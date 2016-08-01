@@ -12,15 +12,19 @@
     <link rel="stylesheet" type="text/css" href="css/sweetalert2.css">
 
 </head>
-<body onload="getReaderInfo()">
+<body onload="getReaderInfo();$('#selectReader').hide();">
 <section id="welcome">
-    <div id="userInfo"></div>
+    <h1>Choose Your Activity</h1>
+    <div class="btnActivity" onclick="createReader()">Create Reader</div>
+    <div class="btnActivity" onclick="studyReader()">Study Reader</div>
+    <div class="btnActivity" onclick="studyVocab()">Study Vocabulary</div>
+</section>
+<section id="selectReader">
 <h1>Select Reader</h1>
 </section>
-<section id="reader">
-
-</section>
-
+<section id="reader"></section>
+<section id="vocab"></section>
+<section id="vocaTest"></section>
 <div id="preload">
     <!--<img src="assets/img/chonwon.png">-->
     <!--<img src="assets/img/2coins50px.png">-->

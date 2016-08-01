@@ -1,12 +1,48 @@
+body{
+    margin: 0;
+    padding: 0;
+}
 .readerlistitem{
     font-size: x-large;
     border-radius: 3px;
+    background-color: dodgerblue;
+    color: seashell;
+    margin-top: 10px;
+    width: 74%;
+    text-align: center;
+    padding: 2% 3%;
+    cursor: pointer;
+    float: left;
+    height: 2.3rem;
+}
+.readerlistitemvocab{
+    font-size: x-large;
+    border-radius: 3px;
+    background-color: purple;
+    margin-top: 10px;
+    margin-left: 2%;
+    width: 10%;
+    text-align: center;
+    padding: 2% 3%;
+    cursor: pointer;
+    float: left;
+    height: 2.3rem;
+    color: yellow;
+}
+.item{
+    margin: 0 auto;
+    margin-top: 40px;
+    width: 80%;
+}
+.btnActivity{
+    font-size: x-large;
+    border-radius: 5px;
     margin: auto;
     background-color: #a5dc86;
-    margin-top: 10px;
+    margin-top: 30px;
     width: 80%;
     text-align: center;
-    padding: 5px 8px;
+    padding: 10px 16px;
     cursor: pointer;
 }
 body{
@@ -15,13 +51,29 @@ body{
 }
 #reader{
     text-align: left;
+    padding: 3% 4%;
+    line-height: 200%;
 }
 #reader>a{
-
     color: black;
 }
 
 .clicked{
     color: rebeccapurple;
     font-weight: bold;
+}
+.vocabitem{
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 3px;
+    background-color: antiquewhite;
+    padding: 2% 2%;
+}
+.vocabitemWord{
+
+}
+.vocabitemTranny{
+font-style: italic;
+    font-size: large;
 }
