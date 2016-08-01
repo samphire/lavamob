@@ -1,0 +1,27 @@
+.readerlistitem{
+    font-size: x-large;
+    border-radius: 3px;
+    margin: auto;
+    background-color: #a5dc86;
+    margin-top: 10px;
+    width: 80%;
+    text-align: center;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+body{
+    text-align: center;
+    font-size: x-large;
+}
+#reader{
+    text-align: left;
+}
+#reader>a{
+
+    color: black;
+}
+
+.clicked{
+    color: rebeccapurple;
+    font-weight: bold;
+}
