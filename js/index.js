@@ -7,6 +7,8 @@ var selectedTextid;
 var selectedReaderText;
 var llData, nowList;
 var naverPopup;
+// var url = "http://www.notborder.org:8080/Reader/webresources";
+var url = "http://localhost:10757/Reader/webresources"
 
 function getReaderInfo() {
     var htmlstr;
@@ -20,7 +22,7 @@ function getReaderInfo() {
             xhr.setRequestHeader('Accept', 'application/json');
         },
         dataType: "json",
-        url: "http://localhost:8080/Reader/webresources/textinfo",
+        url: url + "/textinfo",
         data: {"userid": 1}
     }).done(function (resultjson) {
         // alert(JSON.stringify(resultjson));
@@ -49,7 +51,7 @@ function getReader(serial, textid) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
         dataType: "json",
-        url: "http://localhost:8080/Reader/webresources/text",
+        url: url + "/text",
         data: {"serial": serial}
     }).done(function (resultjson) {
         selectedReaderText = resultjson.reader;
@@ -67,7 +69,7 @@ function getReader(serial, textid) {
 
 function getLL(textid) {
     $.ajax({
-        url: "http://localhost:8080/Reader/webresources/lladd",
+        url: url + "/lladd",
         type: "GET",
         dataType: "json",
         data: {"userid": userid},
@@ -149,7 +151,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         // swal("in ajax " + data);
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/Reader/webresources/lladd",
+            url: url + "/lladd",
             crossDomain: true,
             data: {
                 "userid": 1,
@@ -185,7 +187,7 @@ function studyReader() {
 function getVocab(textid) {
 
     $.ajax({
-        url: "http://localhost:8080/Reader/webresources/lladd",
+        url: url + "/lladd",
         type: "GET",
         dataType: "json",
         data: {"userid": userid},
@@ -228,7 +230,7 @@ function getLLData() {
     if (!llData) {
         // alert("llData was empty");
         $.ajax({
-            url: "http://localhost:8080/Reader/webresources/lladd",
+            url: url + "/lladd",
             type: "GET",
             dataType: "json",
             data: {"userid": userid},
@@ -238,6 +240,7 @@ function getLLData() {
                 xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data) {
+                // alert(JSON.stringify(data));
                 llData = data;
             }
         });
@@ -247,7 +250,7 @@ function studyVocab() {
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
-            url: "http://localhost:8080/Reader/webresources/lladd",
+            url: url + "/lladd",
             type: "GET",
             dataType: "json",
             data: {"userid": userid},
@@ -258,11 +261,13 @@ function studyVocab() {
             },
             success: function (data) {
                 llData = data;
+                // alert(JSON.stringify(data));
                 nowList = new Array();
                 llData.list.forEach(function (el, idx) {
-                    var t = el.datenext.split(/[- :]/);
-                    var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
-                    var d = Date.parse(datestr);
+                    var d = convertDateToNumber(el.datenext);
+                    // var t = el.datenext.split(/[- :]/);
+                    // var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
+                    // var d = Date.parse(datestr);
                     // alert(Date.now() + "\n" + d);
                     if (d < Date.now()) {
                         nowList.push(el);
@@ -282,12 +287,13 @@ function studyVocab() {
                 nowList.push(el);
             }
         });
-                makeVocaTest();
+        makeVocaTest();
     }
 }
-function makeVocaTest(){
-    swal("You have " + nowList.length + " items to review");
-    $("#welcome").hide();
-    $("#vocaTest").show();
-
+function makeVocaTest() {
+    swal({
+        text: "You have " + nowList.length + " items to review"
+    }).then(function () {
+        test(nowList);
+    });
 }

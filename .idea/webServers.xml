@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ac697517-7b61-4766-9b05-16fd5b784ac3" name="Amazon notborder" url="http://notborder.org">
+        <fileTransfer host="notborder.org" port="22" privateKey="C:\Users\matthew\.ssh\matt_amazon.ppk" rootFolder="/var/www/html" accessType="SFTP" username="ec2-user" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="3a7d3b59-dcd6-448d-a8cf-c74ed7f0308b" name="in place" url="http://localhost:63342">
+        <fileTransfer port="0" accessType="LOCAL" />
+      </webServer>
+      <webServer id="b366e120-7b79-40d4-90fc-ba796742806f" name="local folder" url="http://localhost:63342">
+        <fileTransfer port="0" mountedRoot="C:\Users\matthew\WebstormProjects\mobReader" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
