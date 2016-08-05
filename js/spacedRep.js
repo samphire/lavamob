@@ -1,101 +1,159 @@
 var testList, doneList, wrongList;
+var randItems;// contains 4 or 6 items from which to choose for types 1 - 4
+
 var soundRight = new buzz.sound("assets/sound/bells-1-half.mp3");
 var soundWrong = new buzz.sound("assets/sound/saliva-2.mp3");
 var soundFinished = new buzz.sound("assets/sound/perfect.mp3");
 
 function test(list) {
-    testList = list;
+    testList = list;// all the elements for this date
+
+    var testListtmp = testList;
+
+    testListtmp.forEach(function (val, idx) {
+        val.idxInTestList = idx; // add property to each object for when getting random 4 or 6 and need to retrieve the object being tested
+    });
+    var sessionList = new Array();
+    var htmlstr;
     doneList = new Array();
     wrongList = new Array();
-    $("section").not("#vocaTest").hide();
-    $("#vocaTest").show();
-    testList.forEach(function (el, idx) {
-        // for(var propt in el){
-        //     alert(propt + ": " + el[propt]);
-        // }
-        var qType;
-        // decide type
-        qType = 3;
-        makeQuestion(qType, el.word, el.tranny, idx);
+    var htmlstrArray = new Array(20);
+    htmlstrArray.forEach(function (val, idx, arr) { // initialize the array with empty strings so as not to get error when printing the array
+        arr[idx] = "";
     });
+
+    //Choose 7 words from list
+    // MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
+    var sizeArr = testListtmp.length;
+    for (var q = 0; q < 7; q++) {
+        sessionList.push(testListtmp.splice(Math.floor(Math.random() * sizeArr), 1));
+        sizeArr--;
+    } //sessionList now contains 7 words to test
+    testListtmp = null;
+
+    sessionList.forEach(function (val, idx) {
+            var idxToPlace = 0;
+            switch (val.repnum) {
+                case 1:
+                    randItems = makeRand4(val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(1, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    htmlstrArray[idxToPlace] = makeQ(2, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    break;
+                case 2:
+                    randItems = makeRand4(val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(2, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    break;
+                case 3:
+                    randItems = makeRand6(val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(1, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    break;
+                case 4:
+                    randItems = makeRand6(val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(3, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    htmlstrArray[idxToPlace] = makeQ(4, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    break;
+                case 5:
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(4, val);
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    break;
+                case 6:
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(4, val);
+                    break;
+                case 7:
+                    idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    htmlstrArray[idxToPlace] = makeQ(4, val);
+                    break;
+                default:
+                    if (val.EF > 2.5) {
+                        htmlstr += makeQ(5, val);
+                    } else {
+                        if (val.EF < 1.5) {
+                            idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                            htmlstrArray[idxToPlace] = makeQ(1, val);
+                            idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                            htmlstrArray[idxToPlace] = makeQ(2, val);
+                            idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                            htmlstrArray[idxToPlace] = makeQ(5, val);
+                        } else {
+                            idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                            htmlstrArray[idxToPlace] = makeQ(4, val);
+                            idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                            htmlstrArray[idxToPlace] = makeQ(5, val);
+                        }
+                    }
+            }
+        }
+    );
+    $("section").not("#vocaTest").hide();
+    htmlstrArray.forEach(function (el, idx) {
+        $("#vocaTest").append(el);
+    });
+    $("#vocaTest").show();
     $(".testItem:first-of-type").show().find(".inputAnswer input").focus();
 }
 
-function makeQuestion(type, word, tran, idx) {
-    var countdistinct;
-    var arr = new Array(100);
-    for (var x = 0; x < arr.length; x++) {
-        arr[x] = 0;
-    }
-    var randArray;
-    type = (testList.length < 6 && testList.length > 3 && type === 3) ? 1 : type;
-    type = (testList.length < 6 && testList.length > 3 && type === 4) ? 2 : type;
-    if (type < 3) { // 4 random
-        randArray = new Array(4);
-        do {
-            for (var i = 0; i < 4; i++) {
-                randArray[i] = Math.floor(Math.random() * testList.length);
-                arr[randArray[i]] += 1;
-            }
-            countdistinct = 0;
-            for (var i2 = 0; i2 < 100; i2++) {
-                if (arr[i2] > 0) {
-                    countdistinct += 1;
-                }
-            }
-        } while (countdistinct < 4);
-        // OK, got 4 random numbers within the length of testList
-    } else if (type < 5) { // 6 random
-        randArray = new Array(5);
-        randWordArray = new Array(5);
-        newArray = new Array(6);
-        newArray[0] = testList.splice(idx, 1)[0];
-        do {
-            for (var i = 0; i < 5; i++) {
-                randArray[i] = Math.floor(Math.random() * testList.length);
-                arr[randArray[i]] += 1;
-            }
-            countdistinct = 0;
-            for (var i2 = 0; i2 < 100; i2++) {
-                if (arr[i2] > 0) {
-                    countdistinct += 1;
-                }
-            }
-        } while (countdistinct < 5);
-        // OK, got 5 random numbers within the length of testList
-        for(var y=0;y<randArray.length; y++){
-            newArray[y+1] = testList[y];
-        }
-        newArray = shuffle(newArray);
-        alert(newArray[0].word);
-    }
-
+function makeQ(type, val) {
+    var returnStr;
     switch (type) {
+
         case 1: // Korean word shown, choose from 4 tranny
-            var htmlstr = "<div class = '4grid'><div class = 'gridItem'>" + +"</div></div>";
+            returnStr = "<div class = 'testItem'><div class='wordItem'>" + val.word + "</div>";
+            randItems.foreach(function (rndVal, rndIdx) {
+                returnStr += "<div class='grid4Tran'>" + rndVal.tranny + "</div>";
+            });
+            returnStr += "</div>";
+            return returnStr;
             break;
         case 2: // English word shown, choose from 4 tranny
+            returnStr = "<div class = 'testItem'><div class='tranItem'>" + val.tranny + "</div>";
+            randItems.foreach(function (rndVal, rndIdx) {
+                returnStr += "<div class='grid4Word'>" + rndVal.word + "</div>";
+            });
+            returnStr += "</div>";
+            return returnStr;
             break;
         case 3: // Korean word shown, choose from 6 tranny
-            alert("case 3");
-
-            var htmlstr = "<div class = '4grid'><div class = 'gridItem'>" + +"</div></div>";
-
-
+            returnStr = "<div class = 'testItem'><div class='wordItem'>" + val.word + "</div>";
+            randItems.foreach(function (rndVal, rndIdx) {
+                returnStr += "<div class='grid6Tran'>" + rndVal.tranny + "</div>";
+            });
+            returnStr += "</div>";
+            return returnStr;
             break;
         case 4: // English word shown, choose from 6 tranny
+            returnStr = "<div class = 'testItem'><div class='tranItem'>" + val.tranny + "</div>";
+            randItems.foreach(function (rndVal, rndIdx) {
+                returnStr += "<div class='grid6Word'>" + rndVal.word + "</div>";
+            });
+            returnStr += "</div>";
+            return returnStr;
             break;
         case 5: // Typing
-            var bobby = tran.replace("'", "&apos;");
+            val.tranny = replaceApos(val.tranny);
             var htmlstr = "<div class='testItem' style='display:none;'><div class='testWord'>" + word + "</div><div class='inputAnswer'>" +
                 "<input type='text' onkeydown='javascript: if(event.keyCode == 13) checkResult(event, \x22" + bobby + "\x22, this, " + idx;
             var bob = ")'/>";
             htmlstr += bob;
-            $("#vocaTest").append(htmlstr);
-            break;
+            return returnStr;
             break;
     }
-
 }
 
 function checkResult(event, tran, el, index) { // this is actually the main routine during the test

@@ -17,3 +17,35 @@ function shuffle(a) {
     }
     return a;
 }
+
+function findFirstEmptySlot(arr, idx) {
+    for (var x = idx; x < arr.length; x++) {
+        if (typeof arr[x] === 'undefined') return x;
+    }
+}
+
+function makeRand4(elem) {
+    var tmpTestList = testList;
+    var returnArray = new Array(4);
+    returnArray[0] = tmpTestList.splice(tmpTestList[elem.idxInTestList], 1)[0];
+
+    for (var b = 1; b < returnArray.length; b++) {
+        returnArray[b] = tmpTestList.splice(tmpTestList[Math.floor(Math.random() * tmpTestList.length)], 1)[0];
+    }
+    return shuffle(returnArray);
+}
+
+function makeRand6(elem) {
+    var tmpTestList = testList;
+    var returnArray = new Array(6);
+    returnArray[0] = tmpTestList.splice(tmpTestList[elem.idxInTestList], 1)[0];
+
+    for (var b = 1; b < returnArray.length; b++) {
+        returnArray[b] = tmpTestList.splice(tmpTestList[Math.floor(Math.random() * tmpTestList.length)], 1)[0];
+    }
+    return shuffle(returnArray);
+}
+
+function replaceApos(str){
+    return str.replace("'", "&apos;");
+}
