@@ -5,7 +5,7 @@
       <paths name="Amazon notborder">
         <serverdata>
           <mappings>
-            <mapping deploy="/lava" local="$PROJECT_DIR$" web="/lava" />
+            <mapping deploy="/lavamob" local="$PROJECT_DIR$" web="/lavamob" />
           </mappings>
         </serverdata>
       </paths>

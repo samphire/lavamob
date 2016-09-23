@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>Mobile Reader</title>
     <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/howler.core.min.js"></script>
+    <script src="js/createReader.js"></script>
     <script src="js/buzz.min.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/index.js"></script>
@@ -15,7 +17,8 @@
     <link rel="stylesheet" type="text/css" href="css/test.css">
 
 </head>
-<body onload="getReaderInfo();$('#selectReader').hide();">
+<body onload="getReaderInfo();$('#selectReader').hide();$('#createReader').hide();"> // flicker visible. Instead, set visibility to false in css.
+<br><h2>User id = 1</h2>
 <section id="welcome">
     <h1>Choose Your Activity</h1>
     <div class="btnActivity" onclick="createReader()">Create Reader</div>
@@ -24,6 +27,24 @@
 </section>
 <section id="selectReader">
 <h1>Select Reader</h1>
+</section>
+<section id="createReader">
+
+    <form method="post" action="http://notborder.org/readeraudio/upload.php" enctype="multipart/form-data">
+        <input type="file" name="fileToUpload" id="fileinput">
+        <input type="submit" value="Upload File">
+    </form>
+
+    <button onclick="loadAndPlay()">load and play</button>
+    <button onclick="finish()">finish</button>
+    <button onclick="test()">test</button>
+
+    <textarea id="text" contenteditable="true" onpaste="pastey"></textarea>
+    <div id="result" style="height: 30%;"></div>
+    <div id="superResult" style="height: 20%"></div>
+    <button onclick="parseText()" value="bob">parse</button>
+
+
 </section>
 <section id="reader"></section>
 <section id="vocab"></section>

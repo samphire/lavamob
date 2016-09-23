@@ -4,11 +4,14 @@
 
 var userid = 1;
 var selectedTextid;
+var selectedReaderObj;
 var selectedReaderText;
 var llData, nowList;
 var naverPopup;
+var howlSpriteObj;
+var howl;
 // var url = "http://www.notborder.org:8080/Reader/webresources";
-var url = "http://localhost:10757/Reader/webresources"
+var url = "http://localhost:8080/Reader/webresources"
 
 function getReaderInfo() {
     var htmlstr;
@@ -27,7 +30,7 @@ function getReaderInfo() {
     }).done(function (resultjson) {
         // alert(JSON.stringify(resultjson));
         $.each(resultjson.readers, function (idx, val) {
-            htmlstr = "<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(" + val.serial + ", " + val.id + ")'>" + val.name + "</div>";
+            htmlstr = "<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(" + val.id + ")'>" + val.name + "</div>";
             htmlstr += "<div class='readerlistitemvocab' onclick='getVocab(" + val.id + ")'>V</div></div>";
             $('#selectReader').append(htmlstr);
         });
@@ -41,8 +44,12 @@ function getReaderInfo() {
 }
 
 
-function getReader(serial, textid) {
+function getReader(textid) {
     selectedTextid = textid;
+    getLL(textid);
+}
+
+function downloadReader(){
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -50,14 +57,78 @@ function getReader(serial, textid) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
-        dataType: "json",
-        url: url + "/text",
-        data: {"serial": serial}
+        url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
-        selectedReaderText = resultjson.reader;
+        console.log(JSON.stringify(resultjson));
+        selectedReaderObj = resultjson;
+
+        //Initialize sound
+        howl = null;
+        howlSpriteObj = null;
+
+        if (resultjson.audioFilename) { // If there is audio, set up Howl and the sprite object
+            console.log('there is audio');
+            var sndArr = new Array();
+            sndArr.push(resultjson.audioFilename); // simplify this for goodness sake, insert on instantiation
+            howlSpriteObj = JSON.parse(resultjson.audioSpriteObjString);
+            howl = new Howl({
+                src: sndArr,
+                sprite: howlSpriteObj
+            });
+        }
+
+        // make selected reader text !!!!!!!!!!
+        //recursively use indexof to alter the value of
+        var finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
+
+        var constituteText = function (myStr, start) {
+            var infoArr = myStr.split("^/");
+            var inList = false;
+            var foundidx = finalTextArr.indexOf(infoArr[0]);
+            if (foundidx > -1) {
+                llData.list.forEach(function (el) {
+                    if (el.wordid === parseInt(infoArr[1])) {
+                        inList = true;
+                    }
+                });
+                if (inList) {
+                    finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
+                } else {
+                    finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
+                }
+                try {
+                    constituteText(myStr, foundidx + 1);
+                } catch (a) {
+                    console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
+                }
+            }
+        };
+
+        for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
+            constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
+        }
+        console.log("Printing finalTextArr");
+        selectedReaderText = "";
+        finalTextArr.forEach(function (el, idx) {
+            if (el.indexOf("^&") > -1) {
+                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ")\">";
+                selectedReaderText += finalTextArr[idx];
+                console.log(finalTextArr[idx]);
+            } else {
+                selectedReaderText += el;
+                console.log(el);
+            }
+        });
+        console.log(selectedReaderText);
+
         // alert("ajax call success to web service for texts: \n\n" + JSON.stringify(resultjson));
-        selectedReaderText = selectedReaderText.replace(/customPop\(/g, "customPop(this,");
-        getLL(textid);
+        // selectedReaderText = selectedReaderText.replace(/customPop\(/g, "customPop(this,");
+        // getLL(textid);
+
+
+        $('#selectReader').hide();
+        $('#reader').append(selectedReaderText);
+
     }).fail(function (jqXHR, status, err) {
         // alert("some problem");
         // alert(status);
@@ -68,6 +139,7 @@ function getReader(serial, textid) {
 }
 
 function getLL(textid) {
+    console.log("In getLL with textid " + textid);
     $.ajax({
         url: url + "/lladd",
         type: "GET",
@@ -80,37 +152,39 @@ function getLL(textid) {
         },
         success: function (data) {
             llData = data;
+            console.log("Set llData. Type of list: " + typeof llData.list);
+            downloadReader();
             // alert(JSON.stringify(llData));
             // convert to object with parse, split reader text, add class if word in ll, show reader text
-            var textArr = selectedReaderText.split("</span>");
-            // make Array from learning list wordids
-            var listo = new Array();
-            llData.list.forEach(function (el) {
-                if (el.textid === selectedTextid) { // only items in selectedtext
-                    listo.push(el.wordid);
-                }
-            });
-
-            textArr.forEach(function (el, idx) { // color purple all words found in wordlist
-                var a = el.indexOf(",");
-                var b = el.indexOf(",", a + 1);
-                var c = el.indexOf("'", b + 2);
-                var wid = el.substring(b + 2, c);
-                listo.forEach(function (el2) {
-                    if (parseInt(wid) === el2) {
-                        textArr[idx] = textArr[idx].replace(/\'word\'/g, '"word clicked"');
-                    }
-                });
-            });
-            //reconstitute selectedReaderText from the array
-            var newStr = "";
-            textArr.forEach(function (el, idx) {
-                newStr += el + "</span>";
-            });
-            selectedReaderText = newStr;
-
-            $('#selectReader').hide();
-            $('#reader').append(selectedReaderText);
+            // var textArr = selectedReaderText.split("</span>");
+            // // make Array from learning list wordids
+            // var listo = new Array();
+            // llData.list.forEach(function (el) {
+            //     if (el.textid === selectedTextid) { // only items in selectedtext
+            //         listo.push(el.wordid);
+            //     }
+            // });
+            //
+            // textArr.forEach(function (el, idx) { // color purple all words found in wordlist
+            //     var a = el.indexOf(",");
+            //     var b = el.indexOf(",", a + 1);
+            //     var c = el.indexOf("'", b + 2);
+            //     var wid = el.substring(b + 2, c);
+            //     listo.forEach(function (el2) {
+            //         if (parseInt(wid) === el2) {
+            //             textArr[idx] = textArr[idx].replace(/\'word\'/g, '"word clicked"');
+            //         }
+            //     });
+            // });
+            // //reconstitute selectedReaderText from the array
+            // var newStr = "";
+            // textArr.forEach(function (el, idx) {
+            //     newStr += el + "</span>";
+            // });
+            // selectedReaderText = newStr;
+            //
+            // $('#selectReader').hide();
+            // $('#reader').append(selectedReaderText);
         },
         error: function () {
             alert("oops");
@@ -128,27 +202,26 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     }
     $(el).addClass("clicked");
 
-    var url = "http://endic.naver.com/search.nhn?query=" + word;
+    var dicUrl = "http://endic.naver.com/search.nhn?query=" + word;
     var name = "dictionary";
     var specs = "width=500, height=500, resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes";
-    naverPopup = window.open(url, name, specs);
+    naverPopup = window.open(dicUrl, name, specs);
 
 
     swal({
         title: 'Add to List',
         html: '<input id="llWord" class="llWord" autofocus>' +
         '<input id="tranny" class="tranny">',
+        showCancelButton: true,
         onOpen: function (el) {
             $(el).find('.llWord').val(word);
         },
         preConfirm: function () {
             return new Promise(function (resolve) {
-                // alert($(".tranny").val());
                 resolve($(".tranny").val());
             });
         }
     }).then(function (data) {
-        // swal("in ajax " + data);
         $.ajax({
             type: "POST",
             url: url + "/lladd",
@@ -171,17 +244,22 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 // alert(status);
                 // alert(jqXHR.status);
                 // alert(err);
-                console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log");
+                console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log\n" + err);
             })
         });
     }, function () {
-        alert("sumtink wong");
+        console.log("cancelled");
     });
 }
 
 function studyReader() {
     $("#welcome").hide();
     $("#selectReader").show();
+}
+
+function createReader() {
+    $('#welcome').hide();
+    $('#createReader').show();
 }
 
 function getVocab(textid) {
@@ -296,4 +374,10 @@ function makeVocaTest() {
     }).then(function () {
         test(nowList);
     });
+}
+
+function playSound(sprite){
+    howl.stop();
+    sprite = sprite.toString();
+    howl.play(sprite);
 }

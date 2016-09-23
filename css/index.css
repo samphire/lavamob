@@ -1,6 +1,22 @@
+html{
+    height: 100%;
+}
+
 body{
+    height: 100%;
     margin: 0;
     padding: 0;
+    text-align: center;
+    font-size: x-large;
+}
+
+textarea{
+    width: 90%;
+    height: 30%;
+}
+#result {
+    line-height: 3rem;
+    font-size: x-large;
 }
 .readerlistitem{
     font-size: x-large;
@@ -45,10 +61,7 @@ body{
     padding: 10px 16px;
     cursor: pointer;
 }
-body{
-    text-align: center;
-    font-size: x-large;
-}
+
 #reader{
     text-align: left;
     padding: 3% 4%;
