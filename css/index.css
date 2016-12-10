@@ -8,6 +8,8 @@ body {
     padding: 0;
     text-align: center;
     font-size: x-large;
+    background: url(../assets/img/bg.jpg);
+    /*overflow: hidden;*/
 }
 
 textarea {
@@ -70,20 +72,22 @@ textarea {
 }
 
 .btnActivity {
-    font-size: x-large;
+    font-size: 2rem;
+    font-family: 'Bitter', serif;
+    width: 500px;
     border-radius: 5px;
-    margin: auto;
-    background-color: #a5dc86;
-    margin-top: 30px;
-    width: 80%;
+    margin: 30px auto;
+    background-color: moccasin ;
+    border: 3px solid darkgoldenrod;
     text-align: center;
     padding: 10px 16px;
     cursor: pointer;
+    box-shadow: 5px 5px 10px;
 }
 
 .hideo {
     width: 80%;
-    height: 100%;
+    /*height: 100%;*/
     margin: auto;
     border: solid blue 2px;
     padding: 2%;
@@ -114,16 +118,15 @@ textarea {
 }
 
 .vocabitem {
-    width: 90%;
-    margin: auto;
-    margin-top: 10px;
+    width: 94%;
+    margin: 40px auto;
     border-radius: 3px;
     background-color: antiquewhite;
     padding: 2% 2%;
 }
 
 .vocabitemWord {
-
+font-size: 2rem;
 }
 
 #readerblurb {
@@ -137,14 +140,57 @@ textarea {
     font-size: large;
 }
 
+.word {
+    cursor: pointer;
+}
+#welcome>h1{
+    font-size: 4rem;
+    background-color: floralwhite;
+    /*background-image: url(../assets/img/natural-canvas-pale.jpg);*/
+    background-image: url(../assets/img/flops.jpg);
+    padding: 20px;
+    font-family: 'Play', sans-serif;
+    border: 3px solid darkgoldenrod;
+    margin: 0 30px;
+}
+#selectReader{
+    overflow: auto;
+    margin-top: -6%;
+}
+
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
     .hideo {
-        width: 100%;
-        height: 100%;
+        width: 92%;
+        /*height: 100%;*/
         padding: 2%;
         border: none;
         background-color: #e8e3c3;
         display: none;
+    }
+
+    #welcome>h1{
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    #reader{
+        margin-top: -6%;
+        min-height: 97%;
+    }
+    #vocab{
+        min-height: 97%;
+        padding: 3% 4%;
+        margin-top: -6%;
+    }
+
+    body{
+        background-size: cover;
+        background-position: 20%;
+    }
+
+    .btnActivity{
+        font-size: 1.2rem;
+        width: 80%;
     }
 
     input {
@@ -166,9 +212,25 @@ textarea {
         float: left;
         display: none;
     }
+
     #readerblurb {
         width: 35%;
         float: left;
         text-align: left;
+    }
+    #selectReader{
+        height: auto;
+        overflow: auto;
+        padding: 3% 4%;
+    }
+    .readerPanel{
+        border: none;
+        background-color: inherit;
+        padding: 0;
+        font-size: 1.4rem;
+        line-height: 260%;
+    }
+    .swal2-modal button.styled{
+        padding: 5px 16px;
     }
 }

@@ -241,6 +241,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 "thouTranch": 5
             },
             success: function (result) {
+                $(".readerPanel").remove();
                 getLL(selectedTextid);
             },
             error: (function (jqXHR, status, err) {

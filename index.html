@@ -12,12 +12,13 @@
     <script src="js/index.js"></script>
     <script src="js/spacedRep.js"></script>
     <script src="js/sweetalert2.min.js"></script>
-    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/sweetalert2.css">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/test.css">
+    <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
 
 </head>
-<body onload="getReaderInfo();" style="background-color: #707078; height: 100%;"><br>
+<body onload="getReaderInfo();"><br>
 <section id="welcome">
     <h1>Choose Your Activity</h1>
     <div class="btnActivity" onclick="createReader()">Create Reader</div>
@@ -29,11 +30,10 @@
 </section>
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
-        Audio?&nbsp;&nbsp; <input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"><br>
-        User Id <br><input type="text" id="userid"><br>
-        Text Name <br><input type="text" id="readerName">
-        <br>
-        Description <br><input type="text" id="readerDescription" size="20">
+        <label for="audioCheck">Audio?</label><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"><br>
+        <label for="userid">User Id</label><input type="text" id="userid"><br>
+        <label for="readerName">Text Name</label><input type="text" id="readerName"><br>
+        <label for="readerDescription">Description</label><input type="text" id="readerDescription" size="20">
     </div>
     <div id="audiodiv">
         <fieldset>
