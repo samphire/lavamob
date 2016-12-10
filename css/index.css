@@ -1,8 +1,8 @@
-html{
+html {
     height: 100%;
 }
 
-body{
+body {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -10,15 +10,25 @@ body{
     font-size: x-large;
 }
 
-textarea{
+textarea {
     width: 90%;
-    height: 30%;
+    min-height: 40%;
 }
+
 #result {
+    display: none;
     line-height: 3rem;
     font-size: x-large;
+    clear: both;
 }
-.readerlistitem{
+
+.textPanel {
+    border: 1px solid black;
+    background-color: ghostwhite;
+    margin-top: 20px;
+}
+
+.readerlistitem {
     font-size: x-large;
     border-radius: 3px;
     background-color: dodgerblue;
@@ -31,7 +41,14 @@ textarea{
     float: left;
     height: 2.3rem;
 }
-.readerlistitemvocab{
+
+#audiodiv {
+    width: 45%;
+    float: right;
+    display: none;
+}
+
+.readerlistitemvocab {
     font-size: x-large;
     border-radius: 3px;
     background-color: purple;
@@ -45,12 +62,14 @@ textarea{
     height: 2.3rem;
     color: yellow;
 }
-.item{
+
+.item {
     margin: 0 auto;
     margin-top: 40px;
     width: 80%;
 }
-.btnActivity{
+
+.btnActivity {
     font-size: x-large;
     border-radius: 5px;
     margin: auto;
@@ -62,20 +81,39 @@ textarea{
     cursor: pointer;
 }
 
-#reader{
+.hideo {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    border: solid blue 2px;
+    padding: 2%;
+    background-color: #bdbdbd;
+    display: none;
+}
+
+#reader {
     text-align: left;
     padding: 3% 4%;
     line-height: 200%;
 }
-#reader>a{
+
+.readerPanel {
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: cornsilk;
+    padding: 1%;
+}
+
+#reader > a {
     color: black;
 }
 
-.clicked{
+.clicked {
     color: rebeccapurple;
     font-weight: bold;
 }
-.vocabitem{
+
+.vocabitem {
     width: 90%;
     margin: auto;
     margin-top: 10px;
@@ -83,10 +121,54 @@ textarea{
     background-color: antiquewhite;
     padding: 2% 2%;
 }
-.vocabitemWord{
+
+.vocabitemWord {
 
 }
-.vocabitemTranny{
-font-style: italic;
+
+#readerblurb {
+    width: 35%;
+    float: left;
+    text-align: left;
+}
+
+.vocabitemTranny {
+    font-style: italic;
     font-size: large;
+}
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
+    .hideo {
+        width: 100%;
+        height: 100%;
+        padding: 2%;
+        border: none;
+        background-color: #e8e3c3;
+        display: none;
+    }
+
+    input {
+        transform: scale(1.6);
+        margin: 5px 0 15px 40px;
+    }
+
+    button {
+        transform: scale(2);
+    }
+
+    body {
+        font-size: 1.2rem;
+        text-align: left;
+    }
+
+    #audiodiv {
+        width: 45%;
+        float: left;
+        display: none;
+    }
+    #readerblurb {
+        width: 35%;
+        float: left;
+        text-align: left;
+    }
 }

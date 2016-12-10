@@ -10,8 +10,8 @@ var llData, nowList;
 var naverPopup;
 var howlSpriteObj;
 var howl;
-// var url = "http://www.notborder.org:8080/Reader/webresources";
-var url = "http://localhost:8080/Reader/webresources"
+var url = "http://www.notborder.org:8080/Reader/webresources";
+// var url = "http://localhost:8080/Reader/webresources";
 
 function getReaderInfo() {
     var htmlstr;
@@ -45,6 +45,7 @@ function getReaderInfo() {
 
 
 function getReader(textid) {
+    $("#reader").show();
     selectedTextid = textid;
     getLL(textid);
 }
@@ -66,8 +67,11 @@ function downloadReader(){
         howl = null;
         howlSpriteObj = null;
 
+        var finalTextArr = selectedReaderObj.puncParsedJsonArray;
+
         if (resultjson.audioFilename) { // If there is audio, set up Howl and the sprite object
             console.log('there is audio');
+            finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
             var sndArr = new Array();
             sndArr.push(resultjson.audioFilename); // simplify this for goodness sake, insert on instantiation
             howlSpriteObj = JSON.parse(resultjson.audioSpriteObjString);
@@ -79,12 +83,11 @@ function downloadReader(){
 
         // make selected reader text !!!!!!!!!!
         //recursively use indexof to alter the value of
-        var finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
 
-        var constituteText = function (myStr, start) {
+        var constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
             var infoArr = myStr.split("^/");
             var inList = false;
-            var foundidx = finalTextArr.indexOf(infoArr[0]);
+            var foundidx = finalTextArr.indexOf(infoArr[0], start); // don't I need to use 'start' here?
             if (foundidx > -1) {
                 llData.list.forEach(function (el) {
                     if (el.wordid === parseInt(infoArr[1])) {
@@ -97,7 +100,7 @@ function downloadReader(){
                     finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
                 }
                 try {
-                    constituteText(myStr, foundidx + 1);
+                    constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
                 } catch (a) {
                     console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
                 }
@@ -127,7 +130,8 @@ function downloadReader(){
 
 
         $('#selectReader').hide();
-        $('#reader').append(selectedReaderText);
+        $('#reader').append("<div class='readerPanel'></div>");
+        $('#reader .readerPanel').append(selectedReaderText);
 
     }).fail(function (jqXHR, status, err) {
         // alert("some problem");

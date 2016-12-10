@@ -7,24 +7,28 @@
  paragraphArr strips out new line characters
  textArr is one item from paragraphArr split on spaces
  finalArr is a multidimensional array. Per paragraphArr element, it stores an array made up of startpunc elements, then the word with a red style attribute, then endpunc elements, and of course spaces
- luckArr is finalArr put into a single dimension
- makeSpriteArr is luckArr with inserted audio icon and call to playSound (including spriteNum)
- bobArr is the upload version of makeSpriteArr
+ singleDimensionalFinalArr is finalArr put into a single dimension
+ makeSpriteArr is singleDimensionalFinalArr with inserted audio icon and call to playSound (including spriteNum)
+ finalArrWithAudio is the upload version of makeSpriteArr
  *
  *
  * */
 
 
-var finalArr, makeSpriteArr, bobArr, luckArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr;
+var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr;
 var userid = "1";
+var url = "http://www.notborder.org:8080/Reader/webresources";
+// var url = "http://localhost:8080/Reader/webresources";
+var audiourl = "http://www.notborder.org/readeraudio";
+// var audiourl = "http://localhost/readeraudio";
 var lastPos = 0;
-function parseText() {
+function parseText() { // creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
-    finalArr = new Array();
+    finalArr = new Array(); // array containing words and punctuation, in order
     makeSpriteArr = new Array();
-    luckArr = new Array();
-    bobArr = new Array();
-    wordArr = new Array();
+    singleDimensionalFinalArr = new Array(); // just a single dimensional version of finalArr
+    finalArrWithAudio = new Array();
+    wordArr = new Array(); // array containing ONLY words, without any punctuation
     var w = 0;
     var text = document.getElementById('text').value;
     var paragraphArr = text.split(/[\r\n]/g);
@@ -40,7 +44,7 @@ function parseText() {
     for (w = 0; w < paragraphArr.length; w++) {
         finalArr[w] = new Array();
         textArr = paragraphArr[w].split(" ");
-        for (var i = 0; i < textArr.length; i++) {
+        for (var i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
             var tmpString = "";
             endPuncArr = new Array();
 
@@ -50,7 +54,7 @@ function parseText() {
                     return startPunc(myStr.slice(1));
                 }
                 else {
-                    return myStr;
+                    return myStr; // The actual word, stripped of start punctuation, but still end punctuation there
                 }
             };
 
@@ -59,12 +63,12 @@ function parseText() {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
                 } else {
-                    return myStr; // The actual word, stripped of punctuation
+                    return myStr; // The actual word, stripped of end punctuation
                 }
             };
 
             tmpString = startPunc(textArr[i]);
-            tmpString = endPunc(tmpString);
+            tmpString = endPunc(tmpString); // so tmpString is now ... THE WORD (without punctuation)
             wordArr.push(tmpString);
             // tmpString = "<span>" + tmpString + "</span>";
 
@@ -86,27 +90,35 @@ function parseText() {
 
     for (var i = 0; i < finalArr.length; i++) {
         for (var x = 0; x < finalArr[i].length; x++) {
-            luckArr.push(finalArr[i][x]);
+            singleDimensionalFinalArr.push(finalArr[i][x]);
         }
     }
 
     var checkString = "";
 
-    for (var m = 0; m < luckArr.length; m++) {
-        console.log(luckArr[m]);
-        if (!luckArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
+    for (var m = 0; m < singleDimensionalFinalArr.length; m++) {
+        console.log(singleDimensionalFinalArr[m]);
+        if (!singleDimensionalFinalArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
             checkString += "<img src='play_hover.png' onclick='makeSprite(" + m + ")'>";
         }
-        checkString += luckArr[m];
+        checkString += singleDimensionalFinalArr[m];
     }
-    document.getElementById("result").innerHTML = checkString;
+
+    if ($("#audioCheck").is(":checked")) {
+        $("#text").hide();
+        document.getElementById("result").innerHTML = checkString; // Don't worry. this text is never uploaded. It's just for the gui to make sound sprites.
+        $("#result").show();
+    } else{
+        uploadText();
+    }
 }
 
 function loadAndPlay() {
 
     sndArr = new Array();
     var fileStrArr = document.getElementById("fileinput").value.split("\\");
-    var fileStr = fileStrArr[fileStrArr.length - 1];
+    var fileStr = audiourl + "/" + fileStrArr[fileStrArr.length - 1];
+    console.log(fileStr)
     sndArr.push(fileStr);
 
     sound = new Howl({
@@ -118,7 +130,9 @@ function loadAndPlay() {
     spriteNum = 0;
     sound.play();
 }
+
 var perf;
+
 function playSound(sprite) {
     mySprite = sprite.toString();
     perf = new Howl({
@@ -142,51 +156,53 @@ function makeSprite(pos) {
     console.log(JSON.stringify(spriteObj));
 
     for (var y = lastPos; y < pos; y++) {
-        makeSpriteArr.push(luckArr[y]);
-        bobArr.push(luckArr[y]);
+        makeSpriteArr.push(singleDimensionalFinalArr[y]);
+        finalArrWithAudio.push(singleDimensionalFinalArr[y]);
     }
     lastPos = pos;
 
     makeSpriteArr.push("<img src='play_hover.png' onclick='playSound(" + spriteNum + ")'>");
-    bobArr.push("^&" + spriteNum);
+    finalArrWithAudio.push("^&" + spriteNum);
     for (var nm = 0; nm < makeSpriteArr.length; nm++) {
         console.log("makeSpriteArr:  " + makeSpriteArr[nm]);
     }
-
 }
 
 function finish() {
     sound.stop();
-    for (var y = lastPos; y < luckArr.length; y++) { // complete makeSpriteArr to the end of the words in luckArr
-        makeSpriteArr.push(luckArr[y]);
-        bobArr.push(luckArr[y]);
+    for (var y = lastPos; y < singleDimensionalFinalArr.length; y++) { // complete makeSpriteArr to the end of the words in singleDimensionalFinalArr
+        makeSpriteArr.push(singleDimensionalFinalArr[y]);
+        finalArrWithAudio.push(singleDimensionalFinalArr[y]);
     }
     var frog = "";
     for (var u = 0; u < makeSpriteArr.length; u++) {
         frog += makeSpriteArr[u];
     }
     document.getElementById("superResult").innerHTML = frog;
-    uploadText();
 }
+
+//noinspection JSAnnotator
 function uploadText() {
     var plainText, puncParsedJsonArray, audioSpriteJson, puncParsedAudioJsonArray;
-    plainText = document.getElementById("text").getAttribute("pasted");
-    puncParsedJsonArray = luckArr;
+    plainText = document.getElementById("text").getAttribute("pasted"); // Hang on! What if the text was typed, rather than pasted?
+    puncParsedJsonArray = singleDimensionalFinalArr;
     audioSpriteJson = spriteObj;
-    puncParsedAudioJsonArray = bobArr;
+    puncParsedAudioJsonArray = finalArrWithAudio;
 
     var uploadData = {};
     uploadData.plainText = plainText;
     uploadData.puncParsedJsonArray = puncParsedJsonArray;
     uploadData.audioSpriteObjString = JSON.stringify(audioSpriteJson);
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
-    uploadData.wordArray = wordArr
+    uploadData.wordArray = wordArr;
+    if(typeof sndArr != 'undefined' && sndArr[0] != null){
     uploadData.audioFilename = sndArr[0];
+    }
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
 
     $.ajax({
-        url: "http://localhost:8080/Reader/webresources" + "/text",
+        url: url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val(),
         headers: {"userid": userid}, // header must be enabled in cors filter on server
         type: "POST",
         dataType: "json",
@@ -195,6 +211,7 @@ function uploadText() {
         crossDomain: true,
         success: function (data) {
             console.log("Uploaded Text Successfully");
+            swal("Text Uploaded Successfully");
         },
         error: function () {
             alert("Problem Uploading the Text");
@@ -209,23 +226,4 @@ function pastey(e) {
     clipboardData = e.clipboardData || window.clipboardData;
     var pastedData = clipboardData.getData("text/plain");
     document.getElementById("text").setAttribute("pasted", pastedData);
-}
-
-function test(){
-    $.ajax({
-        url: "http://localhost:8080/Reader/webresources" + "/text/dBOnly?textid=10049",
-        type: "GET",
-        accepts: "application/json",
-        beforeSend: function(xhr){
-            xhr.setRequestHeader("Accept", "application/json");
-        },
-        crossDomain: true,
-        success: function (data) {
-            console.log("Downloaded Text Successfully");
-            console.log(JSON.stringify(data));
-        },
-        error: function () {
-            alert("Problem Downloading the Text");
-        }
-    });
 }
