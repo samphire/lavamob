@@ -330,6 +330,7 @@ function getLLData() {
     }
 }
 function studyVocab() {
+    console.log("In study vocab, makeVocaTest is next");
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
@@ -346,12 +347,14 @@ function studyVocab() {
                 llData = data;
                 // alert(JSON.stringify(data));
                 nowList = new Array();
+                console.log("size of json array is: " + llData.list.length);
                 llData.list.forEach(function (el, idx) {
+
                     var d = convertDateToNumber(el.datenext);
-                    // var t = el.datenext.split(/[- :]/);
-                    // var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
-                    // var d = Date.parse(datestr);
-                    // alert(Date.now() + "\n" + d);
+                    var t = el.datenext.split(/[- :]/);
+                    var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
+                    var d = Date.parse(datestr);
+                    // alert("Now: "+Date.now() + "\nitem datenext" + d);
                     if (d < Date.now()) {
                         nowList.push(el);
                     }
@@ -374,9 +377,12 @@ function studyVocab() {
     }
 }
 function makeVocaTest() {
+    console.log("In makevVocaTest. then promise is next");
+
     swal({
         text: "You have " + nowList.length + " items to review"
     }).then(function () {
+        console.log("In then promise. test is next");
         test(nowList);
     });
 }

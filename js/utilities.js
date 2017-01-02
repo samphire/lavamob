@@ -7,6 +7,17 @@ function convertDateToNumber(date) {
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
+function printObject(msg, obj) {
+    var toClass = {}.toString();
+    var myStr = "";
+    for (prop in obj) {
+        myStr += "Property Name: " + prop + ", Value: " + obj[prop] + ", Type: " + typeof obj[prop] + "\n";
+    }
+    console.log("******* " + msg + " *******");
+    console.log(myStr);
+    console.log("******* " + msg + " ***END*");
+}
+
 function shuffle(a) {
     var j, x, i;
     for (i = a.length; i; i--) {
@@ -25,13 +36,21 @@ function findFirstEmptySlot(arr, idx) {
 }
 
 function makeRand4(elem) {
-    var tmpTestList = testList;
+    console.log("in makeRand4. element is: " + elem.word + " at index " + elem.idxInTestList + " in testList, with tranny " + elem.tranny);
+    var tmpTestList = testList.slice(0);
     var returnArray = new Array(4);
-    returnArray[0] = tmpTestList.splice(tmpTestList[elem.idxInTestList], 1)[0];
+
+    returnArray[0] = tmpTestList.splice(elem.idxInTestList, 1)[0];
+
+    // printObject("should be the item in question", returnArray[0]);
 
     for (var b = 1; b < returnArray.length; b++) {
-        returnArray[b] = tmpTestList.splice(tmpTestList[Math.floor(Math.random() * tmpTestList.length)], 1)[0];
+        returnArray[b] = tmpTestList.splice(Math.floor(Math.random() * tmpTestList.length), 1)[0];
     }
+    //
+    // returnArray.forEach(function (val) {
+    //     printObject("returnArray from makeRand4", val);
+    // });
     return shuffle(returnArray);
 }
 
@@ -46,6 +65,6 @@ function makeRand6(elem) {
     return shuffle(returnArray);
 }
 
-function replaceApos(str){
+function replaceApos(str) {
     return str.replace("'", "&apos;");
 }
