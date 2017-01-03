@@ -30,10 +30,11 @@
 </section>
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
-        <label for="audioCheck">Audio?</label><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"><br>
-        <label for="userid">User Id</label><input type="text" id="userid"><br>
-        <label for="readerName">Text Name</label><input type="text" id="readerName"><br>
-        <label for="readerDescription">Description</label><input type="text" id="readerDescription" size="20">
+        <div><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"><label for="audioCheck">Audio?</label></div>
+        <div><input type="text" id="userid" required><label for="userid">User Id</label></div>
+        <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
+        <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
+
     </div>
     <div id="audiodiv">
         <fieldset>
@@ -47,10 +48,10 @@
             <button onclick="finish()" id="finishBtn">finish</button>
         </fieldset>
     </div>
-    <textarea id="text" contenteditable="true" onpaste="pastey"></textarea>
+    <div><textarea id="text" contenteditable="true" onpaste="pastey(event)" required></textarea><label for="text">Paste or Type here</label></div>
     <div id="result" class="textPanel"></div>
     <div id="superResult"></div>
-    <button onclick="parseText()" value="bob" id="parseBtn" style="display: block; width: 20%; margin: auto">upload</button>
+    <button onclick="parseText()" value="bob" id="parseBtn" style="display: block; width: 20%; margin: 20px auto">upload</button>
 
 
 </section>

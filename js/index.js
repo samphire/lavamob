@@ -211,7 +211,6 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     var specs = "width=500, height=500, resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes";
     naverPopup = window.open(dicUrl, name, specs);
 
-
     swal({
         title: 'Add to List',
         html: '<input id="llWord" class="llWord" autofocus>' +
@@ -233,7 +232,8 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
             data: {
                 "userid": 1,
                 "textid": selectedTextid,
-                "word": word,
+                // "word": word,
+                "word": document.getElementById("llWord").value,
                 "wordid": wordid,
                 "headwordid": headwordid,
                 "headword": headword,
@@ -331,6 +331,7 @@ function getLLData() {
 }
 function studyVocab() {
     console.log("In study vocab, makeVocaTest is next");
+    llData = null;
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
@@ -383,6 +384,10 @@ function makeVocaTest() {
         text: "You have " + nowList.length + " items to review"
     }).then(function () {
         console.log("In then promise. test is next");
+        if(nowList.length < 7){
+            swal({text: "Sorry, there are not enough items to make a test"});
+            return;
+        }
         test(nowList);
     });
 }

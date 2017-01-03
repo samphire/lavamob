@@ -49,7 +49,7 @@ function parseText() { // creates a version of the text with play buttons in bet
             endPuncArr = new Array();
 
             var startPunc = function recursiveStartPunc(myStr) {
-                if (myStr.slice(0, 1).search(/[\`\~\#\(\{\[\"\'\<\u2026]/g) > -1) {
+                if (myStr.slice(0, 1).search(/[\`\~\#\(\{\[\"\'\<\u2026\u201c]/g) > -1) {
                     finalArr[w].push(myStr.slice(0, 1));
                     return startPunc(myStr.slice(1));
                 }
@@ -59,7 +59,7 @@ function parseText() { // creates a version of the text with play buttons in bet
             };
 
             var endPunc = function recursiveEndPunc(myStr) {
-                if (myStr.slice(-1).search(/[\!\?\,\.\:\;\)\}\"\'\]\u2026]/g) > -1) {
+                if (myStr.slice(-1).search(/[\!\?\,\.\:\;\)\}\"\'\]\u2026\u201d]/g) > -1) {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
                 } else {
@@ -185,6 +185,7 @@ function finish() {
 function uploadText() {
     var plainText, puncParsedJsonArray, audioSpriteJson, puncParsedAudioJsonArray;
     plainText = document.getElementById("text").getAttribute("pasted"); // Hang on! What if the text was typed, rather than pasted?
+    console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
     audioSpriteJson = spriteObj;
     puncParsedAudioJsonArray = finalArrWithAudio;
@@ -220,10 +221,13 @@ function uploadText() {
 }
 
 function pastey(e) {
+    console.log("in pastey");
     var clipboardData;
     // e.preventDefault();
     // e.stopPropagation();
     clipboardData = e.clipboardData || window.clipboardData;
+    printObject("clipboard data on paste", clipboardData);
     var pastedData = clipboardData.getData("text/plain");
+    alert(pastedData);
     document.getElementById("text").setAttribute("pasted", pastedData);
 }

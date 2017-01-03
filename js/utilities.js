@@ -8,7 +8,6 @@ function convertDateToNumber(date) {
 }
 
 function printObject(msg, obj) {
-    var toClass = {}.toString();
     var myStr = "";
     for (prop in obj) {
         myStr += "Property Name: " + prop + ", Value: " + obj[prop] + ", Type: " + typeof obj[prop] + "\n";
@@ -36,31 +35,24 @@ function findFirstEmptySlot(arr, idx) {
 }
 
 function makeRand4(elem) {
-    console.log("in makeRand4. element is: " + elem.word + " at index " + elem.idxInTestList + " in testList, with tranny " + elem.tranny);
     var tmpTestList = testList.slice(0);
     var returnArray = new Array(4);
 
     returnArray[0] = tmpTestList.splice(elem.idxInTestList, 1)[0];
 
-    // printObject("should be the item in question", returnArray[0]);
-
     for (var b = 1; b < returnArray.length; b++) {
         returnArray[b] = tmpTestList.splice(Math.floor(Math.random() * tmpTestList.length), 1)[0];
     }
-    //
-    // returnArray.forEach(function (val) {
-    //     printObject("returnArray from makeRand4", val);
-    // });
     return shuffle(returnArray);
 }
 
 function makeRand6(elem) {
-    var tmpTestList = testList;
+    var tmpTestList = testList.slice(0);
     var returnArray = new Array(6);
-    returnArray[0] = tmpTestList.splice(tmpTestList[elem.idxInTestList], 1)[0];
+    returnArray[0] = tmpTestList.splice(elem.idxInTestList, 1)[0];
 
     for (var b = 1; b < returnArray.length; b++) {
-        returnArray[b] = tmpTestList.splice(tmpTestList[Math.floor(Math.random() * tmpTestList.length)], 1)[0];
+        returnArray[b] = tmpTestList.splice(Math.floor(Math.random() * tmpTestList.length), 1)[0];
     }
     return shuffle(returnArray);
 }

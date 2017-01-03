@@ -1,17 +1,17 @@
 var testList, doneList, wrongList;
-var numPerSession = 2;
+var numPerSession = 7;
 var randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
-var soundRight = new buzz.sound("assets/sound/bells-1-half.mp3");
-var soundWrong = new buzz.sound("assets/sound/saliva-2.mp3");
+// var soundRight = new buzz.sound("assets/sound/bells-1-half.mp3");
+// var soundWrong = new buzz.sound("assets/sound/saliva-2.mp3");
+var soundRight = new buzz.sound("assets/sound/correct.mp3");
+var soundWrong = new buzz.sound("assets/sound/wrong2.mp3");
 var soundFinished = new buzz.sound("assets/sound/perfect.mp3");
 
 function test(list) {
     console.log("In test");
     console.log("list length is: " + list.length);
     testList = list;// all the elements for this date
-
-    // printObject("testList 5", testList[5]);
 
     var testListtmp = testList.slice(0);
 
@@ -61,10 +61,13 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 1:
+                    console.log("In case 1 with word " + val.word);
                     randItems = makeRand4(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
+                    console.log("about to make a type 2 question");
                     htmlstrArray[idxToPlace] = makeQ(2, val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    console.log("about to make a type 5 question");
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 2:
@@ -78,38 +81,45 @@ function test(list) {
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
+                    randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 4:
+                    randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 5:
+                    randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
                     break;
                 case 6:
+                    randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
                     break;
                 default:
                     randItems = makeRand4(val); //not sure about this!
-                    if (val.EF > 2.5) {
+                    if (val.ef > 2.5) {
                         htmlstr += makeQ(5, val);
                     } else {
-                        if (val.EF < 1.5) {
+                        if (val.ef < 1.5) {
+                            randItems = makeRand4(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(1, val);
+                            randItems = makeRand4(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                             htmlstrArray[idxToPlace] = makeQ(2, val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
                             htmlstrArray[idxToPlace] = makeQ(5, val);
                         } else {
+                            randItems = makeRand6(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(4, val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
@@ -160,33 +170,33 @@ function makeQ(type, val) {
         case 3: // Korean word shown, choose from 6 tranny
             returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.word + "</div>";
             randItems.forEach(function (rndVal) {
-                returnStr += "<div class='gridItem'>" + rndVal.tranny + "</div>";
+                if (rndVal.word === val.word) {
+                    returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";
+                } else {
+                    returnStr += "<div class='gridItem' onclick='checkResult(event, false, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";
+                }
             });
             returnStr += "</div>";
             return returnStr;
             break;
         case 4: // English word shown, choose from 6 tranny
             returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.tranny + "</div>";
-            console.log("randitems is: " + typeof randItems + ", size " + randItems.length);
-            // randItems.forEach(function (rndVal, rndIdx) {
-            //     returnStr += "<div class='grid6Word'>" + rndVal.word + "</div>";
-            // });
-
-            for (var boblo = 0; boblo < randItems.length; boblo++) {
-                returnStr += "<div class='gridItem'>" + rndVal.word + "</div>";
-            }
-
-
+            randItems.forEach(function (rndVal) {
+                if (rndVal.word === val.word) {
+                    returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.word + "</div>";
+                } else {
+                    returnStr += "<div class='gridItem' onclick='checkResult(event, false, " + val.idxInTestList + ")'>" + rndVal.word + "</div>";
+                }
+            });
             returnStr += "</div>";
             return returnStr;
             break;
         case 5: // Typing
-            return returnStr; //temporary!!!
-            val.tranny = replaceApos(val.tranny);
-            var htmlstr = "<div class='testItem' style='display:none;'><div class='testWord'>" + word + "</div><div class='inputAnswer'>" +
-                "<input type='text' onkeydown='javascript: if(event.keyCode == 13) checkResult(event, \x22" + bobby + "\x22, this, " + idx;
-            var bob = ")'/>";
-            htmlstr += bob;
+            // val.tranny = replaceApos(val.tranny);
+            returnStr = "<div class='testItem'><div class='wordToTest'>" + val.tranny + "</div><div class='inputAnswer'>" +
+                "<input class='typingInput' id='typingInput" + val.idxInTestList + "' type='text' onkeydown='if(event.keyCode == 13) " +
+                "checkResult(event, document.getElementById(\"typingInput" + val.idxInTestList + "\").value == \"" + val.word + "\"?true:false, " + val.idxInTestList + ")'>";
+
             return returnStr;
             break;
     }
@@ -206,7 +216,8 @@ function checkResult(event, result, index) { // this is actually the main routin
         wrongList.push(testList[index]);
         updateItem(false, index);
     }
-    var $el = $(event.target).parent().hide();
+    var $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();
+    $el.hide();
     // alert(($el).next().length);
     if ($el.next()[0] !== undefined) {
         $el.next().show().find(".inputAnswer input").focus();
@@ -295,44 +306,44 @@ function updateItem(right, idx) {
                 myEl.ef *= .8;
                 alert("ef is: " + myEl.ef);
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -=1;
+                myEl.repnum -= 1;
                 break;
             case 7:
                 alert("in case 7");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=2;
+                myEl.repnum -= 2;
                 break;
 
             case 8:
                 alert("in case 8");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=2;
+                myEl.repnum -= 2;
                 break;
             case 9:
                 alert("in case 9");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=2;
+                myEl.repnum -= 2;
                 break;
             case 10:
                 alert("in case 10");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=3;
+                myEl.repnum -= 3;
                 break;
             case 11:
                 alert("in case 11");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=3;
+                myEl.repnum -= 3;
                 break;
             case 12:
                 alert("in case 12");
                 myEl.ef *= .8;
                 myEl.datenext = calcDateNext(myEl.ef * 2);
-                myEl.repnum -=4;
+                myEl.repnum -= 4;
                 break;
             default:
                 myEl.datenext = calcDateNext(0);
@@ -344,7 +355,7 @@ function updateItem(right, idx) {
 function updateLLItem(myLLItem) {
     myLLItem.datenext = myLLItem.datenext.getTime();
 
-    printObject("check myLLItem's data before ajaxing via put",myLLItem);
+    printObject("check myLLItem's data before ajaxing via put", myLLItem);
 
     console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
 
@@ -363,10 +374,10 @@ function updateLLItem(myLLItem) {
             "datenext": myLLItem.datenext,
             "repnum": myLLItem.repnum
         },
-        success: function(result){
-            alert("success editing ll item");
+        success: function (result) {
+            console.log("LearningList Item edited and uploaded successfully");
         },
-        error: function(jqXHR, status, err){
+        error: function (jqXHR, status, err) {
             alert("some problem: " + status + ", " + jqXHR.status + ", " + err);
         }
     });

@@ -14,7 +14,8 @@ body {
 
 textarea {
     width: 90%;
-    min-height: 40%;
+    min-height: 300px;
+    margin-top: 3rem;
 }
 
 #result {
@@ -77,7 +78,7 @@ textarea {
     width: 500px;
     border-radius: 5px;
     margin: 30px auto;
-    background-color: moccasin ;
+    background-color: moccasin;
     border: 3px solid darkgoldenrod;
     text-align: center;
     padding: 10px 16px;
@@ -126,7 +127,7 @@ textarea {
 }
 
 .vocabitemWord {
-font-size: 2rem;
+    font-size: 2rem;
 }
 
 #readerblurb {
@@ -143,7 +144,8 @@ font-size: 2rem;
 .word {
     cursor: pointer;
 }
-#welcome>h1{
+
+#welcome > h1 {
     font-size: 4rem;
     background-color: floralwhite;
     /*background-image: url(../assets/img/natural-canvas-pale.jpg);*/
@@ -153,7 +155,8 @@ font-size: 2rem;
     border: 3px solid darkgoldenrod;
     margin: 0 30px;
 }
-#selectReader{
+
+#selectReader {
     overflow: auto;
     margin-top: -6%;
 }
@@ -161,41 +164,48 @@ font-size: 2rem;
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
     .hideo {
         width: 92%;
-        /*height: 100%;*/
+        height: 100%;
         padding: 2%;
         border: none;
         background-color: #e8e3c3;
         display: none;
+        text-align: center;
     }
 
-    #welcome>h1{
+    #welcome > h1 {
         font-size: 2rem;
         text-align: center;
     }
 
-    #reader{
+    #reader {
         margin-top: -6%;
         min-height: 97%;
     }
-    #vocab{
+
+    #vocab {
         min-height: 97%;
         padding: 3% 4%;
         margin-top: -6%;
     }
 
-    body{
+    body {
         background-size: cover;
         background-position: 20%;
     }
 
-    .btnActivity{
+    .btnActivity {
         font-size: 1.2rem;
         width: 80%;
     }
 
     input {
         transform: scale(1.6);
-        margin: 5px 0 15px 40px;
+        /*margin: 5px 0 15px 40px;*/
+        z-index: 1;
+    }
+
+    input:valid {
+        background: white;
     }
 
     button {
@@ -213,24 +223,124 @@ font-size: 2rem;
         display: none;
     }
 
-    #readerblurb {
-        width: 35%;
-        float: left;
-        text-align: left;
-    }
-    #selectReader{
+    #selectReader {
         height: auto;
         overflow: auto;
         padding: 3% 4%;
     }
-    .readerPanel{
+
+    #createReader {
+        width: 100%;
+        padding: 0;
+        margin-top: -54px;
+    }
+
+    .readerPanel {
         border: none;
         background-color: inherit;
         padding: 0;
         font-size: 1.4rem;
         line-height: 260%;
     }
-    .swal2-modal button.styled{
+
+    .swal2-modal button.styled {
         padding: 5px 16px;
+        font-size: 12px;
+        margin-right: 20%;
+    }
+
+    .llWord, .tranny {
+        display: block;
+        margin: 1rem auto;
+        width: 60%;
+    }
+
+    #readerBlurb div {
+        position: relative;
+        margin-top: 2rem;
+        overflow: hidden;
+    }
+
+    #audiodiv + div {
+        position: relative;
+        overflow: hidden;
+    }
+
+    #readerBlurb div input, #audiodiv + div textarea {
+        width: 50%;
+        border: 2px solid gray;
+        background: none;
+        position: relative;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        padding: 16px 12px;
+        outline: 0;
+    }
+
+    #readerBlurb div input:valid, #audiodiv + div textarea:valid {
+        background: white;
+    }
+
+    #readerBlurb div input:focus, #audiodiv + div textarea:focus {
+        border-color: #f06d06;
+    }
+
+    #readerBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
+        background: #f06d06;
+        color: white;
+        font-size: 70%;
+        padding: 1px 6px;
+        z-index: 2;
+        text-transform: uppercase;
+    }
+
+    #readerBlurb div label, #audiodiv + div textarea + label {
+        transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
+        position: absolute;
+        color: #999;
+        padding: 7px 6px;
+    }
+
+    #audiodiv + div textarea {
+        resize: vertical;
+        width: 90%;
+    }
+
+    #readerBlurb div input, #audiodiv + div textarea {
+        padding: 12px 12px 12px 12px;
+    }
+
+    #readerBlurb div label {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    #audiodiv + div textarea + label {
+        top: 100px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    #readerBlurb div input:focus, #audiodiv + div textarea:focus {
+        padding: 4px 6px 20px 6px;
+    }
+
+    #readerBlurb div input:focus + label {
+        top: 26%;
+        margin-top: 16px;
+    }
+
+    #audiodiv + div textarea:focus + label {
+        top: 32px;
+        height: 1rem;
+        /*margin-top: 16px;*/
+    }
+
+    #text {
+        height: 30%;
     }
 }
