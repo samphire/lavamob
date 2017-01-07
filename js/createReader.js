@@ -213,6 +213,7 @@ function uploadText() {
         success: function (data) {
             console.log("Uploaded Text Successfully");
             swal("Text Uploaded Successfully");
+            getReaderInfo();
         },
         error: function () {
             alert("Problem Uploading the Text");
