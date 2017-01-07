@@ -366,7 +366,7 @@ function updateLLItem(myLLItem) {
         crossDomain: true,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         data: {
-            "userid": 1,
+            "userid": userid,
             "word": myLLItem.word,
             "wordid": myLLItem.wordid,
             "tranny": myLLItem.tranny,

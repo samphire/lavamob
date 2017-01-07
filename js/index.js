@@ -2,7 +2,7 @@
  * Created by matthew on 7/28/2016.
  */
 
-var userid = 1;
+var userid = 0;
 var selectedTextid;
 var selectedReaderObj;
 var selectedReaderText;
@@ -12,6 +12,25 @@ var howlSpriteObj;
 var howl;
 var url = "http://www.notborder.org:8080/Reader/webresources";
 // var url = "http://localhost:8080/Reader/webresources";
+var naverPre = "http://m.endic.naver.com/search.nhn?query=";
+var naverPost = "&searchOption=mean";
+
+function login(){
+
+    $.ajax({
+        type: "GET",
+        crossDomain: true,
+        url: "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("user").value + "&pass_word=" + document.getElementById("pass").value,
+        success: function(data){
+            userid = data;
+            $(".login").hide();
+            $("#welcome").show();
+            $("#menu").show();
+            getReaderInfo();
+        }
+    });
+}
+
 
 function getReaderInfo() {
     var htmlstr;
@@ -26,7 +45,7 @@ function getReaderInfo() {
         },
         dataType: "json",
         url: url + "/textinfo",
-        data: {"userid": 1}
+        data: {"userid": userid}
     }).done(function (resultjson) {
         // alert(JSON.stringify(resultjson));
         $.each(resultjson.readers, function (idx, val) {
@@ -50,7 +69,7 @@ function getReader(textid) {
     getLL(textid);
 }
 
-function downloadReader(){
+function downloadReader() {
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -230,7 +249,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
             url: url + "/lladd",
             crossDomain: true,
             data: {
-                "userid": 1,
+                "userid": userid,
                 "textid": selectedTextid,
                 // "word": word,
                 "word": document.getElementById("llWord").value,
@@ -258,12 +277,12 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 }
 
 function studyReader() {
-    $("#welcome").hide();
+    $("section").hide();
     $("#selectReader").show();
 }
 
 function createReader() {
-    $('#welcome').hide();
+    $('section').hide();
     $('#createReader').show();
 }
 
@@ -291,8 +310,8 @@ function getVocab(textid) {
             $("#vocab").show();
             var htmlstr = "";
             thisTextLL.forEach(function (el, idx) {
-                htmlstr += "<div class='vocabitem'><div class='vocabitemWord'>" + el.word +
-                    "</div><div class='vocabitemTranny'>" + el.tranny + "</div></div>";
+                htmlstr += "<div class='vocabitem'><div class='vocabitemWord'>" + el.word + "</div><img src='assets/img/icons/naver.png' onclick='showDic(\"" + el.word + "\")'>" +
+                    "<div class='vocabitemTranny'>" + el.tranny + "</div><div class='vocabInfo'>next review: " + el.datenext.substr(0, 16) + ", repnum: " + el.repnum + ", ef: " + el.ef + "</div></div>";
             });
             $("#vocab").append(htmlstr);
             $("#selectReader").hide();
@@ -330,6 +349,7 @@ function getLLData() {
     }
 }
 function studyVocab() {
+
     console.log("In study vocab, makeVocaTest is next");
     llData = null;
     if (!llData) {
@@ -384,16 +404,126 @@ function makeVocaTest() {
         text: "You have " + nowList.length + " items to review"
     }).then(function () {
         console.log("In then promise. test is next");
-        if(nowList.length < 7){
+        if (nowList.length < 7) {
             swal({text: "Sorry, there are not enough items to make a test"});
+            $("section").hide();
+            $("#welcome").show();
             return;
         }
+        $("section").hide();
+        $("#vocaTest").show();
         test(nowList);
     });
 }
 
-function playSound(sprite){
+function playSound(sprite) {
     howl.stop();
     sprite = sprite.toString();
     howl.play(sprite);
+}
+
+function showDic(word) {
+    var url = naverPre + word + naverPost;
+
+    $.ajax({
+        type: "GET",
+        crossdomain: true,
+        url: "http://www.notborder.org/lavamob/lizard.php?word=" + word,
+        success: function (data) {
+            // alert(data);
+            var nodeArr = $.parseHTML(data);
+            // printObject("downloaded node array", nodeArr);
+            var fuck = "";
+
+
+            var $wowElement = $(nodeArr).find(".section_card").find(".h_word").find("strong");
+
+            // printObject("fook", $wowElement[0]);
+            fuck += "<h1>" + $wowElement[0].outerHTML + "</h1>";
+
+            fuck += "<h3>" + $wowElement.parent().parent().find(".desc_lst").find("a")[0].innerHTML + "</h3>";
+
+            printObject("different method", $wowElement.parent().parent().find(".desc_lst").find("span")[0]);
+
+            fuck += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[0].innerHTML + "</div>";
+            // printObject("real", $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1]);
+            fuck += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1].textContent.replace("발음듣기", "") + "</div>";
+
+            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + fuck;
+            $("#dicFrame").show();
+
+            return;
+
+            nodeArr.forEach(function (val, idx) {
+                // printObject("each object", val);
+                // console.log(val.id);
+                if (val.id == "wrap") {
+                    alert("found wrap");
+                    val.childNodes.forEach(function (val, idx) {
+                        if (val.id == "content") {
+                            alert("found content");
+
+                            val.childNodes.forEach(function (val, idx) {
+                                // printObject("content", val);
+                                if (val.className == "entry_wrap") {
+                                    alert("found entry_wrap");
+
+                                    val.childNodes.forEach(function (val, idx) {
+                                        // printObject("entry wrap", val);
+                                        if (val.className == "section_card") {
+                                            alert("found section_card");
+                                            val.childNodes.forEach(function (val, idx) {
+                                                printObject("section_card ... frist", val);
+                                                if (val.className == "entry_search_body" || val.className == "entry_search_word top kr") {
+                                                    alert("found entry_search_body or entry_search_word");
+                                                    val.childNodes.forEach(function (val, idx) {
+                                                        // printObject("entry_search_body", val);
+                                                        if (val.className == "word_wrap") {
+                                                            alert("found word_wrap");
+                                                            val.childNodes.forEach(function (val, idx) {
+                                                                if (val.className == "h_word") {
+                                                                    alert("found h_word");
+                                                                    val.childNodes.forEach(function (val, idx) {
+                                                                        // printObject("at last", val);
+                                                                        // console.log("textContent: " + val.textContent.trim());
+                                                                        fuck += "<h1>" + val.textContent.trim() + "</h1>";
+                                                                    });
+                                                                }
+                                                                if (val.className == "desc_lst") {
+                                                                    val.childNodes.forEach(function (val, idx) {
+                                                                        // printObject("desclst", val);
+                                                                        if (val.outerHTML) {
+                                                                            // console.log(val.outerHTML);
+                                                                            fuck += val.outerHTML;
+                                                                        } else {
+                                                                            // console.log(val.textContent.trim());
+                                                                            fuck += "<span class='myDesc'>" + val.textContent.trim() + "</span>";
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                                return;
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            // alert(fuck);
+            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + fuck;
+            $("#dicFrame").show();
+            // document.getElementById("dicFrame").srcdoc = data;
+        },
+        fail: function () {
+            alert("ajax no worky!");
+        }
+    });
+
+
 }

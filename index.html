@@ -15,10 +15,54 @@
     <link rel="stylesheet" type="text/css" href="css/sweetalert2.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/test.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
 
 </head>
-<body onload="getReaderInfo();"><br>
+<body onload="if (userid == 0);$('section').hide();$('#menu').hide();$('.login').show()">
+
+<div class="login" style="display: none">
+    <div class="heading">
+        <h2>Sign in</h2>
+        <form action="#">
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input id="user" type="text" class="form-control" placeholder="email">
+            </div>
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                <input id="pass" type="password" class="form-control" placeholder="password">
+            </div>
+
+            <button type="submit" class="float" onclick="login()">Login</button>
+        </form>
+    </div>
+</div>
+
+<nav id="menu" style="display:none;">
+
+    <input type="checkbox" id="toggle-nav"/>
+    <label id="toggle-nav-label" for="toggle-nav"><i class="icon-reorder"></i></label>
+
+    <div class="box">
+        <ul>
+            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();"><i class="icon-home"></i> home</a></li>-->
+            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader();"><i class="icon-edit"></i> Create Reader</a></li>-->
+            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyReader();"><i class="icon-eye-open"></i> Study Reader</a></li>-->
+            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyVocab();"><i class="icon-trophy"></i> Test Vocabulary</a></li>            -->
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();"><i class="icon-home icon-4x"></i>&nbsp;</a></li>
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader();"><i class="icon-edit icon-4x"></i>&nbsp;</a></li>
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyReader();"><i class="icon-eye-open icon-4x"></i>&nbsp;</a></li>
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyVocab();"><i class="icon-trophy icon-4x"></i>&nbsp;</a></li>
+        </ul>
+    </div>
+
+</nav>
+
+<br>
 <section id="welcome">
     <h1>Choose Your Activity</h1>
     <div class="btnActivity" onclick="createReader()">Create Reader</div>
@@ -30,7 +74,7 @@
 </section>
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
-        <div><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"><label for="audioCheck">Audio?</label></div>
+        <div>Audio?&nbsp;</span><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"></div>
         <div><input type="text" id="userid" required><label for="userid">User Id</label></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
@@ -56,7 +100,7 @@
 
 </section>
 <section id="reader" class="hideo"></section>
-<section id="vocab" class="hideo"></section>
+<section id="vocab" class="hideo"><div id="dicFrame" src="http://www.naver.com"></div></section>
 <section id="vocaTest" class="hideo"></section>
 <div id="preload">
     <!--<img src="assets/img/chonwon.png">-->

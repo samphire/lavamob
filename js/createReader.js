@@ -16,7 +16,7 @@
 
 
 var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr;
-var userid = "1";
+// var userid = userid;
 var url = "http://www.notborder.org:8080/Reader/webresources";
 // var url = "http://localhost:8080/Reader/webresources";
 var audiourl = "http://www.notborder.org/readeraudio";

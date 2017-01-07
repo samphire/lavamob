@@ -1,3 +1,5 @@
+@import 'login.css';
+
 html {
     height: 100%;
 }
@@ -42,7 +44,23 @@ textarea {
     padding: 2% 3%;
     cursor: pointer;
     float: left;
-    height: 2.3rem;
+}
+
+.vocabInfo {
+    position: relative;
+    color: grey;
+    margin-top: 10px;
+    font-size: small;
+}
+
+.vocabitem {
+    position: relative;
+}
+
+.vocabitem img {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 #audiodiv {
@@ -62,8 +80,26 @@ textarea {
     padding: 2% 3%;
     cursor: pointer;
     float: left;
-    height: 2.3rem;
     color: yellow;
+}
+
+#dicFrame {
+    width: 100%;
+    z-index: 2;
+    background: floralwhite;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 60%;
+    display: none;
+    overflow: auto;
+}
+
+#closeIcon {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 16%;
 }
 
 .item {
@@ -164,7 +200,7 @@ textarea {
 @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
     .hideo {
         width: 92%;
-        height: 100%;
+        min-height: 97%;
         padding: 2%;
         border: none;
         background-color: #e8e3c3;
@@ -184,6 +220,11 @@ textarea {
 
     #vocab {
         min-height: 97%;
+        padding: 3% 4%;
+        margin-top: -6%;
+    }
+
+    #vocaTest{
         padding: 3% 4%;
         margin-top: -6%;
     }
@@ -218,13 +259,12 @@ textarea {
     }
 
     #audiodiv {
-        width: 45%;
+        width: 100%;
         float: left;
         display: none;
     }
 
     #selectReader {
-        height: auto;
         overflow: auto;
         padding: 3% 4%;
     }
@@ -232,7 +272,8 @@ textarea {
     #createReader {
         width: 100%;
         padding: 0;
-        margin-top: -54px;
+        margin-top: -44px;
+        min-height: 100%;
     }
 
     .readerPanel {
@@ -257,7 +298,7 @@ textarea {
 
     #readerBlurb div {
         position: relative;
-        margin-top: 2rem;
+        margin-top: 1.4rem;
         overflow: hidden;
     }
 
@@ -266,7 +307,7 @@ textarea {
         overflow: hidden;
     }
 
-    #readerBlurb div input, #audiodiv + div textarea {
+    #readerBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
         width: 50%;
         border: 2px solid gray;
         background: none;
@@ -343,4 +384,5 @@ textarea {
     #text {
         height: 30%;
     }
+
 }
