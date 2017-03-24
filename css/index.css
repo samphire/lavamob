@@ -39,7 +39,7 @@ textarea {
     background-color: dodgerblue;
     color: seashell;
     margin-top: 10px;
-    width: 74%;
+    width: 60%;
     text-align: center;
     padding: 2% 3%;
     cursor: pointer;
@@ -69,6 +69,11 @@ textarea {
     display: none;
 }
 
+fieldset{
+    margin-top: 2.3rem;
+    height: 312px;
+}
+
 .readerlistitemvocab {
     font-size: x-large;
     border-radius: 3px;
@@ -77,10 +82,17 @@ textarea {
     margin-left: 2%;
     width: 10%;
     text-align: center;
-    padding: 2% 3%;
+    padding: 2% 1%;
     cursor: pointer;
     float: left;
     color: yellow;
+}
+
+.delreader{
+    margin: 2% 0 0 0;
+    width: 4%;
+    cursor: pointer;
+    float: left;
 }
 
 #dicFrame {
@@ -97,7 +109,7 @@ textarea {
 
 #closeIcon {
     position: fixed;
-    bottom: 0;
+    bottom: 80px;
     right: 0;
     width: 16%;
 }
@@ -197,7 +209,109 @@ textarea {
     margin-top: -6%;
 }
 
-@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
+#selectReader i{
+    margin: 0.55em;
+    float: left;
+}
+
+input#llWord.llWord, input#tranny.tranny {
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    border-left: 2px solid black;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+
+#readerBlurb div {
+    position: relative;
+    margin-top: 1.4rem;
+    overflow: hidden;
+}
+
+#audiodiv + div {
+    position: relative;
+    overflow: hidden;
+}
+
+#readerBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
+    width: 50%;
+    border: 2px solid gray;
+    background: none;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    padding: 16px 12px;
+    outline: 0;
+}
+
+#readerBlurb div input:valid, #audiodiv + div textarea:valid {
+    background: white;
+}
+
+#readerBlurb div input:focus, #audiodiv + div textarea:focus {
+    border-color: #f06d06;
+}
+
+#readerBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
+    background: #f06d06;
+    color: white;
+    font-size: 70%;
+    padding: 1px 6px;
+    z-index: 2;
+    text-transform: uppercase;
+}
+
+#readerBlurb div label, #audiodiv + div textarea + label {
+    transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
+    position: absolute;
+    color: #999;
+    padding: 7px 6px;
+}
+
+#audiodiv + div textarea {
+    resize: vertical;
+    width: 90%;
+}
+
+#readerBlurb div input, #audiodiv + div textarea {
+    padding: 12px 12px 12px 12px;
+}
+
+#readerBlurb div label {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+#audiodiv + div textarea + label {
+    top: 100px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+#readerBlurb div input:focus, #audiodiv + div textarea:focus {
+    padding: 4px 6px 20px 6px;
+}
+
+#readerBlurb div input:focus + label {
+    top: 26%;
+    margin-top: 16px;
+}
+
+#audiodiv + div textarea:focus + label {
+    top: 32px;
+    height: 1rem;
+    /*margin-top: 16px;*/
+}
+
+#text {
+    height: 30%;
+}
+
+@media only screen and (max-device-width: 736px) and (orientation: portrait) {
     .hideo {
         width: 92%;
         min-height: 97%;
@@ -224,7 +338,7 @@ textarea {
         margin-top: -6%;
     }
 
-    #vocaTest{
+    #vocaTest {
         padding: 3% 4%;
         margin-top: -6%;
     }
@@ -255,7 +369,7 @@ textarea {
 
     body {
         font-size: 1.2rem;
-        text-align: left;
+        /*text-align: left;*/
     }
 
     #audiodiv {
@@ -269,10 +383,24 @@ textarea {
         padding: 3% 4%;
     }
 
+    #selectReader i{
+        margin: 0.3em 0.2em;
+    }
+    .item{
+        width: 100%;
+    }
+    .readerlistitem{
+        width: 50%;
+    }
+    .delreader{
+        width: 8%;
+        margin: 0.7em 0 0 0.5em;
+    }
+
     #createReader {
         width: 100%;
         padding: 0;
-        margin-top: -44px;
+        margin-top: -46px;
         min-height: 100%;
     }
 
@@ -385,4 +513,164 @@ textarea {
         height: 30%;
     }
 
+    input#llWord.llWord, input#tranny.tranny {
+
+        margin-bottom: 50px;
+    }
+}
+
+@media only screen /*Samsung Galaxy S7 Edge*/
+and (max-width: 1440px)
+and (max-height: 2560px) {
+
+    .hideo {
+        width: 92%;
+        min-height: 97%;
+        padding: 2%;
+        border: none;
+        background-color: #e8e3c3;
+        display: none;
+        text-align: center;
+    }
+
+    #welcome > h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    #reader {
+        margin-top: -6%;
+        min-height: 97%;
+    }
+
+    #vocab {
+        min-height: 97%;
+        padding: 3% 4%;
+        margin-top: -6%;
+    }
+
+    #vocaTest {
+        padding: 3% 4%;
+        margin-top: -6%;
+    }
+
+    body {
+        background-size: cover;
+        background-position: 20%;
+    }
+
+    .btnActivity {
+        font-size: 1.2rem;
+        width: 80%;
+    }
+
+    input {
+        transform: scale(1.6);
+        /*margin: 5px 0 15px 40px;*/
+        z-index: 1;
+    }
+
+    input:valid {
+        background: white;
+    }
+
+    button {
+        transform: scale(2);
+    }
+
+    body {
+        font-size: 1.2rem;
+        /*text-align: left;*/
+    }
+
+    #audiodiv {
+        width: 100%;
+        float: left;
+        display: none;
+    }
+
+    #selectReader {
+        overflow: auto;
+        padding: 3% 4%;
+    }
+
+    #createReader {
+        width: 100%;
+        /*padding: 0;*/
+        margin-top: -46px;
+        min-height: 100%;
+    }
+
+    .readerPanel {
+        border: none;
+        background-color: inherit;
+        padding: 0;
+        font-size: 1.4rem;
+        line-height: 260%;
+    }
+
+    .swal2-modal button.styled {
+        padding: 5px 16px;
+        font-size: 12px;
+        margin-right: 20%;
+    }
+
+    .llWord, .tranny {
+        display: block;
+        margin: 1rem auto;
+        width: 60%;
+    }
+
+    input#llWord.llWord, input#tranny.tranny {
+
+        margin-bottom: 50px;
+    }
+
+}
+
+/*   phones   */
+@media (max-width: 599px) {
+
+}
+
+/*   tablets portrait   */
+@media (min-width: 600px) {
+
+}
+
+/*   tablets landscape   */
+@media (max-width: 900px) {
+
+}
+
+/*   desktops   */
+@media only screen and (min-width: 1200px) {
+    .hideo {
+        width: 80%;
+        /*height: 100%;*/
+        margin: auto;
+        border: solid blue 2px;
+        padding: 2%;
+        background-color: #ffffff;
+        display: none;
+    }
+    #createReader{
+        width: 80%;
+        margin-top: 0;
+    }
+    #parseBtn{
+        border-radius: 4px;
+        border: 2px solid #23203b;
+        padding: 10px 20px;
+        margin: 40px auto;
+    }
+}
+
+/*   big desktops   */
+@media (max-width: 1800px) {
+
+}
+
+.fa-cloud-upload:hover{
+    color: green;
 }

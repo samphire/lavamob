@@ -108,16 +108,22 @@ function parseText() { // creates a version of the text with play buttons in bet
         $("#text").hide();
         document.getElementById("result").innerHTML = checkString; // Don't worry. this text is never uploaded. It's just for the gui to make sound sprites.
         $("#result").show();
-    } else{
+    } else {
         uploadText();
     }
 }
 
-function loadAndPlay() {
+function loadAndPlay() { // Does what it says on the tin
 
     sndArr = new Array();
-    var fileStrArr = document.getElementById("fileinput").value.split("\\");
-    var fileStr = audiourl + "/" + fileStrArr[fileStrArr.length - 1];
+var fileStrArr, fileStr;
+    if (document.getElementById("fileinput")) {
+        fileStrArr = document.getElementById("fileinput").value.split("\\");
+        fileStr = audiourl + "/" + fileStrArr[fileStrArr.length - 1];
+    } else{
+        fileStr = audiourl + "/" + selectedReaderObj.audio;
+    }
+
     console.log(fileStr)
     sndArr.push(fileStr);
 
@@ -131,7 +137,7 @@ function loadAndPlay() {
     sound.play();
 }
 
-var perf;
+var perf, mySprite;
 
 function playSound(sprite) {
     mySprite = sprite.toString();
@@ -184,7 +190,8 @@ function finish() {
 //noinspection JSAnnotator
 function uploadText() {
     var plainText, puncParsedJsonArray, audioSpriteJson, puncParsedAudioJsonArray;
-    plainText = document.getElementById("text").getAttribute("pasted"); // Hang on! What if the text was typed, rather than pasted?
+    plainText = document.getElementById("text").value;
+    printObject("take a look", document.getElementById("text"));
     console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
     audioSpriteJson = spriteObj;
@@ -196,8 +203,8 @@ function uploadText() {
     uploadData.audioSpriteObjString = JSON.stringify(audioSpriteJson);
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.wordArray = wordArr;
-    if(typeof sndArr != 'undefined' && sndArr[0] != null){
-    uploadData.audioFilename = sndArr[0];
+    if (typeof sndArr != 'undefined' && sndArr[0] != null) {
+        uploadData.audioFilename = sndArr[0];
     }
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
@@ -212,8 +219,10 @@ function uploadText() {
         crossDomain: true,
         success: function (data) {
             console.log("Uploaded Text Successfully");
-            swal("Text Uploaded Successfully");
-            getReaderInfo();
+            swal("Text Uploaded Successfully").then(function () {
+                getReaderInfo();
+                studyReader();
+            });
         },
         error: function () {
             alert("Problem Uploading the Text");
@@ -229,6 +238,6 @@ function pastey(e) {
     clipboardData = e.clipboardData || window.clipboardData;
     printObject("clipboard data on paste", clipboardData);
     var pastedData = clipboardData.getData("text/plain");
-    alert(pastedData);
+    // alert(pastedData);
     document.getElementById("text").setAttribute("pasted", pastedData);
 }

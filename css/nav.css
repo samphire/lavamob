@@ -1,12 +1,12 @@
 @import url('http://fonts.googleapis.com/css?family=Merriweather+Sans:700,300');
-@import url('http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
-* {
-    padding: 0px;
-    margin: 0px;
-    border: 0px;
-    outline: 0px;
-}
+/** {*/
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+    /*border: 0px;*/
+    /*outline: 0px;*/
+/*}*/
 
 /* fast reset */
 

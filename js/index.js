@@ -15,25 +15,37 @@ var url = "http://www.notborder.org:8080/Reader/webresources";
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 
-function login(){
-
+function login() {
+    // localStorage.clear();
+// alert(document.getElementById("userEmail").value);
+    localStorage.setItem("userEmail", document.getElementById("userEmail").value);
     $.ajax({
         type: "GET",
         crossDomain: true,
-        url: "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("user").value + "&pass_word=" + document.getElementById("pass").value,
-        success: function(data){
+        url: "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value,
+        success: function (data) {
+            if (data == "fail login") {
+                alert("username or password is incorrect");
+                return;
+            }
+            // alert("data is: " + data);
+            // alert("success on login");
             userid = data;
             $(".login").hide();
+            document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
             $("#welcome").show();
             $("#menu").show();
             getReaderInfo();
+            localStorage.setItem("userid", userid);
         }
     });
 }
 
 
 function getReaderInfo() {
+    $('#selectReader').empty();
     var htmlstr;
+    // alert("userid is: " + userid);
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -50,7 +62,11 @@ function getReaderInfo() {
         // alert(JSON.stringify(resultjson));
         $.each(resultjson.readers, function (idx, val) {
             htmlstr = "<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(" + val.id + ")'>" + val.name + "</div>";
-            htmlstr += "<div class='readerlistitemvocab' onclick='getVocab(" + val.id + ")'>V</div></div>";
+            htmlstr += "<div class='readerlistitemvocab' onclick='getVocab(" + val.id + ")'>V</div>";
+            htmlstr += "<i class='fa fa-pencil-square-o fa-2x' aria-hidden='true' onclick='editReader(" + val.id + ")'></i>";
+            // htmlstr += "<img class='delreader' onclick='var el = this.parentNode; this.parentNode.parentNode.removeChild(el);deleteReader(" + val.id + ");' src='assets/img/icons/mission_complete.png'>";
+            htmlstr += "<img class='delreader' onclick='deleteReader(this.parentNode," + val.id + ");' src='assets/img/icons/mission_complete.png'>";
+            htmlstr += "</div>";
             $('#selectReader').append(htmlstr);
         });
     }).fail(function (jqXHR, status, err) {
@@ -62,6 +78,68 @@ function getReaderInfo() {
     });
 }
 
+function editReader(textid){
+
+    $.ajax({
+        type: "GET",
+        crossDomain: true,
+        accepts: "application/json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Accept', 'application/json');
+        },
+        url: url + "/text/forEdit?textid=" + textid
+    }).done(function (resultjson) {
+        console.log(JSON.stringify(resultjson));
+        printObject("yes", resultjson);
+        selectedReaderObj = resultjson;
+        document.getElementById("text").innerText = resultjson.plainText;
+        document.getElementById("readerName").value = resultjson.name;
+        document.getElementById("readerDescription").value = resultjson.description;
+        if(resultjson.audio){
+            var el = document.getElementById("audioform");
+            var newEl = document.createElement('div');
+            newEl.innerHTML = resultjson.audio;
+            el.parentNode.appendChild(newEl);
+            el.parentNode.removeChild(el);
+
+        }
+        createReader();
+
+    }).fail(function (jqXHR, status, err) {
+        // alert("some problem");
+        // alert(status);
+        // alert(jqXHR.status);
+        // alert(err);
+        console.log("failed ajax call in getReader");
+    });
+}
+
+function deleteReader(node, textid) {
+
+    swal({
+        title: 'Are you sure you want to remove Reader id ' + textid + '?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Add all words to learned list',
+        cancelButtonText: 'Just delete',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: true
+    }).then(function () {
+        node.parentNode.removeChild(node);
+        removeReader(textid, true); // TODO make ajax call to webservice to remove text from usertext table for this user, and to assign all words to the user's 'learned' list
+    }, function (dismiss) {
+        // dismiss can be 'cancel', 'overlay',
+        // 'close', and 'timer'
+        if (dismiss === 'cancel') {
+            node.parentNode.removeChild(node);
+            removeReader(textid, false);
+        }
+    })
+}
 
 function getReader(textid) {
     $("#reader").show();
@@ -233,7 +311,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     swal({
         title: 'Add to List',
         html: '<input id="llWord" class="llWord" autofocus>' +
-        '<input id="tranny" class="tranny">',
+        '<input id="tranny" class="tranny" placeholder="type here">',
         showCancelButton: true,
         onOpen: function (el) {
             $(el).find('.llWord').val(word);
@@ -278,6 +356,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 
 function studyReader() {
     $("section").hide();
+    $("#reader").empty();
     $("#selectReader").show();
 }
 
@@ -376,6 +455,7 @@ function studyVocab() {
                     var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
                     var d = Date.parse(datestr);
                     // alert("Now: "+Date.now() + "\nitem datenext" + d);
+                    console.log("Checking nowlist. value of d is: " + d + ", value of now is: " + Date.now());
                     if (d < Date.now()) {
                         nowList.push(el);
                     }
@@ -391,6 +471,7 @@ function studyVocab() {
             var d = Date.parse(datestr);
             // alert(Date.now() + "\n" + d);
             if (d < Date.now()) {
+                // alert('hey');
                 nowList.push(el);
             }
         });
@@ -398,7 +479,7 @@ function studyVocab() {
     }
 }
 function makeVocaTest() {
-    console.log("In makevVocaTest. then promise is next");
+    console.log("In makeVocaTest. then promise is next");
 
     swal({
         text: "You have " + nowList.length + " items to review"
@@ -433,23 +514,23 @@ function showDic(word) {
             // alert(data);
             var nodeArr = $.parseHTML(data);
             // printObject("downloaded node array", nodeArr);
-            var fuck = "";
+            var htmlString = "";
 
 
             var $wowElement = $(nodeArr).find(".section_card").find(".h_word").find("strong");
 
             // printObject("fook", $wowElement[0]);
-            fuck += "<h1>" + $wowElement[0].outerHTML + "</h1>";
+            htmlString += "<h1>" + $wowElement[0].outerHTML + "</h1>";
 
-            fuck += "<h3>" + $wowElement.parent().parent().find(".desc_lst").find("a")[0].innerHTML + "</h3>";
+            htmlString += "<h3>" + $wowElement.parent().parent().find(".desc_lst").find("a")[0].innerHTML + "</h3>";
 
             printObject("different method", $wowElement.parent().parent().find(".desc_lst").find("span")[0]);
 
-            fuck += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[0].innerHTML + "</div>";
+            htmlString += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[0].innerHTML + "</div>";
             // printObject("real", $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1]);
-            fuck += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1].textContent.replace("발음듣기", "") + "</div>";
+            htmlString += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1].textContent.replace("발음듣기", "") + "</div>";
 
-            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + fuck;
+            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + htmlString;
             $("#dicFrame").show();
 
             return;
@@ -486,7 +567,7 @@ function showDic(word) {
                                                                     val.childNodes.forEach(function (val, idx) {
                                                                         // printObject("at last", val);
                                                                         // console.log("textContent: " + val.textContent.trim());
-                                                                        fuck += "<h1>" + val.textContent.trim() + "</h1>";
+                                                                        htmlString += "<h1>" + val.textContent.trim() + "</h1>";
                                                                     });
                                                                 }
                                                                 if (val.className == "desc_lst") {
@@ -494,10 +575,10 @@ function showDic(word) {
                                                                         // printObject("desclst", val);
                                                                         if (val.outerHTML) {
                                                                             // console.log(val.outerHTML);
-                                                                            fuck += val.outerHTML;
+                                                                            htmlString += val.outerHTML;
                                                                         } else {
                                                                             // console.log(val.textContent.trim());
-                                                                            fuck += "<span class='myDesc'>" + val.textContent.trim() + "</span>";
+                                                                            htmlString += "<span class='myDesc'>" + val.textContent.trim() + "</span>";
                                                                         }
                                                                     });
                                                                 }
@@ -516,7 +597,7 @@ function showDic(word) {
                 }
             });
             // alert(fuck);
-            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + fuck;
+            document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + htmlString;
             $("#dicFrame").show();
             // document.getElementById("dicFrame").srcdoc = data;
         },
@@ -525,5 +606,20 @@ function showDic(word) {
         }
     });
 
+}
+
+function removeReader(textid, addWords) {
+    $.ajax({
+        type: "DELETE",
+        url: url + "/text?userid=" + userid + "&textid=" + textid + "&isAddToLearned=" + addWords,
+        crossDomain: true,
+        success: function (result) {
+            msg = addWords?"Reader has been removed.\nWords have been added to learned list.":"Reader has been removed.";
+            swal(msg);
+        },
+        error: (function (jqXHR, status, err) {
+            swal("some problem");
+        })
+    });
 
 }

@@ -9,6 +9,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="Lavamob Production Version">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/lava" local="$PROJECT_DIR$" web="/lava" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="in place">
         <serverdata>
           <mappings>

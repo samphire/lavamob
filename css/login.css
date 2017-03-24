@@ -7,6 +7,8 @@
 .login .heading {
     text-align: center;
     margin-top: 1%;
+    background-color: darkslateblue;
+    padding: 15%;
 }
 .login .heading h2 {
     font-size: 3em;
@@ -29,7 +31,7 @@
     border: none;
 }
 .login form .input-group span i {
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: rgba(255, 255, 255, 0.2);
 }
 .login form input.form-control {
@@ -42,10 +44,11 @@
     background: none;
     border-radius: 0px;
     padding: 10px;
-    font-size: 1.6em;
+    font-size: 1.2em;
     width: 100%;
     background: transparent;
     color: #c2b8b1;
+    text-align: center;
 }
 .login form input.form-control:focus {
     border: none;
@@ -56,7 +59,7 @@
     border: none;
     font-size: 1.6em;
     font-weight: 300;
-    padding: 5px 0;
+    padding: 5px 10px;
     width: 100%;
     border-radius: 3px;
     color: #b3eecc;
@@ -84,56 +87,68 @@
     transform: translateY(-3px);
 }
 
-/* Large Devices, Wide Screens */
-@media only screen and (max-width: 1200px) {
-    .login {
-        width: 600px;
-        font-size: 2em;
-    }
+.mySignout{
+    /*position: absolute;*/
+    /*margin-left: -47%;*/
+    /*margin-top: -110px;*/
 }
-@media only screen and (max-width: 1100px) {
-    .login {
-        margin-top: 2%;
-        width: 600px;
-        font-size: 1.7em;
-    }
+.mySignout:hover{
+    color: darkred;
 }
-/* Medium Devices, Desktops */
-@media only screen and (max-width: 992px) {
-    .login {
-        margin-top: 1%;
-        width: 550px;
-        font-size: 1.7em;
-        min-height: 0;
-    }
-}
-/* Small Devices, Tablets */
-@media only screen and (max-width: 768px) {
-    .login {
-        margin-top: 0;
-        width: 500px;
-        font-size: 1.3em;
-        min-height: 0;
-    }
-}
-/* Extra Small Devices, Phones */
-@media only screen and (max-width: 480px) {
-    .login {
-        margin-top: 200px;
-        width: 50%;
-        font-size: 1em;
-        min-height: 0;
-    }
-    .login h2 {
-        margin-top: 0;
-    }
-}
-/* Custom, iPhone Retina */
-@media only screen and (max-width: 320px) {
-    .login {
-        margin-top: 0;
-        width: 200px;
-        font-size: 0.7em;
-        min-height: 0;
-    }
-}
+
+/*!* Large Devices, Wide Screens *!*/
+/*@media only screen and (max-width: 1200px) {*/
+    /*.login {*/
+        /*width: 600px;*/
+        /*font-size: 2em;*/
+    /*}*/
+/*}*/
+/*@media only screen and (max-width: 1100px) {*/
+    /*.login {*/
+        /*margin-top: 2%;*/
+        /*width: 600px;*/
+        /*font-size: 1.7em;*/
+    /*}*/
+/*}*/
+/*!* Medium Devices, Desktops *!*/
+/*@media only screen and (max-width: 992px) {*/
+    /*.login {*/
+        /*margin-top: 1%;*/
+        /*width: 550px;*/
+        /*font-size: 1.7em;*/
+        /*min-height: 0;*/
+    /*}*/
+/*}*/
+/*!* Small Devices, Tablets *!*/
+/*@media only screen and (max-width: 768px) {*/
+    /*.login {*/
+        /*margin-top: 0;*/
+        /*width: 500px;*/
+        /*font-size: 1.3em;*/
+        /*min-height: 0;*/
+    /*}*/
+/*}*/
+/*!* Extra Small Devices, Phones *!*/
+/*@media only screen and (max-width: 480px) {*/
+    /*.login {*/
+        /*margin-top: 200px;*/
+        /*width: 50%;*/
+        /*font-size: 1em;*/
+        /*min-height: 0;*/
+    /*}*/
+    /*.login h2 {*/
+        /*margin-top: 0;*/
+    /*}*/
+/*}*/
+/*!* Custom, iPhone Retina *!*/
+/*@media only screen and (max-width: 320px) {*/
+    /*.login {*/
+        /*margin-top: 0;*/
+        /*width: 200px;*/
+        /*font-size: 0.7em;*/
+        /*min-height: 0;*/
+    /*}*/
+    /*.icon-signout{*/
+        /*display:none;*/
+    /*}*/
+/*}*/
