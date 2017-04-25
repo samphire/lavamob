@@ -10,8 +10,8 @@ var llData, nowList;
 var naverPopup;
 var howlSpriteObj;
 var howl;
-var url = "http://www.notborder.org:8080/Reader/webresources";
-// var url = "http://localhost:8080/Reader/webresources";
+// var url = "http://www.notborder.org:8080/Reader/webresources";
+var url = "http://localhost:8080/Reader/webresources";
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 
@@ -103,7 +103,7 @@ function editReader(textid){
             el.parentNode.removeChild(el);
 
         }
-        createReader();
+        createReader(textid);
 
     }).fail(function (jqXHR, status, err) {
         // alert("some problem");
@@ -219,7 +219,7 @@ function downloadReader() {
                 console.log(el);
             }
         });
-        console.log(selectedReaderText);
+        console.log("******* THIS IS PRINTED IN THE HTML ******* \n" +  selectedReaderText);
 
         // alert("ajax call success to web service for texts: \n\n" + JSON.stringify(resultjson));
         // selectedReaderText = selectedReaderText.replace(/customPop\(/g, "customPop(this,");
@@ -360,7 +360,8 @@ function studyReader() {
     $("#selectReader").show();
 }
 
-function createReader() {
+function createReader(textid) {
+    textToEdit = textid;
     $('section').hide();
     $('#createReader').show();
 }
@@ -386,7 +387,7 @@ function getVocab(textid) {
                 }
             });
             $("#selectReader").hide();
-            $("#vocab").show();
+            $("#vocab").empty();
             var htmlstr = "";
             thisTextLL.forEach(function (el, idx) {
                 htmlstr += "<div class='vocabitem'><div class='vocabitemWord'>" + el.word + "</div><img src='assets/img/icons/naver.png' onclick='showDic(\"" + el.word + "\")'>" +

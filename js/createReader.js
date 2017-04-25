@@ -15,7 +15,7 @@
  * */
 
 
-var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr;
+var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr, textToEdit;
 // var userid = userid;
 var url = "http://www.notborder.org:8080/Reader/webresources";
 // var url = "http://localhost:8080/Reader/webresources";
@@ -208,9 +208,11 @@ function uploadText() {
     }
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
-
+    var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
+    // var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val();
+    console.log("Editing text number: " + textToEdit);
     $.ajax({
-        url: url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val(),
+        url: myUrl,
         headers: {"userid": userid}, // header must be enabled in cors filter on server
         type: "POST",
         dataType: "json",

@@ -8,7 +8,7 @@
     <script src="js/howler.core.min.js"></script>
     <script src="js/createReader.js"></script>
     <script src="js/buzz.min.js"></script>
-    <script src="js/index.js?version=6"></script>
+    <script src="js/index.js?version=7"></script>
     <script src="js/spacedRep.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/sweetalert2.min.js"></script>
@@ -84,7 +84,7 @@
             <li><a href="#"
                    onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();"><i
                     class="fa fa-home fa-4x"></i>&nbsp;</a></li>
-            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader();"><i
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader(0);"><i
                     class="fa fa-edit fa-4x"></i>&nbsp;</a></li>
             <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyReader();"><i
                     class="fa fa-eye fa-4x"></i>&nbsp;</a></li>
@@ -100,7 +100,7 @@
     <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout" onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
 
     <h1>Choose Your Activity</h1>
-    <div class="btnActivity" onclick="createReader()">Create Reader</div>
+    <div class="btnActivity" onclick="createReader(0)">Create Reader</div>
     <div class="btnActivity" onclick="studyReader()">Study Reader</div>
     <div class="btnActivity" onclick="studyVocab()">Study Vocabulary</div>
 </section>
