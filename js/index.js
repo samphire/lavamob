@@ -10,33 +10,32 @@ var llData, nowList;
 var naverPopup;
 var howlSpriteObj;
 var howl;
-// var url = "http://www.notborder.org:8080/Reader/webresources";
-var url = "http://localhost:8080/Reader/webresources";
+var url = "http://www.notborder.org:8080/Reader/webresources";
+// var url = "http://localhost:8080/Reader/webresources";
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 
 function login() {
-    // localStorage.clear();
-// alert(document.getElementById("userEmail").value);
-    localStorage.setItem("userEmail", document.getElementById("userEmail").value);
     $.ajax({
         type: "GET",
         crossDomain: true,
         url: "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value,
         success: function (data) {
+            console.log("LOGIN: " + data);
+            alert(data);
             if (data == "fail login") {
                 alert("username or password is incorrect");
+                localStorage.clear();
                 return;
             }
-            // alert("data is: " + data);
-            // alert("success on login");
             userid = data;
+            localStorage.setItem("userEmail", document.getElementById("userEmail").value);
+            localStorage.setItem("userid", userid);
             $(".login").hide();
             document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
             $("#welcome").show();
             $("#menu").show();
             getReaderInfo();
-            localStorage.setItem("userid", userid);
         }
     });
 }
@@ -78,7 +77,7 @@ function getReaderInfo() {
     });
 }
 
-function editReader(textid){
+function editReader(textid) {
 
     $.ajax({
         type: "GET",
@@ -95,7 +94,7 @@ function editReader(textid){
         document.getElementById("text").innerText = resultjson.plainText;
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
-        if(resultjson.audio){
+        if (resultjson.audio) {
             var el = document.getElementById("audioform");
             var newEl = document.createElement('div');
             newEl.innerHTML = resultjson.audio;
@@ -157,25 +156,28 @@ function downloadReader() {
         },
         url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
-        console.log(JSON.stringify(resultjson));
+
+        printObject("All Properties of resultjson", resultjson);
         selectedReaderObj = resultjson;
 
         //Initialize sound
         howl = null;
         howlSpriteObj = null;
 
-        var finalTextArr = selectedReaderObj.puncParsedJsonArray;
+        var finalTextArr;
 
-        if (resultjson.audioFilename) { // If there is audio, set up Howl and the sprite object
+        if (resultjson.audio) { // If there is audio, set up Howl and the sprite object
             console.log('there is audio');
             finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
             var sndArr = new Array();
-            sndArr.push(resultjson.audioFilename); // simplify this for goodness sake, insert on instantiation
-            howlSpriteObj = JSON.parse(resultjson.audioSpriteObjString);
+            sndArr.push(resultjson.audio); // simplify this for goodness sake, insert on instantiation
+            howlSpriteObj = JSON.parse(resultjson.audioSpriteJson);
             howl = new Howl({
                 src: sndArr,
                 sprite: howlSpriteObj
             });
+        } else{
+            finalTextArr = selectedReaderObj.puncParsedJsonArray;
         }
 
         // make selected reader text !!!!!!!!!!
@@ -207,19 +209,19 @@ function downloadReader() {
         for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
             constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
         }
-        console.log("Printing finalTextArr");
+        // console.log("Printing finalTextArr");
         selectedReaderText = "";
         finalTextArr.forEach(function (el, idx) {
             if (el.indexOf("^&") > -1) {
                 finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ")\">";
                 selectedReaderText += finalTextArr[idx];
-                console.log(finalTextArr[idx]);
+                // console.log(finalTextArr[idx]);
             } else {
                 selectedReaderText += el;
-                console.log(el);
+                // console.log(el);
             }
         });
-        console.log("******* THIS IS PRINTED IN THE HTML ******* \n" +  selectedReaderText);
+        // console.log("******* THIS IS PRINTED IN THE HTML ******* \n" + selectedReaderText);
 
         // alert("ajax call success to web service for texts: \n\n" + JSON.stringify(resultjson));
         // selectedReaderText = selectedReaderText.replace(/customPop\(/g, "customPop(this,");
@@ -615,7 +617,7 @@ function removeReader(textid, addWords) {
         url: url + "/text?userid=" + userid + "&textid=" + textid + "&isAddToLearned=" + addWords,
         crossDomain: true,
         success: function (result) {
-            msg = addWords?"Reader has been removed.\nWords have been added to learned list.":"Reader has been removed.";
+            msg = addWords ? "Reader has been removed.\nWords have been added to learned list." : "Reader has been removed.";
             swal(msg);
         },
         error: (function (jqXHR, status, err) {

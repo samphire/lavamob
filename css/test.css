@@ -2,6 +2,10 @@
     display: none;
 }
 
+.visible{
+    display: block;
+}
+
 .wordToTest{
     font-size: xx-large;
     font-weight: bolder;
@@ -22,4 +26,21 @@
 .typingInput{
     margin-top: 2rem;
     font-size: larger;
+}
+
+.slidey{
+    transition: margin-right 0.5s;
+    margin-right: -3005px;
+}
+
+.slidey-active{
+    margin-right: 0;
+    transition: margin-right 0.7s;
+    transition-timing-function: cubic-bezier(.27,.43,.27,1.26);
+}
+
+#redbutton{
+    width: 120px;
+    position: absolute;
+    left: 110px;
 }

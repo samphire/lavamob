@@ -11,7 +11,7 @@ body {
     text-align: center;
     font-size: x-large;
     background: url(../assets/img/bg.jpg);
-    /*overflow: hidden;*/
+    overflow-x: hidden;
 }
 
 textarea {
@@ -116,7 +116,7 @@ fieldset{
 
 .item {
     margin: 0 auto;
-    margin-top: 40px;
+    /*margin-top: 40px;*/
     width: 80%;
 }
 
@@ -387,11 +387,28 @@ input#llWord.llWord, input#tranny.tranny {
         margin: 0.3em 0.2em;
     }
     .item{
+        position: relative;
         width: 100%;
+        overflow: hidden;
     }
     .readerlistitem{
-        width: 50%;
+        width: 56%;
     }
+
+    .readerlistitemvocab {
+        font-size: x-large;
+        border-radius: 3px;
+        background-color: purple;
+        margin-top: 10px;
+        margin-left: 1%;
+        width: 8%;
+        text-align: center;
+        padding: 2% 1%;
+        cursor: pointer;
+        float: left;
+        color: yellow;
+    }
+
     .delreader{
         width: 8%;
         margin: 0.7em 0 0 0.5em;

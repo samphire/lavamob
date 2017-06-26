@@ -10,11 +10,11 @@ function convertDateToNumber(date) {
 function printObject(msg, obj) {
     var myStr = "";
     for (prop in obj) {
-        myStr += "Property Name: " + prop + ", Value: " + obj[prop] + ", Type: " + typeof obj[prop] + "\n";
+        myStr += "\n\nProperty Name: " + prop + ", Value: " + obj[prop] + ", Type: " + typeof obj[prop] + "\n";
     }
-    console.log("******* " + msg + " *******");
+    console.log("\n\n\n\n******* " + msg + " *******\n\n");
     console.log(myStr);
-    console.log("******* " + msg + " ***END*");
+    console.log("\n\n******* " + msg + " ***END*\n\n\n\n");
 }
 
 function shuffle(a) {

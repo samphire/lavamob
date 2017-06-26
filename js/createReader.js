@@ -83,7 +83,7 @@ function parseText() { // creates a version of the text with play buttons in bet
             }
         }
         if (w < (paragraphArr.length - 1)) {
-            finalArr[w].push("<br>");
+            finalArr[w].push("<br><br>");
             console.log("Pushing [LINEFEED]");
         }
     }
@@ -116,11 +116,11 @@ function parseText() { // creates a version of the text with play buttons in bet
 function loadAndPlay() { // Does what it says on the tin
 
     sndArr = new Array();
-var fileStrArr, fileStr;
+    var fileStrArr, fileStr;
     if (document.getElementById("fileinput")) {
         fileStrArr = document.getElementById("fileinput").value.split("\\");
         fileStr = audiourl + "/" + fileStrArr[fileStrArr.length - 1];
-    } else{
+    } else {
         fileStr = audiourl + "/" + selectedReaderObj.audio;
     }
 
@@ -184,17 +184,24 @@ function finish() {
     for (var u = 0; u < makeSpriteArr.length; u++) {
         frog += makeSpriteArr[u];
     }
+    $("#result").hide();
     document.getElementById("superResult").innerHTML = frog;
+    printObject("finalArrWithAudio", finalArrWithAudio);
+    uploadText();
+
 }
 
 //noinspection JSAnnotator
 function uploadText() {
     var plainText, puncParsedJsonArray, audioSpriteJson, puncParsedAudioJsonArray;
     plainText = document.getElementById("text").value;
-    printObject("take a look", document.getElementById("text"));
     console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
     audioSpriteJson = spriteObj;
+
+    printObject("finalArrWithAudio", finalArrWithAudio);
+
+
     puncParsedAudioJsonArray = finalArrWithAudio;
 
     var uploadData = {};
@@ -206,6 +213,7 @@ function uploadText() {
     if (typeof sndArr != 'undefined' && sndArr[0] != null) {
         uploadData.audioFilename = sndArr[0];
     }
+    printObject("data object uploaded by uploadText()", uploadData);
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
     var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
@@ -230,6 +238,15 @@ function uploadText() {
             alert("Problem Uploading the Text");
         }
     });
+
+    document.getElementById("audioCheck").checked = false;
+    document.getElementById("readerName").value = "";
+    document.getElementById("readerDescription").value = "";
+    $("#result").empty();
+    $("#superResult").empty();
+    $("#audiodiv").hide();
+    document.getElementById("text").value = "";
+    $("#text").show();
 }
 
 function pastey(e) {

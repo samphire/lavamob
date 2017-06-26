@@ -7,6 +7,7 @@ var randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 var soundRight = new buzz.sound("assets/sound/correct.mp3");
 var soundWrong = new buzz.sound("assets/sound/wrong2.mp3");
 var soundFinished = new buzz.sound("assets/sound/perfect.mp3");
+var currentVocabIndex = 0;  //global variable to be used by functions in vocab test. corresponds to the index of the item in testList array, which is a whole json object representing the entirety of the database table fields.
 
 function test(list) {
     console.log("In test");
@@ -48,6 +49,11 @@ function test(list) {
     console.log("sessionList contains " + sessionList.length + " items");
 
     sessionList.forEach(function (val, idx) {
+
+            if (idx == 0) {
+                currentVocabIndex = val.idxInTestList;
+            }
+
             console.log("Item in sessionList - word: " + val.word + ", tranny: " + val.tranny + ",repnum: " + val.repnum + ", ef: " + val.ef);
 
             var idxToPlace = 0;
@@ -180,19 +186,58 @@ function test(list) {
     $("section").not("#vocaTest").hide(); //is this duplicating work of makeVocaTest()?
     console.log("Size of htmlstrArray is " + htmlstrArray.length);
     htmlstrArray.forEach(function (el, idx) {
-        // console.log("Appending the following string: " + el);
+        console.log("Appending the following string: " + el + "\n\nat index " + el.idxInTestList + "\n\n");
         $("#vocaTest").append(el);
     });
+
+    $('#vocaTest').append("<div><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\")'>" +
+        "<div class='slidey'>" +
+        "<img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'>" +
+        "<img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'>" +
+        "<img src='assets/img/icons/emoticons/learned.png' onclick='manageLL(3)'>" +
+        "<img src='assets/img/icons/emoticons/getlost.png' onclick='manageLL(4)'>" +
+        "<img src='assets/img/icons/emoticons/visittext.png' onclick='manageLL(5)'>" +
+        "</div></div>");
     $("#vocaTest").show();
-    $(".testItem:first-of-type").show().find(".inputAnswer input").focus();
+    $(".testItem:first-of-type").toggleClass("visible").find(".inputAnswer input").focus();
 }
+
+function manageLL(type) {
+    switch (type) {
+        case 1:
+            alert("type 1");
+            break;
+        case 2:
+            alert("type 2");
+            break;
+        case 3:
+            alert("type 3");
+            delLLItem(testList[currentVocabIndex], "" + 3);
+            break;
+        case 4:
+            alert("type 4");
+            delLLItem(testList[currentVocabIndex], 4 + "");
+            break;
+        case 5:
+            alert("type 5");
+            break;
+    }
+    $(".slidey.slidey-active").toggleClass("slidey-active");
+    var $el = $(".testItem.visible");
+    $el.toggleClass("visible");
+    if ($el.next()[0] !== undefined) {
+        $el.next().show().find(".inputAnswer input").focus();
+        currentVocabIndex = $el.next()[0].dataset.idxintestlist;
+    }
+}
+
 
 function makeQ(type, val) {
     var returnStr;
     switch (type) {
 
         case 1: // Korean word shown, choose from 4 tranny
-            returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.word + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.word + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";
@@ -204,7 +249,7 @@ function makeQ(type, val) {
             return returnStr;
             break;
         case 2: // English word shown, choose from 4 tranny
-            returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.tranny + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.tranny + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.word + "</div>";
@@ -216,7 +261,7 @@ function makeQ(type, val) {
             return returnStr;
             break;
         case 3: // Korean word shown, choose from 6 tranny
-            returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.word + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.word + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";
@@ -228,7 +273,7 @@ function makeQ(type, val) {
             return returnStr;
             break;
         case 4: // English word shown, choose from 6 tranny
-            returnStr = "<div class = 'testItem'><div class='wordToTest'>" + val.tranny + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.tranny + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.word + "</div>";
@@ -241,7 +286,7 @@ function makeQ(type, val) {
             break;
         case 5: // Typing
             // val.tranny = replaceApos(val.tranny);
-            returnStr = "<div class='testItem'><div class='wordToTest'>" + val.tranny + "</div><div class='inputAnswer'>" +
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.tranny + "</div><div class='inputAnswer'>" +
                 "<input class='typingInput' id='typingInput" + val.idxInTestList + "' type='text' onkeydown='if(event.keyCode == 13) " +
                 "checkResult(event, document.getElementById(\"typingInput" + val.idxInTestList + "\").value == \"" + val.word + "\"?true:false, " + val.idxInTestList + ")'>";
 
@@ -266,10 +311,12 @@ function checkResult(event, result, index) { // this is actually the main routin
         updateItem(false, index);
     }
     var $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();
-    $el.hide();
+    // $el.hide();
     // alert(($el).next().length);
+    $el.toggleClass("visible");
     if ($el.next()[0] !== undefined) {
-        $el.next().show().find(".inputAnswer input").focus();
+        $el.next().toggleClass("visible").find(".inputAnswer input").focus();
+        currentVocabIndex = $el.next()[0].dataset.idxintestlist;
     } else {
         endTest();
     }
@@ -296,7 +343,7 @@ function calcDateNext(daysInterval) {
 function updateItem(right, idx) {
     var myEl = testList[idx];
     myEl.repnum += 1;
-    console.log("updateItem");
+    console.log("updateItem: " + printObject("hey", testList[idx]));
     if (right) {
 
         switch (myEl.repnum) {
@@ -404,14 +451,11 @@ function updateItem(right, idx) {
 }
 
 function updateLLItem(myLLItem) {
-    console.log("datenext is"  + myLLItem.datenext);
+    console.log("datenext is" + myLLItem.datenext);
     myLLItem.datenext = myLLItem.datenext.getTime();
-    console.log("datenext is"  + myLLItem.datenext);
-
-    printObject("check myLLItem's data before ajaxing via put", myLLItem);
-
+    console.log("datenext is" + myLLItem.datenext);
+    printObject("check myLLItem's data before ajaxing via post", myLLItem);
     console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
-
 
     $.ajax({
         type: "POST",
@@ -429,6 +473,30 @@ function updateLLItem(myLLItem) {
         },
         success: function (result) {
             console.log("LearningList Item edited and uploaded successfully");
+        },
+        error: function (jqXHR, status, err) {
+            alert("some problem: " + status + ", " + jqXHR.status + ", " + err);
+        }
+    });
+}
+
+function delLLItem(myLLItem, type) {
+
+    printObject("LLItem to delete", myLLItem);
+    console.log("Type of deletion is: " + type);
+    console.log("type is type " + typeof type);
+    console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
+
+    myLLItem.headwordid = 6;
+
+
+    $.ajax({
+        type: "DELETE",
+        url: url + "/lladd?userid=" + userid + "&wordid=" + myLLItem.wordid +
+        "&headwordid=" + myLLItem.headwordid + "&type=" + type,
+        crossDomain: true,
+        success: function (result) {
+            console.log("LearningList Item removed successfully");
         },
         error: function (jqXHR, status, err) {
             alert("some problem: " + status + ", " + jqXHR.status + ", " + err);

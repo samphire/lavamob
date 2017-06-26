@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
     <script>
         window.onload = function () {
-            document.getElementById('showusername').innerText=localStorage.getItem('userEmail');
+            document.getElementById('showusername').innerText=localStorage.getItem('userEmail') + "/" + localStorage.getItem('userid');
 //            localStorage.clear();
 //            alert(localStorage.getItem("userid") + "\n" + localStorage.getItem(("userEmail")));
 
@@ -116,25 +116,23 @@
     </div>
     <div id="audiodiv">
         <fieldset>
-            <legend>. audio .</legend>
+            <legend>. audio file .</legend>
 
             <form method="post" action="http://notborder.org/readeraudio/upload.php" enctype="multipart/form-data" id="audioform">
                 <input type="file" name="fileToUpload" id="fileinput">
                 <input type="submit" value="Upload Audio File"><br><br>
             </form>
-            <button onclick="loadAndPlay()" id="loadBtn">load and play</button>
+            <button onclick="loadAndPlay();parseText()" id="loadBtn">load and play</button>
             <button onclick="finish()" id="finishBtn">finish</button>
         </fieldset>
     </div>
-    <div><textarea id="text" contenteditable="true" onpaste="pastey(event)" required></textarea><label for="text">Paste
-        or Type here</label></div>
+    <div>
+        <textarea id="text" contenteditable="true" onpaste="pastey(event)" required></textarea>
+        <label for="text">Paste or Type here</label>
+    </div>
     <div id="result" class="textPanel"></div>
     <div id="superResult"></div>
     <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="parseText()" value="bob"></i>
-    <!--<button onclick="parseText()" value="bob" id="parseBtn">-->
-        <!--upload-->
-    <!--</button>-->
-
 
 </section>
 <section id="reader" class="hideo"></section>
