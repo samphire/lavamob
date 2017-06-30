@@ -16,13 +16,15 @@ var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 
 function login() {
+    console.log("In login()");
+    var urly = "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
     $.ajax({
         type: "GET",
         crossDomain: true,
-        url: "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value,
+        url: urly,
+        async: false,
         success: function (data) {
             console.log("LOGIN: " + data);
-            alert(data);
             if (data == "fail login") {
                 alert("username or password is incorrect");
                 localStorage.clear();
@@ -36,6 +38,11 @@ function login() {
             $("#welcome").show();
             $("#menu").show();
             getReaderInfo();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("some problem with ajax login");
+            console.log(urly);
+            console.log(textStatus + "\n" + errorThrown);
         }
     });
 }
@@ -88,20 +95,19 @@ function editReader(textid) {
         },
         url: url + "/text/forEdit?textid=" + textid
     }).done(function (resultjson) {
-        console.log(JSON.stringify(resultjson));
         printObject("yes", resultjson);
         selectedReaderObj = resultjson;
         document.getElementById("text").innerText = resultjson.plainText;
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
-        if (resultjson.audio) {
-            var el = document.getElementById("audioform");
-            var newEl = document.createElement('div');
-            newEl.innerHTML = resultjson.audio;
-            el.parentNode.appendChild(newEl);
-            el.parentNode.removeChild(el);
-
-        }
+        // if (resultjson.audio) {
+        //     var el = document.getElementById("audioform");
+        //     var newEl = document.createElement('div');
+        //     newEl.innerHTML = resultjson.audio;
+        //     el.parentNode.appendChild(newEl);
+        //     el.parentNode.removeChild(el);
+        //
+        // }
         createReader(textid);
 
     }).fail(function (jqXHR, status, err) {
@@ -170,7 +176,7 @@ function downloadReader() {
             console.log('there is audio');
             finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
             var sndArr = new Array();
-            sndArr.push(resultjson.audio); // simplify this for goodness sake, insert on instantiation
+            sndArr.push(audiourl + "/" + resultjson.audio); // simplify this for goodness sake, insert on instantiation
             howlSpriteObj = JSON.parse(resultjson.audioSpriteJson);
             howl = new Howl({
                 src: sndArr,
@@ -213,7 +219,7 @@ function downloadReader() {
         selectedReaderText = "";
         finalTextArr.forEach(function (el, idx) {
             if (el.indexOf("^&") > -1) {
-                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ")\">";
+                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ");console.log('hi')\">";
                 selectedReaderText += finalTextArr[idx];
                 // console.log(finalTextArr[idx]);
             } else {

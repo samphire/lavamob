@@ -22,6 +22,48 @@ var url = "http://www.notborder.org:8080/Reader/webresources";
 var audiourl = "http://www.notborder.org/readeraudio";
 // var audiourl = "http://localhost/readeraudio";
 var lastPos = 0;
+var files;
+
+function prepareUpload(event) {
+    files = event.target.files;
+}
+
+function uploadFiles(event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    // start loading spinner
+
+    var data = new FormData();
+    $.each(files, function (key, value) {
+        data.append(key, value);
+    });
+
+    $.ajax({
+        url: 'http://notborder.org/readeraudio/upload.php?files',
+        // url: 'http://notborder.org/lavamob/upload.php?files',
+        type: 'POST',
+        data: data,
+        crossDomain: true,
+        cache: false,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (data, textStatus, jqXHR) {
+            if (typeof data.error === 'undefined') { //i.e. there is no variable 'error' in the array... therefore success
+                alert('success uploading file');
+            } else {
+                console.log('ERRORS: ' + data.error);
+                alert('fail');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrows) {
+            console.log('ERRORS: ' + textStatus);
+            // stop loading spinner
+        }
+    });
+}
+
 function parseText() { // creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
     finalArr = new Array(); // array containing words and punctuation, in order
@@ -188,7 +230,6 @@ function finish() {
     document.getElementById("superResult").innerHTML = frog;
     printObject("finalArrWithAudio", finalArrWithAudio);
     uploadText();
-
 }
 
 //noinspection JSAnnotator
@@ -201,7 +242,6 @@ function uploadText() {
 
     printObject("finalArrWithAudio", finalArrWithAudio);
 
-
     puncParsedAudioJsonArray = finalArrWithAudio;
 
     var uploadData = {};
@@ -210,8 +250,11 @@ function uploadText() {
     uploadData.audioSpriteObjString = JSON.stringify(audioSpriteJson);
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.wordArray = wordArr;
+    uploadData.uniqueInfoArray = new Array();
     if (typeof sndArr != 'undefined' && sndArr[0] != null) {
-        uploadData.audioFilename = sndArr[0];
+        var bob = sndArr[0].split("/");
+        uploadData.audioFilename = bob[bob.length - 1];
+        // uploadData.audioFilename = sndArr[0];
     }
     printObject("data object uploaded by uploadText()", uploadData);
     uploadData = JSON.stringify(uploadData);

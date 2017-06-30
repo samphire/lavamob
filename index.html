@@ -20,15 +20,15 @@
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
     <script>
         window.onload = function () {
-            document.getElementById('showusername').innerText=localStorage.getItem('userEmail') + "/" + localStorage.getItem('userid');
-//            localStorage.clear();
-//            alert(localStorage.getItem("userid") + "\n" + localStorage.getItem(("userEmail")));
 
-//            calcDateNext(1);
+            $('#fileinput').on('change', prepareUpload);
+            $('#audioform').on('submit', uploadFiles);
+
+            document.getElementById('showusername').innerText = "Welcome, " + localStorage.getItem('userEmail');
+//            localStorage.clear();
             $('section').hide();
             $('#menu').hide();
             if (localStorage.getItem("userid")) { //all user info is there and can be reused
-//                alert("there is a userid");
                 userid = localStorage.getItem("userid");
                 $(".login").hide();
                 $("#welcome").show();
@@ -37,12 +37,10 @@
                 return;
             } else {
                 if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
-//                    alert("there is an email");
                     document.getElementById("userEmail").value = localStorage.getItem("userEmail");
                     $('.login').show();
                 }
             }
-
             $('.login').show();
         }
 
@@ -97,7 +95,8 @@
 
 <br>
 <section id="welcome">
-    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout" onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
+    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"
+                                                        onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
 
     <h1>Choose Your Activity</h1>
     <div class="btnActivity" onclick="createReader(0)">Create Reader</div>
@@ -116,23 +115,30 @@
     </div>
     <div id="audiodiv">
         <fieldset>
-            <legend>. audio file .</legend>
-
-            <form method="post" action="http://notborder.org/readeraudio/upload.php" enctype="multipart/form-data" id="audioform">
+            <legend>. audio .</legend>
+            <!--http://notborder.org/readeraudio/upload.php-->
+            <form method="post" action="#" enctype="multipart/form-data"
+                  id="audioform">
                 <input type="file" name="fileToUpload" id="fileinput">
-                <input type="submit" value="Upload Audio File"><br><br>
+                <input type="submit" value="Upload File">
             </form>
-            <button onclick="loadAndPlay();parseText()" id="loadBtn">load and play</button>
-            <button onclick="finish()" id="finishBtn">finish</button>
+            <button onclick="loadAndPlay();parseText()" id="loadBtn">Set Audio Markers</button>
+            <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="finish()" id="btnFinish"></i>
+            <!--<button onclick="finish()" id="finishBtn">finish</button>-->
+            <form method="post" action="#">
+                Upload Audacity Labels File
+                <input type="file" id="audacityFileChooser" onchange="replaceSpriteData(event)">
+            </form>
         </fieldset>
     </div>
+
     <div>
         <textarea id="text" contenteditable="true" onpaste="pastey(event)" required></textarea>
         <label for="text">Paste or Type here</label>
     </div>
     <div id="result" class="textPanel"></div>
     <div id="superResult"></div>
-    <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="parseText()" value="bob"></i>
+    <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="parseText()" id="btnUploadText"></i>
 
 </section>
 <section id="reader" class="hideo"></section>

@@ -60,3 +60,33 @@ function makeRand6(elem) {
 function replaceApos(str) {
     return str.replace("'", "&apos;");
 }
+
+function replaceSpriteData(event) {
+    var input = event.target;
+    var audioSpriteString = "{";
+    var reader = new FileReader();
+    reader.onload = function () {
+        var textArr = reader.result.split("\r\n");
+        var previous;
+        for (var bob = 0; bob < textArr.length; bob++) {
+            var ss = textArr[bob].split("\t");
+
+            var a = Math.floor(Number(ss[0]) * 1000);
+
+            if (bob == textArr.length - 1) {
+                var theString = "\"" + bob + "\":[" + previous + "," + 100000 + "]";
+            } else {
+                var theString = "\"" + bob + "\":[" + previous + "," + (a - previous) + "]";
+            }
+            previous = a;
+            if (bob > 0) {
+                audioSpriteString += theString + ",";
+            }
+
+        }
+        audioSpriteString = audioSpriteString.slice(0, -1);
+        audioSpriteString += "}";
+        console.log(audioSpriteString);
+    };
+    reader.readAsText(input.files[0]);
+}

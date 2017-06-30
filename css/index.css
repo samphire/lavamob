@@ -64,9 +64,15 @@ textarea {
 }
 
 #audiodiv {
-    width: 45%;
+    width: 25%;
     float: right;
     display: none;
+    text-align: left;
+}
+
+#audiodiv input{
+    display: block;
+    margin-bottom: 1.6rem;
 }
 
 fieldset{
