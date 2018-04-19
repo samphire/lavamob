@@ -3,6 +3,7 @@
  */
 
 var userid = 0;
+var goals;
 var selectedTextid;
 var selectedReaderObj;
 var selectedReaderText;
@@ -11,13 +12,20 @@ var naverPopup;
 var howlSpriteObj;
 var howl;
 var url = "http://www.notborder.org:8080/Reader/webresources";
-// var url = "http://localhost:8080/Reader/webresources";
+var url2 = "http://www.notborder.org/lavamob";
+//var url = "http://localhost:8080/Reader/webresources";
+//var url2 = "http://localhost:63342/lavamob";
+
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
+var readerYScroll = 0;
 
 function login() {
+    history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
     console.log("In login()");
-    var urly = "http://www.notborder.org/lavamob/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
+    var urly = url2 + "/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
+    console.log(urly);
+    //alert(urly);
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -25,6 +33,7 @@ function login() {
         async: false,
         success: function (data) {
             console.log("LOGIN: " + data);
+            //alert("success");
             if (data == "fail login") {
                 alert("username or password is incorrect");
                 localStorage.clear();
@@ -39,14 +48,88 @@ function login() {
             $("#menu").show();
             getReaderInfo();
         },
-        error: function(jqXHR, textStatus, errorThrown){
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log("some problem with ajax login");
+            //alert("fail");
             console.log(urly);
             console.log(textStatus + "\n" + errorThrown);
+            alert(textStatus + "\n" + errorThrown);
         }
     });
 }
 
+function progress(percent, $element, boolAnimColor, col) {
+    percent = percent > 100 ? 100 : percent;
+    if (percent == 100) col = "#000000";
+    var progressBarWidth = percent * $element.width() / 100;
+    // $element.find('div').animate({width: progressBarWidth}, 500).html(percent + "%");
+    $element.find('div').animate({width: progressBarWidth}, 500);
+    if (boolAnimColor) $element.find('div').animate({backgroundColor: col}, 1800);
+
+}
+
+function getGoalsInfo() {
+
+    $.ajax({
+        type: "GET",
+        crossDomain: true,
+        url: url2 + "/php/goals.php?userid=" + userid
+    }).done(function (resultjson) {
+        goals = JSON.parse(resultjson);
+
+        console.log(resultjson);
+
+        var goalPlate = document.querySelector('#goalTemplate');
+        for (var i = 0; i < goals.length; i++) {
+            var goalData = goals[i];
+            var clone = goalPlate.content.cloneNode(true);
+            var blob = clone.querySelector('.goalName');
+            blob.textContent = goalData.goal_name;
+            blob = clone.querySelector('.goalDescription');
+            blob.textContent = goalData.goal_description;
+            blob = clone.querySelector('.startDate');
+            blob.textContent = "start: " + goalData.start_date;
+            blob = clone.querySelector('.endDate');
+            blob.textContent = "end: " + goalData.end_date;
+
+            // Date value
+            var day = 1000 * 60 * 60 * 24;
+            var now = new Date();
+            var startDate = new Date(goalData.start_date);
+            var endDate = new Date(goalData.end_date);
+            var diff = Math.ceil((endDate - startDate) / day);
+            var timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
+
+            // Progress value
+            var range = goalData.unit_target_value - goalData.unit_start_value;
+            var valProg = Math.ceil(goalData.actual / range * 100);
+            console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
+                + "\ngoal actual value: " + goalData.actual + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
+
+            // Colors
+            var col = '';
+            var percGood = valProg / timeProg;
+            if (percGood > 1.2) col = "#44ff4b";
+            if (percGood < 1.2) col = "#abce39";
+            if (percGood < 1.05) col = "#cecb39";
+            if (percGood < 0.9) col = "#ce9c39";
+            if (percGood < 0.75) col = "#ce3939";
+
+            var prog1 = clone.querySelector('.progressBar1');
+            var prog2 = clone.querySelector('.progressBar2');
+            goalPlate.parentNode.appendChild(clone);
+            progress(valProg, $(prog1), true, col);
+            progress(timeProg, $(prog2), false);
+
+
+        }
+
+    }).fail(function (jqXHR, status, err) {
+        console.log("failed ajax call to get goals data");
+    });
+
+
+}
 
 function getReaderInfo() {
     $('#selectReader').empty();
@@ -65,7 +148,12 @@ function getReaderInfo() {
         url: url + "/textinfo",
         data: {"userid": userid}
     }).done(function (resultjson) {
+
         // alert(JSON.stringify(resultjson));
+        if (!resultjson) {
+            console.log("resultjson evaluates to false. Probably there are no readers");
+            return;
+        }
         $.each(resultjson.readers, function (idx, val) {
             htmlstr = "<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(" + val.id + ")'>" + val.name + "</div>";
             htmlstr += "<div class='readerlistitemvocab' onclick='getVocab(" + val.id + ")'>V</div>";
@@ -76,10 +164,6 @@ function getReaderInfo() {
             $('#selectReader').append(htmlstr);
         });
     }).fail(function (jqXHR, status, err) {
-        // alert("some problem");
-        // alert(status);
-        // alert(jqXHR.status);
-        // alert(err);
         console.log("failed ajax call in getReaderInfo");
     });
 }
@@ -100,21 +184,10 @@ function editReader(textid) {
         document.getElementById("text").innerText = resultjson.plainText;
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
-        // if (resultjson.audio) {
-        //     var el = document.getElementById("audioform");
-        //     var newEl = document.createElement('div');
-        //     newEl.innerHTML = resultjson.audio;
-        //     el.parentNode.appendChild(newEl);
-        //     el.parentNode.removeChild(el);
-        //
-        // }
+
         createReader(textid);
 
     }).fail(function (jqXHR, status, err) {
-        // alert("some problem");
-        // alert(status);
-        // alert(jqXHR.status);
-        // alert(err);
         console.log("failed ajax call in getReader");
     });
 }
@@ -147,6 +220,8 @@ function deleteReader(node, textid) {
 }
 
 function getReader(textid) {
+    history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/studyText");
+    console.log("push state page 5 studyText");
     $("#reader").show();
     selectedTextid = textid;
     getLL(textid);
@@ -163,7 +238,7 @@ function downloadReader() {
         url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
 
-        printObject("All Properties of resultjson", resultjson);
+        // printObject("All Properties of resultjson", resultjson);
         selectedReaderObj = resultjson;
 
         //Initialize sound
@@ -182,7 +257,7 @@ function downloadReader() {
                 src: sndArr,
                 sprite: howlSpriteObj
             });
-        } else{
+        } else {
             finalTextArr = selectedReaderObj.puncParsedJsonArray;
         }
 
@@ -215,34 +290,28 @@ function downloadReader() {
         for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
             constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
         }
-        // console.log("Printing finalTextArr");
         selectedReaderText = "";
         finalTextArr.forEach(function (el, idx) {
             if (el.indexOf("^&") > -1) {
-                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ");console.log('hi')\">";
+                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ")\">";
                 selectedReaderText += finalTextArr[idx];
-                // console.log(finalTextArr[idx]);
             } else {
                 selectedReaderText += el;
-                // console.log(el);
             }
         });
-        // console.log("******* THIS IS PRINTED IN THE HTML ******* \n" + selectedReaderText);
-
-        // alert("ajax call success to web service for texts: \n\n" + JSON.stringify(resultjson));
-        // selectedReaderText = selectedReaderText.replace(/customPop\(/g, "customPop(this,");
-        // getLL(textid);
-
 
         $('#selectReader').hide();
+        $('#reader').empty();
         $('#reader').append("<div class='readerPanel'></div>");
+        if(resultjson.audio){
+        $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions'>" +
+            "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;Continuous Audio?" +
+            "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;Loop?" +
+            "<input type='radio' name='audioOptions'>&nbsp;&nbsp;none</div><br>");
+        }
         $('#reader .readerPanel').append(selectedReaderText);
-
+        document.documentElement.scrollTop = readerYScroll;
     }).fail(function (jqXHR, status, err) {
-        // alert("some problem");
-        // alert(status);
-        // alert(jqXHR.status);
-        // alert(err);
         console.log("failed ajax call in getReader");
     });
 }
@@ -263,37 +332,6 @@ function getLL(textid) {
             llData = data;
             console.log("Set llData. Type of list: " + typeof llData.list);
             downloadReader();
-            // alert(JSON.stringify(llData));
-            // convert to object with parse, split reader text, add class if word in ll, show reader text
-            // var textArr = selectedReaderText.split("</span>");
-            // // make Array from learning list wordids
-            // var listo = new Array();
-            // llData.list.forEach(function (el) {
-            //     if (el.textid === selectedTextid) { // only items in selectedtext
-            //         listo.push(el.wordid);
-            //     }
-            // });
-            //
-            // textArr.forEach(function (el, idx) { // color purple all words found in wordlist
-            //     var a = el.indexOf(",");
-            //     var b = el.indexOf(",", a + 1);
-            //     var c = el.indexOf("'", b + 2);
-            //     var wid = el.substring(b + 2, c);
-            //     listo.forEach(function (el2) {
-            //         if (parseInt(wid) === el2) {
-            //             textArr[idx] = textArr[idx].replace(/\'word\'/g, '"word clicked"');
-            //         }
-            //     });
-            // });
-            // //reconstitute selectedReaderText from the array
-            // var newStr = "";
-            // textArr.forEach(function (el, idx) {
-            //     newStr += el + "</span>";
-            // });
-            // selectedReaderText = newStr;
-            //
-            // $('#selectReader').hide();
-            // $('#reader').append(selectedReaderText);
         },
         error: function () {
             alert("oops");
@@ -310,6 +348,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         return;
     }
     $(el).addClass("clicked");
+    readerYScroll = document.documentElement.scrollTop;
 
     var dicUrl = "http://endic.naver.com/search.nhn?query=" + word;
     var name = "dictionary";
@@ -350,10 +389,6 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 getLL(selectedTextid);
             },
             error: (function (jqXHR, status, err) {
-                // alert("some problem");
-                // alert(status);
-                // alert(jqXHR.status);
-                // alert(err);
                 console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log\n" + err);
             })
         });
@@ -363,12 +398,16 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 }
 
 function studyReader() {
+    history.pushState({page_id: 2, page: "readers"}, null, "/lavamob/studyReader");
+    console.log("push state page 2 readers");
     $("section").hide();
     $("#reader").empty();
     $("#selectReader").show();
 }
 
 function createReader(textid) {
+    history.pushState({page_id: 1, page: "create"}, null, "/lavamob/createReader");
+    console.log("push state page 1 create");
     textToEdit = textid;
     $('section').hide();
     $('#createReader').show();
@@ -411,6 +450,7 @@ function getVocab(textid) {
     });
 
 }
+
 function completeText() {
     swal("not implemented");
 }
@@ -436,8 +476,8 @@ function getLLData() {
         });
     }
 }
-function studyVocab() {
 
+function studyVocab() {
     console.log("In study vocab, makeVocaTest is next");
     llData = null;
     if (!llData) {
@@ -459,7 +499,7 @@ function studyVocab() {
                 console.log("size of json array is: " + llData.list.length);
                 llData.list.forEach(function (el, idx) {
 
-                    var d = convertDateToNumber(el.datenext);
+                    var d = convertDateToNumber(el.datenext); // this is overwritten below... delete this line?
                     var t = el.datenext.split(/[- :]/);
                     var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
                     var d = Date.parse(datestr);
@@ -487,6 +527,7 @@ function studyVocab() {
         makeVocaTest();
     }
 }
+
 function makeVocaTest() {
     console.log("In makeVocaTest. then promise is next");
 
@@ -500,14 +541,29 @@ function makeVocaTest() {
             $("#welcome").show();
             return;
         }
+
+        history.pushState({page_id: 3, page: "vocab"}, null, "/lavamob/testVocab");
+        console.log("push state page 3 vocab");
         $("section").hide();
         $("#vocaTest").show();
-        test(nowList);
+        test(nowList); //why am I passing nowList? It is a global variable.
     });
 }
 
 function playSound(sprite) {
     howl.stop();
+    if (document.getElementById("loopAudio").checked) {
+        console.log("loop is checked");
+        howl._sprite.myNewSprite = [howl._sprite[sprite][0], howl._sprite[sprite][1], true];
+        howl.play('myNewSprite');
+        return;
+    }
+    if (document.getElementById("continousAudioCheck").checked) {
+        console.log("continuousAudio is checked");
+        howl._sprite.myNewSprite = [howl._sprite[sprite][0], 1000000];
+        howl.play('myNewSprite');
+        return;
+    }
     sprite = sprite.toString();
     howl.play(sprite);
 }

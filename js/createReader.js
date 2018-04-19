@@ -15,7 +15,8 @@
  * */
 
 
-var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi, lastPosx, sndArr, wordArr, textToEdit;
+var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi,
+    lastPosx, sndArr, wordArr, textToEdit;
 // var userid = userid;
 var url = "http://www.notborder.org:8080/Reader/webresources";
 // var url = "http://localhost:8080/Reader/webresources";
@@ -179,14 +180,21 @@ function loadAndPlay() { // Does what it says on the tin
     sound.play();
 }
 
-var perf, mySprite;
+var perf, testSprite, mySprite;
 
 function playSound(sprite) {
+    alert("hey");
     mySprite = sprite.toString();
     perf = new Howl({
         src: sndArr,
         sprite: spriteObj
     });
+    testSprite = spriteObj;
+
+    console.log("testing the Sprite: " + testSprite);
+    console.log(testSprite['1']);
+    console.log(testSprite['1'][0]);
+    console.log(testSprite['1'][1]);
     perf.play(mySprite);
 }
 
@@ -234,11 +242,10 @@ function finish() {
 
 //noinspection JSAnnotator
 function uploadText() {
-    var plainText, puncParsedJsonArray, audioSpriteJson, puncParsedAudioJsonArray;
+    var plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
     plainText = document.getElementById("text").value;
     console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
-    audioSpriteJson = spriteObj;
 
     printObject("finalArrWithAudio", finalArrWithAudio);
 
@@ -247,7 +254,7 @@ function uploadText() {
     var uploadData = {};
     uploadData.plainText = plainText;
     uploadData.puncParsedJsonArray = puncParsedJsonArray;
-    uploadData.audioSpriteObjString = JSON.stringify(audioSpriteJson);
+    uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.wordArray = wordArr;
     uploadData.uniqueInfoArray = new Array();
@@ -259,8 +266,9 @@ function uploadText() {
     printObject("data object uploaded by uploadText()", uploadData);
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
+    if (!textToEdit) textToEdit = 0;
     var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
-    // var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val();
+
     console.log("Editing text number: " + textToEdit);
     $.ajax({
         url: myUrl,
@@ -285,6 +293,7 @@ function uploadText() {
     document.getElementById("audioCheck").checked = false;
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
+    textToEdit = null;
     $("#result").empty();
     $("#superResult").empty();
     $("#audiodiv").hide();

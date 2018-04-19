@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Mobile Reader</title>
     <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/jqueryColorPlugin.js"></script>
     <script src="js/howler.core.min.js"></script>
-    <script src="js/createReader.js"></script>
+    <script src="js/createReader.js?version=1"></script>
     <script src="js/buzz.min.js"></script>
-    <script src="js/index.js?version=7"></script>
+    <script src="js/index.js?version=8"></script>
     <script src="js/spacedRep.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/sweetalert2.min.js"></script>
@@ -19,8 +20,42 @@
     <link rel="stylesheet" type="text/css" href="css/login.css">
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
     <script>
-        window.onload = function () {
 
+        window.onpopstate = function (event) {
+            // var content = "";
+            if (event.state) {
+                // content = ;
+
+                console.log("HISTORY\nPage id is " + event.state.page_id + ", size of history stack is " + history.length);
+                console.log("history state object data: " + event.state.page + ", " + history.state.hre);
+
+                switch (event.state.page_id) {
+                    case 1:
+                        $('section').hide();
+                        $('#createReader').show();
+                        break;
+                    case 2:
+                        $('section').hide();
+                        $('#selectReader').show();
+                        break;
+                    case 3:
+                        $('section').hide();
+                        $('#vocaTest').show();
+                        break
+                    case 4:
+                        $('section').hide();
+                        $('#welcome').show();
+                        break;
+                    case 5:
+                        $('section').hide();
+                        // getReader(event.state.textid);
+                        $('#reader').show();
+                }
+            }
+        };
+
+        window.onload = function () {
+            history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
             $('#fileinput').on('change', prepareUpload);
             $('#audioform').on('submit', uploadFiles);
 
@@ -33,6 +68,7 @@
                 $(".login").hide();
                 $("#welcome").show();
                 $("#menu").show();
+                getGoalsInfo();
                 getReaderInfo();
                 return;
             } else {
@@ -75,18 +111,16 @@
 
     <div class="box">
         <ul>
-            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();"><i class="icon-home"></i> home</a></li>-->
-            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader();"><i class="icon-edit"></i> Create Reader</a></li>-->
-            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyReader();"><i class="icon-eye-open"></i> Study Reader</a></li>-->
-            <!--<li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyVocab();"><i class="icon-trophy"></i> Test Vocabulary</a></li>            -->
             <li><a href="#"
-                   onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();"><i
+                   onclick="document.getElementById('toggle-nav').checked=false;$('section').hide();$('#welcome').show();textToEdit=null;"><i
                     class="fa fa-home fa-4x"></i>&nbsp;</a></li>
-            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;createReader(0);"><i
+            <li><a href="#"
+                   onclick="document.getElementById('toggle-nav').checked=false;createReader(0);textToEdit=null;"><i
                     class="fa fa-edit fa-4x"></i>&nbsp;</a></li>
-            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyReader();"><i
+            <li><a href="#"
+                   onclick="document.getElementById('toggle-nav').checked=false;studyReader();textToEdit=null;"><i
                     class="fa fa-eye fa-4x"></i>&nbsp;</a></li>
-            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyVocab();"><i
+            <li><a href="#" onclick="document.getElementById('toggle-nav').checked=false;studyVocab();textToEdit=null;"><i
                     class="fa fa-graduation-cap fa-4x"></i>&nbsp;</a></li>
         </ul>
     </div>
@@ -97,6 +131,20 @@
 <section id="welcome">
     <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"
                                                         onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
+    <template id="goalTemplate">
+        <div class="goalContainer">
+            <div class="goalName"></div>
+            <div class="goalDescription"></div>
+            <div class="startDate">&nbsp;</div>
+            <div class="endDate">&nbsp;</div>
+            <div class="progressBar1">
+                <div></div>
+            </div>
+            <div class="progressBar2">
+                <div></div>
+            </div>
+        </div>
+    </template>
 
     <h1>Choose Your Activity</h1>
     <div class="btnActivity" onclick="createReader(0)">Create Reader</div>
@@ -108,7 +156,8 @@
 </section>
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
-        <div>Audio?&nbsp;</span><input type="checkbox" id="audioCheck" onClick="$('#audiodiv').show()"></div>
+        <div>Audio?&nbsp;</span><input type="checkbox" id="audioCheck"
+                                       onClick="$('#audiodiv').show();$('#btnUploadText').hide()"></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
 
@@ -125,8 +174,8 @@
             <button onclick="loadAndPlay();parseText()" id="loadBtn">Set Audio Markers</button>
             <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="finish()" id="btnFinish"></i>
             <!--<button onclick="finish()" id="finishBtn">finish</button>-->
-            <form method="post" action="#">
-                Upload Audacity Labels File
+            <form method="post" action="#"><br>
+                Audacity Labels File<br><br>
                 <input type="file" id="audacityFileChooser" onchange="replaceSpriteData(event)">
             </form>
         </fieldset>

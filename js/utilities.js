@@ -82,11 +82,38 @@ function replaceSpriteData(event) {
             if (bob > 0) {
                 audioSpriteString += theString + ",";
             }
-
         }
         audioSpriteString = audioSpriteString.slice(0, -1);
         audioSpriteString += "}";
         console.log(audioSpriteString);
+
+        spriteObj = JSON.parse(audioSpriteString);
+
+        if (!textToEdit) {
+            alert("No text has been selected to edit");
+            console.log("textToEdit is null or undefined:\n" + typeof textToEdit);
+            return;
+        } else {
+            console.log("textToEdit is " + textToEdit + ":\n" + typeof textToEdit);
+            console.log("type of spriteObj is " + typeof spriteObj + "\n" + JSON.stringify(spriteObj));
+        }
+
+        $.ajax({
+            url: url + "/text/replaceSpriteData?textid=" + textToEdit,
+            headers: {"userid": userid}, // header must be enabled in cors filter on server
+            type: "POST",
+            contentType: "text/plain",
+            data: JSON.stringify(spriteObj),
+            processData: false,
+            crossDomain: true,
+            success: function (data) {
+                swal("done");
+            },
+            error: function () {
+                alert("Problem Uploading Sprite Data");
+            }
+        });
     };
     reader.readAsText(input.files[0]);
 }
+

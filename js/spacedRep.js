@@ -190,7 +190,7 @@ function test(list) {
         $("#vocaTest").append(el);
     });
 
-    $('#vocaTest').append("<div><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\")'>" +
+    $('#vocaTest').append("<div id='testItemActions'><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\")'>" +
         "<div class='slidey'>" +
         "<img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'>" +
         "<img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'>" +
@@ -314,7 +314,7 @@ function checkResult(event, result, index) { // this is actually the main routin
     // $el.hide();
     // alert(($el).next().length);
     $el.toggleClass("visible");
-    if ($el.next()[0] !== undefined) {
+    if ($el.next()[0] !== undefined && $el.next()[0].id != "testItemActions") {
         $el.next().toggleClass("visible").find(".inputAnswer input").focus();
         currentVocabIndex = $el.next()[0].dataset.idxintestlist;
     } else {
