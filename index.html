@@ -35,6 +35,7 @@
                         $('#createReader').show();
                         break;
                     case 2:
+                        if(howl) howl.stop();
                         $('section').hide();
                         $('#selectReader').show();
                         break;
@@ -50,6 +51,10 @@
                         $('section').hide();
                         // getReader(event.state.textid);
                         $('#reader').show();
+                        break;
+                    case 6:
+                        $('section').hide();
+                        $('#vocab').show();
                 }
             }
         };
@@ -166,6 +171,7 @@
         <fieldset>
             <legend>. audio .</legend>
             <!--http://notborder.org/readeraudio/upload.php-->
+            <div style="font-size: small;">supports .mp3 and .wav files only and must be latin alphabet filename</div>
             <form method="post" action="#" enctype="multipart/form-data"
                   id="audioform">
                 <input type="file" name="fileToUpload" id="fileinput">

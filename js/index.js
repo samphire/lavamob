@@ -181,7 +181,7 @@ function editReader(textid) {
     }).done(function (resultjson) {
         printObject("yes", resultjson);
         selectedReaderObj = resultjson;
-        document.getElementById("text").innerText = resultjson.plainText;
+        document.getElementById("text").innerHTML = resultjson.plainText;
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
 
@@ -304,7 +304,7 @@ function downloadReader() {
         $('#reader').empty();
         $('#reader').append("<div class='readerPanel'></div>");
         if(resultjson.audio){
-        $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions'>" +
+        $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions' onclick='howl.stop()'>" +
             "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;Continuous Audio?" +
             "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;Loop?" +
             "<input type='radio' name='audioOptions'>&nbsp;&nbsp;none</div><br>");
@@ -442,6 +442,7 @@ function getVocab(textid) {
             });
             $("#vocab").append(htmlstr);
             $("#selectReader").hide();
+            history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
             $("#vocab").show();
         },
         error: function () {

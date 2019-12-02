@@ -51,8 +51,11 @@ function uploadFiles(event) {
         processData: false,
         contentType: false,
         success: function (data, textStatus, jqXHR) {
+            console.log("success");
             if (typeof data.error === 'undefined') { //i.e. there is no variable 'error' in the array... therefore success
                 alert('success uploading file');
+                console.log('should be data');
+                console.log(data.success);
             } else {
                 console.log('ERRORS: ' + data.error);
                 alert('fail');
@@ -60,6 +63,7 @@ function uploadFiles(event) {
         },
         error: function (jqXHR, textStatus, errorThrows) {
             console.log('ERRORS: ' + textStatus);
+            alert('Console will show CORS error, but file is correctly uploaded!');
             // stop loading spinner
         }
     });
@@ -142,7 +146,7 @@ function parseText() { // creates a version of the text with play buttons in bet
     for (var m = 0; m < singleDimensionalFinalArr.length; m++) {
         console.log(singleDimensionalFinalArr[m]);
         if (!singleDimensionalFinalArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
-            checkString += "<img src='play_hover.png' onclick='makeSprite(" + m + ")'>";
+            checkString += "<img src='play_hover.png' onclick='makeSprite(this, " + m + ")'>";
         }
         checkString += singleDimensionalFinalArr[m];
     }
@@ -198,7 +202,8 @@ function playSound(sprite) {
     perf.play(mySprite);
 }
 
-function makeSprite(pos) {
+function makeSprite(obj, pos) {
+    obj.style.backgroundColor = "#000";
     spriteNum++;
     var start = Math.floor(sound.seek() * 1000 - 300);
     var bob = "";
@@ -220,7 +225,7 @@ function makeSprite(pos) {
     makeSpriteArr.push("<img src='play_hover.png' onclick='playSound(" + spriteNum + ")'>");
     finalArrWithAudio.push("^&" + spriteNum);
     for (var nm = 0; nm < makeSpriteArr.length; nm++) {
-        console.log("makeSpriteArr:  " + makeSpriteArr[nm]);
+        // console.log("makeSpriteArr:  " + makeSpriteArr[nm]);
     }
 }
 
