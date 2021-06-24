@@ -447,7 +447,7 @@ input#llWord.llWord, input#tranny.tranny {
     }
 
     input {
-        transform: scale(1.6);
+        /*transform: scale(1.6);*/
         /*margin: 5px 0 15px 40px;*/
         z-index: 1;
     }
@@ -457,7 +457,7 @@ input#llWord.llWord, input#tranny.tranny {
     }
 
     button {
-        transform: scale(2);
+        /*transform: scale(2);*/
     }
 
     body {

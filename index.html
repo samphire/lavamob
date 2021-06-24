@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <title>Mobile Reader</title>
+    <script src="js/globalVars.js?version=1"></script>
     <script src="js/jquery-3.0.0.min.js"></script>
     <script src="js/jqueryColorPlugin.js"></script>
     <script src="js/howler.core.min.js"></script>
-    <script src="js/createReader.js?version=1"></script>
+    <script src="js/createReader.js?version=2"></script>
     <script src="js/buzz.min.js"></script>
-    <script src="js/index.js?version=8"></script>
+    <script src="js/index.js?version=1"></script>
     <script src="js/spacedRep.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/sweetalert2.min.js"></script>
@@ -35,7 +39,7 @@
                         $('#createReader').show();
                         break;
                     case 2:
-                        if(howl) howl.stop();
+                        if (howl) howl.stop();
                         $('section').hide();
                         $('#selectReader').show();
                         break;
@@ -69,7 +73,7 @@
             $('section').hide();
             $('#menu').hide();
             if (localStorage.getItem("userid")) { //all user info is there and can be reused
-                userid = localStorage.getItem("userid");
+                userid = parseInt(localStorage.getItem("userid"), 10);
                 $(".login").hide();
                 $("#welcome").show();
                 $("#menu").show();
@@ -162,7 +166,14 @@
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
         <div>Audio?&nbsp;</span><input type="checkbox" id="audioCheck"
-                                       onClick="$('#audiodiv').show();$('#btnUploadText').hide()"></div>
+                                       onClick="
+                                       if(!$('#audiodiv').is(':visible'))
+                                       {
+                                           $('#audiodiv').show();$('#btnUploadText').hide();console.info('showing audio')
+                                       }else{
+                                        $('#audiodiv').hide();$('#btnUploadText').show();
+                                       }
+"></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
 

@@ -18,10 +18,7 @@
 var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi,
     lastPosx, sndArr, wordArr, textToEdit;
 // var userid = userid;
-var url = "http://www.notborder.org:8080/Reader/webresources";
-// var url = "http://localhost:8080/Reader/webresources";
-var audiourl = "http://www.notborder.org/readeraudio";
-// var audiourl = "http://localhost/readeraudio";
+
 var lastPos = 0;
 var files;
 
@@ -41,7 +38,7 @@ function uploadFiles(event) {
     });
 
     $.ajax({
-        url: 'http://notborder.org/readeraudio/upload.php?files',
+        url: 'https://notborder.org/readeraudio/upload.php?files',
         // url: 'http://notborder.org/lavamob/upload.php?files',
         type: 'POST',
         data: data,
@@ -82,7 +79,7 @@ function parseText() { // creates a version of the text with play buttons in bet
     var tmpArr = paragraphArr;
     for (var q = tmpArr.length; q > 0; q--) {
         if (tmpArr[q - 1].length < 1) {
-            paragraphArr.splice(q - 1, 1);
+            paragraphArr.splice(q - 1, 1); // remove paragraph item if it has no content
         }
     }
 

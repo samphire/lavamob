@@ -11,10 +11,7 @@ var llData, nowList;
 var naverPopup;
 var howlSpriteObj;
 var howl;
-var url = "http://www.notborder.org:8080/Reader/webresources";
-var url2 = "http://www.notborder.org/lavamob";
-//var url = "http://localhost:8080/Reader/webresources";
-//var url2 = "http://localhost:63342/lavamob";
+
 
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
@@ -134,7 +131,6 @@ function getGoalsInfo() {
 function getReaderInfo() {
     $('#selectReader').empty();
     var htmlstr;
-    // alert("userid is: " + userid);
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -145,10 +141,11 @@ function getReaderInfo() {
             xhr.setRequestHeader('Accept', 'application/json');
         },
         dataType: "json",
-        url: url + "/textinfo",
+       //url: url + "/textinfo",
+	url: "https://notborder.org/lavamob/php/getTextInfo.php",
         data: {"userid": userid}
     }).done(function (resultjson) {
-
+        console.log("\n\n" + JSON.stringify(resultjson.readers[0]) + "\n\n");
         // alert(JSON.stringify(resultjson));
         if (!resultjson) {
             console.log("resultjson evaluates to false. Probably there are no readers");
@@ -164,12 +161,12 @@ function getReaderInfo() {
             $('#selectReader').append(htmlstr);
         });
     }).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call in getReaderInfo");
+        console.log("failed ajax call in getReaderInfo" + status + err);
     });
 }
 
 function editReader(textid) {
-
+console.info("in edit reader");
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -179,9 +176,14 @@ function editReader(textid) {
         },
         url: url + "/text/forEdit?textid=" + textid
     }).done(function (resultjson) {
-        printObject("yes", resultjson);
+        console.info(`text ${textid} fetched successfully`);
+        // printObject("yes", resultjson);
         selectedReaderObj = resultjson;
-        document.getElementById("text").innerHTML = resultjson.plainText;
+        document.getElementById("text").value = resultjson.plainText;
+
+
+            // .innerText = resultjson.plainText;
+        console.log("value set for 'text' div");
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
 
@@ -238,7 +240,7 @@ function downloadReader() {
         url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
 
-        // printObject("All Properties of resultjson", resultjson);
+         printObject("All Properties of resultjson", resultjson);
         selectedReaderObj = resultjson;
 
         //Initialize sound
@@ -334,7 +336,7 @@ function getLL(textid) {
             downloadReader();
         },
         error: function () {
-            alert("oops");
+            alert("error fetching learning list at /lladd");
         }
     });
 }

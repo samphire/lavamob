@@ -2,17 +2,17 @@
     display: none;
 }
 
-.visible{
+.visible {
     display: block;
 }
 
-.wordToTest{
+.wordToTest {
     font-size: xx-large;
     font-weight: bolder;
     text-align: center;
 }
 
-.gridItem{
+.gridItem {
     display: inline-block;
     padding: 2%;
     margin: 2%;
@@ -23,24 +23,34 @@
     width: 40%;
 }
 
-.typingInput{
+.typingInput {
     margin-top: 2rem;
     font-size: larger;
+    width: 100%;
 }
 
-.slidey{
+.slidey {
     transition: margin-right 0.5s;
     margin-right: -3005px;
 }
 
-.slidey-active{
+.slidey-active {
     margin-right: 0;
     transition: margin-right 0.7s;
-    transition-timing-function: cubic-bezier(.27,.43,.27,1.26);
+    transition-timing-function: cubic-bezier(.27, .43, .27, 1.26);
 }
 
-#redbutton{
-    width: 120px;
+#redbutton {
+    width: 80px;
+    margin-top: 30px;
     position: absolute;
-    left: 110px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+@media only screen and (max-device-width: 736px) and (orientation: portrait) {
+    .slidey img {
+        width: 70px;
+        margin-top: 120px;
+    }
 }
