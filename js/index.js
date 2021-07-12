@@ -1,7 +1,7 @@
 /**
  * Created by matthew on 7/28/2016.
  */
-
+var readers;
 var userid = 0;
 var goals;
 var selectedTextid;
@@ -141,11 +141,12 @@ function getReaderInfo() {
             xhr.setRequestHeader('Accept', 'application/json');
         },
         dataType: "json",
-       //url: url + "/textinfo",
-	url: "https://notborder.org/lavamob/php/getTextInfo.php",
+        //url: url + "/textinfo",
+        url: "https://notborder.org/lavamob/php/getTextInfo.php",
         data: {"userid": userid}
     }).done(function (resultjson) {
-        console.log("\n\n" + JSON.stringify(resultjson.readers[0]) + "\n\n");
+        console.log("\n\nresultjson: " + JSON.stringify(resultjson) + "\n\n");
+        console.log("\n\nresultjson.readers[0]:\n" + JSON.stringify(resultjson.readers[0]) + "\n\n");
         // alert(JSON.stringify(resultjson));
         if (!resultjson) {
             console.log("resultjson evaluates to false. Probably there are no readers");
@@ -166,7 +167,7 @@ function getReaderInfo() {
 }
 
 function editReader(textid) {
-console.info("in edit reader");
+    console.info("in edit reader");
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -182,7 +183,7 @@ console.info("in edit reader");
         document.getElementById("text").value = resultjson.plainText;
 
 
-            // .innerText = resultjson.plainText;
+        // .innerText = resultjson.plainText;
         console.log("value set for 'text' div");
         document.getElementById("readerName").value = resultjson.name;
         document.getElementById("readerDescription").value = resultjson.description;
@@ -224,12 +225,13 @@ function deleteReader(node, textid) {
 function getReader(textid) {
     history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/studyText");
     console.log("push state page 5 studyText");
-    $("#reader").show();
     selectedTextid = textid;
     getLL(textid);
+    $("#reader").show();
 }
 
 function downloadReader() {
+    console.log("in downloadReader()");
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -237,30 +239,49 @@ function downloadReader() {
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
-        url: url + "/text/dBOnly?textid=" + selectedTextid
+        url: url2 + "/php/getText.php?textid=" + selectedTextid
+        // url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
 
-         printObject("All Properties of resultjson", resultjson);
-        selectedReaderObj = resultjson;
+        // *** using php ***
+        selectedReaderObj = JSON.parse(resultjson);
+        selectedReaderObj.serial = selectedReaderObj.serial.toString();
+        var shit = new Array();
+        shit = eval(selectedReaderObj.puncParsedJsonArray);
+        selectedReaderObj.puncParsedJsonArray = shit;
+        shit = eval(selectedReaderObj.puncParsedAudioJsonArray);
+        selectedReaderObj.puncParsedAudioJsonArray = shit;
+        shit = eval(selectedReaderObj.uniqueInfoArray);
+        selectedReaderObj.uniqueInfoArray = shit;
 
+        // //*** using glassfish ***
+        // selectedReaderObj = resultjson;
+
+
+        printObject("All Properties of resultjson", selectedReaderObj);
         //Initialize sound
         howl = null;
         howlSpriteObj = null;
 
         var finalTextArr;
 
-        if (resultjson.audio) { // If there is audio, set up Howl and the sprite object
+        console.warn(selectedReaderObj.audio);
+        console.warn(selectedReaderObj.audioSpriteJson);
+
+
+        if (selectedReaderObj.audio) { // If there is audio, set up Howl and the sprite object
             console.log('there is audio');
             finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
             var sndArr = new Array();
-            sndArr.push(audiourl + "/" + resultjson.audio); // simplify this for goodness sake, insert on instantiation
-            howlSpriteObj = JSON.parse(resultjson.audioSpriteJson);
+            sndArr.push(audiourl + "/" + selectedReaderObj.audio); // simplify this for goodness sake, insert on instantiation
+            howlSpriteObj = JSON.parse(selectedReaderObj.audioSpriteJson);
             howl = new Howl({
                 src: sndArr,
                 sprite: howlSpriteObj
             });
         } else {
             finalTextArr = selectedReaderObj.puncParsedJsonArray;
+            // printObject(finalTextArr);
         }
 
         // make selected reader text !!!!!!!!!!
@@ -272,7 +293,7 @@ function downloadReader() {
             var foundidx = finalTextArr.indexOf(infoArr[0], start); // don't I need to use 'start' here?
             if (foundidx > -1) {
                 llData.list.forEach(function (el) {
-                    if (el.wordid === parseInt(infoArr[1])) {
+                    if (parseInt(el.wordid) === parseInt(infoArr[1])) {
                         inList = true;
                     }
                 });
@@ -305,11 +326,11 @@ function downloadReader() {
         $('#selectReader').hide();
         $('#reader').empty();
         $('#reader').append("<div class='readerPanel'></div>");
-        if(resultjson.audio){
-        $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions' onclick='howl.stop()'>" +
-            "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;Continuous Audio?" +
-            "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;Loop?" +
-            "<input type='radio' name='audioOptions'>&nbsp;&nbsp;none</div><br>");
+        if (selectedReaderObj.audio) {
+            $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions' onclick='howl.stop()'>" +
+                "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;Continuous Audio?" +
+                "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;Loop?" +
+                "<input type='radio' name='audioOptions'>&nbsp;&nbsp;none</div><br>");
         }
         $('#reader .readerPanel').append(selectedReaderText);
         document.documentElement.scrollTop = readerYScroll;
@@ -321,7 +342,7 @@ function downloadReader() {
 function getLL(textid) {
     console.log("In getLL with textid " + textid);
     $.ajax({
-        url: url + "/lladd",
+        url: url2 + "/php/getLL.php",
         type: "GET",
         dataType: "json",
         data: {"userid": userid},
@@ -344,7 +365,7 @@ function getLL(textid) {
 function customPop(el, word, wordid, headwordid, headword, tranche) {
     if ($(el).hasClass("clicked")) {
         var tom = llData.list.find(function (currentValue, index, arr) {
-            return currentValue.wordid === parseInt(wordid);
+            return parseInt(currentValue.wordid) === parseInt(wordid);
         });
         swal(tom.word + "\n" + tom.tranny);
         return;
@@ -360,7 +381,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     swal({
         title: 'Add to List',
         html: '<input id="llWord" class="llWord" autofocus>' +
-        '<input id="tranny" class="tranny" placeholder="type here">',
+            '<input id="tranny" class="tranny" placeholder="type here">',
         showCancelButton: true,
         onOpen: function (el) {
             $(el).find('.llWord').val(word);
@@ -373,7 +394,8 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     }).then(function (data) {
         $.ajax({
             type: "POST",
-            url: url + "/lladd",
+            // url: url + "/lladd",
+            url: url2 + "/php/lladd.php",
             crossDomain: true,
             data: {
                 "userid": userid,

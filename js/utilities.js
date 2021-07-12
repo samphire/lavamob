@@ -10,7 +10,7 @@ function convertDateToNumber(date) {
 function printObject(msg, obj) {
     var myStr = "";
     for (prop in obj) {
-        myStr += "\n\nProperty Name: " + prop + ", Value: " + obj[prop] + ", Type: " + typeof obj[prop] + "\n";
+        myStr += "\n\nProperty Name: " + prop + ", Value: " + obj[prop] + ", \tType: " + typeof obj[prop];
     }
     console.log("\n\n\n\n******* " + msg + " *******\n\n");
     console.log(myStr);
