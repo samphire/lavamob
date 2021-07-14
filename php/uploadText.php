@@ -1,5 +1,5 @@
 <?php
-include session.inc;
+include ("session.inc");
 
 
 

@@ -1,5 +1,5 @@
 <?php
-include session.inc;
+include ("session.inc");
 $textid = $_GET['textid'];
 
 $sql = " SELECT SQL_NO_CACHE * FROM text WHERE id=".$textid;

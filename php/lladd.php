@@ -1,6 +1,6 @@
 <?php
 
-include session.inc;
+include ("session.inc");
 
 $textid = $_POST['textid'];
 $userid = $_POST['userid'];

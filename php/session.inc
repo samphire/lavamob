@@ -1,3 +1,4 @@
+<?php
 error_reporting(1);
 
 header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.

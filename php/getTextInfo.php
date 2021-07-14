@@ -1,11 +1,10 @@
 <?php
-include session.inc;
+include ("session.inc");
 $userid = $_GET['userid'];
 
 $sql = "SELECT id, name, description, wordcount, rarityQuot, audio FROM text JOIN usertext ON text.id = usertext.textid WHERE usertext.userid=$userid";
 $result = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");
 $textsInfo = array();
-header('Access-Control-Allow-Origin: *');
 while($row = mysqli_fetch_assoc($result)){
     array_push($textsInfo, $row);
 }
