@@ -269,9 +269,10 @@ function uploadText() {
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
     if (!textToEdit) textToEdit = 0;
-    var myUrl = url + "/text?textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
+    var myUrl = url2 + "/php/uploadText.php?userid=" + userid + "&textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
 
     console.log("Editing text number: " + textToEdit);
+    console.log("upload url is: " + myUrl);
     $.ajax({
         url: myUrl,
         headers: {"userid": userid}, // header must be enabled in cors filter on server
@@ -288,10 +289,11 @@ function uploadText() {
             });
         },
         error: function () {
-            alert("Problem Uploading the Text");
+            alert("Problem Uploading the Text:");
+            console.warn(textToEdit + ", "+ userid + ", \n" + myUrl);
         }
     });
-
+    // cleanup
     document.getElementById("audioCheck").checked = false;
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
