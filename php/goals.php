@@ -1,6 +1,7 @@
 <?php
 include ("session.inc");
 
+$userid = $_GET['userid'];
 $actual = mysqli_query($conn, "SELECT COUNT(headwordid) AS numLearned FROM learned WHERE userid=$userid")->fetch_object()->numLearned;
 $sql = "SELECT * FROM goals where userid=$userid";
 $query = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");

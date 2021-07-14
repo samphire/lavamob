@@ -254,6 +254,10 @@ function uploadText() {
     puncParsedAudioJsonArray = finalArrWithAudio;
 
     var uploadData = {};
+    uploadData.userid = userid;
+    uploadData.textName = $("#readerName").val();
+    uploadData.textDesc = $("#readerDescription").val();
+    uploadData.textToEdit = textToEdit;
     uploadData.plainText = plainText;
     uploadData.puncParsedJsonArray = puncParsedJsonArray;
     uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
@@ -269,13 +273,13 @@ function uploadText() {
     uploadData = JSON.stringify(uploadData);
     console.log(uploadData);
     if (!textToEdit) textToEdit = 0;
-    var myUrl = url2 + "/php/uploadText.php?userid=" + userid + "&textname=" + $("#readerName").val() + "&textdesc=" + $("#readerDescription").val() + "&textToEdit=" + textToEdit;
+    var myUrl = url2 + "/php/uploadText.php";
 
     console.log("Editing text number: " + textToEdit);
     console.log("upload url is: " + myUrl);
     $.ajax({
         url: myUrl,
-        headers: {"userid": userid}, // header must be enabled in cors filter on server
+        //headers: {"userid": userid}, // header must be enabled in cors filter on server
         type: "POST",
         dataType: "json",
         contentType: "application/json; charset=UTF-8",
