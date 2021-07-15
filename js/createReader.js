@@ -66,7 +66,7 @@ function uploadFiles(event) {
     });
 }
 
-function qparseText() { let i;
+function parseText() { let i;
 // creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
     finalArr = new Array(); // array containing words and punctuation, in order
@@ -267,9 +267,9 @@ function uploadText() {
     uploadData.textDesc = $("#readerDescription").val();
     uploadData.textToEdit = textToEdit;
     uploadData.plainText = plainText;
-    uploadData.puncParsedJsonArray = JSON.stringify(puncParsedJsonArray);
+    uploadData.puncParsedJsonArray = puncParsedJsonArray;
     uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
-    uploadData.puncParsedAudioJsonArray = JSON.stringify(puncParsedAudioJsonArray);
+    uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.uniqueWordArray = uniqueWordArr;
     uploadData.wordCount = wordCount;
     // uploadData.uniqueInfoArray = new Array();
@@ -287,7 +287,7 @@ function uploadText() {
     console.warn("upload data after JSON stringify: " + uploadData);
 
     console.log(uploadData);
-    var myUrl = url2 + "/php/uploadText.php";
+    const myUrl = url2 + "/php/uploadText.php";
 
     console.log("Editing text number: " + textToEdit);
     console.log("upload url is: " + myUrl);
