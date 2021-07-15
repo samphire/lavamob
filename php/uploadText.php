@@ -1,34 +1,72 @@
 <?php
-include ("session.inc");
+include("session.inc");
 
 $data = json_decode(file_get_contents('php://input'), true);
 print_r($data);
-echo "plain text is: " . $data['plainText'];
 
-uploadData.plainText = plainText;
-uploadData.puncParsedJsonArray = puncParsedJsonArray;
-uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
-uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
-uploadData.wordArray = wordArr;
-uploadData.uniqueInfoArray = new Array();
-    if (typeof sndArr != 'undefined' && sndArr[0] != null) {
-    var bob = sndArr[0].split("/");
-    uploadData.audioFilename = bob[bob.length - 1];
-    // uploadData.audioFilename = sndArr[0];
+$percs = array(0, 0, 0, 0, 0, 0, 0, 0);
+$uniqueInfoArray = array();
+
+foreach ($data['uniqueWordArray'] as $word) {
+    $sql = "SELECT words.id, headwords.id, headword, frequency 
+            FROM words JOIN headwords
+            ON words.headword_id=headwords.id
+            WHERE word='{$word}'";
+
+    try {
+        $row = mysqli_fetch_row(mysqli_query($conn, $sql));
+        $uniqueInfoArray[] = $word . "^/" . $row[0] . "^/" . $row[1] . "^/" . $row[2] . "^/" . $row[3];
+        if ($row[3] < 7) {
+            $percs[$row[3] - 1]++;
+            $percs[7] += $row[3];
+        } else {
+            $percs[6]++;
+            $percs7 += 7;
+        }
+    } catch (Exception $e) {
+        echo $e->getCode() . ", " . $e->getMessage();
+        $xWordid = 0;
+        $charArr = str_split($word);
+        foreach ($charArr as $bob) {
+            $xWordid += mb_ord($bob);
+        }
+        $uniqueInfoArray[] = $word . "^/" . $xWordid . "^/0^/SLARTIBARTFAST^/3";
+    }
 }
 
-$sql="INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`perc3`,`perc4`,`perc5`,`perc6`,`percREST`,`rarityQuot`,`audio`,`video`,`plainText`,`puncParsedJsonArray`,`audioSpriteJson`,`puncParsedAudioJsonArray`,`uniqueInfoArray`)
-VALUES (" . $data['name'] . ", " . $data['description'] . ", ",<{wordcount: }>,<{perc1: }>,<{perc2: }>,<{perc3: }>,<{perc4: }>,<{perc5: }>,<{perc6: }>,
-<{percREST: }>,<{rarityQuot: }>,<{audio: }>,<{video: }>,
-<{plainText: }>,
-<{puncParsedJsonArray: }>,
-<{audioSpriteJson: }>,
-<{puncParsedAudioJsonArray: }>,
-<{uniqueInfoArray: }>)";
+$uniqueInfoArray = mysqli_real_escape_string($conn, json_encode($uniqueInfoArray));
 
+foreach($data as $el){
+    $el = mysqli_real_escape_string($conn, $el);
+}
 
+$sql = "INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`perc3`,`perc4`,`perc5`,`perc6`,`percREST`,
+                   `rarityQuot`,`audio`,`video`,`plainText`,`puncParsedJsonArray`,`audioSpriteJson`,
+                   `puncParsedAudioJsonArray`,`uniqueInfoArray`)"
+    . "VALUES ('" . $data['textName'] . "', '" . $data['textDesc'] . "', " . $data['wordCount']
+    . ", " . $percs[0] . ", " . $percs[1] . ", " . $percs[2] . ", " . $percs[3] . ", " . $percs[4] . ", " . $percs[5]
+    . ", " . $percs[6] . ", " . intval($percs[7] / $data['wordCount'] * 100)
+    . ", '" . $data['audioFilename'] . "', '" . $data['videoFilename'] . "', '" . $data['plainText'] . "', '" . $data['puncParsedJsonArray'] . "', '"
+    . $data['audioSpriteObjString'] . "', '" . $data['puncParsedAudioJsonArray'] . "', '" . $uniqueInfoArray . "')";
 
-INSERT INTO `usertext`(`userid`,`textid`) VALUES (<{userid: }>,<{textid: }>);
-*/
+echo $sql;
+mysqli_query($conn, $sql) or die("\n" . mysqli_error($conn));
 
-?>
+echo "\nnew text item added";
+
+$ed = $data['textToEdit'];
+$newid = $conn->insert_id;
+
+echo "\nOld id is {$ed} and new id is {$newid}";
+
+if ($ed > 0) {
+    echo "\nold id is greater than zero, so deleting old text";
+    $sql = "delete from `text` where `id`={$ed}";
+    mysqli_query($conn, $sql) or die("\n" . mysqli_error($conn));
+    $sql = "update `text` set `id`={$ed} where `id` = {$newid}";
+    mysqli_query($conn, $sql) or die . ("\n" . mysqli_error($conn));
+    echo "\nupdated id";
+} else {
+    $sql = "INSERT INTO `usertext`(`userid`,`textid`) VALUES (" . $data['userid'] . ", " . $newid . ")";
+    mysqli_query($conn, $sql) or die("\n" . mysqli_error($conn));
+}

@@ -66,7 +66,8 @@ function uploadFiles(event) {
     });
 }
 
-function parseText() { // creates a version of the text with play buttons in between every single word, ready to create sprites.
+function parseText() { let i;
+// creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
     finalArr = new Array(); // array containing words and punctuation, in order
     makeSpriteArr = new Array();
@@ -88,7 +89,7 @@ function parseText() { // creates a version of the text with play buttons in bet
     for (w = 0; w < paragraphArr.length; w++) {
         finalArr[w] = new Array();
         textArr = paragraphArr[w].split(" ");
-        for (var i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
+        for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
             var tmpString = "";
             endPuncArr = new Array();
 
@@ -117,7 +118,7 @@ function parseText() { // creates a version of the text with play buttons in bet
             // tmpString = "<span>" + tmpString + "</span>";
 
             finalArr[w].push(tmpString);
-            for (var n = endPuncArr.length; n > 0; n--) {
+            for (let n = endPuncArr.length; n > 0; n--) {
                 finalArr[w].push(endPuncArr[n - 1]);
             }
 
@@ -132,15 +133,15 @@ function parseText() { // creates a version of the text with play buttons in bet
         }
     }
 
-    for (var i = 0; i < finalArr.length; i++) {
-        for (var x = 0; x < finalArr[i].length; x++) {
+    for (i = 0; i < finalArr.length; i++) {
+        for (let x = 0; x < finalArr[i].length; x++) {
             singleDimensionalFinalArr.push(finalArr[i][x]);
         }
     }
 
-    var checkString = "";
+    let checkString = "";
 
-    for (var m = 0; m < singleDimensionalFinalArr.length; m++) {
+    for (let m = 0; m < singleDimensionalFinalArr.length; m++) {
         console.log(singleDimensionalFinalArr[m]);
         if (!singleDimensionalFinalArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
             checkString += "<img src='play_hover.png' onclick='makeSprite(this, " + m + ")'>";
@@ -244,7 +245,7 @@ function finish() {
 
 //noinspection JSAnnotator
 function uploadText() {
-    var plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
+    let plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
     plainText = document.getElementById("text").value;
     console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
@@ -253,26 +254,39 @@ function uploadText() {
 
     puncParsedAudioJsonArray = finalArrWithAudio;
 
-    var uploadData = {};
+    let uniqueWordArr = Array.from(new Set(wordArr));
+    let wordCount = uniqueWordArr.length;
+
+    console.info("\nsize of wordArr: " + wordArr.length);
+    console.info("size of uniqueWordArr: " + wordCount);
+
+    if (!textToEdit) textToEdit = 0;
+    let uploadData = {};
     uploadData.userid = userid;
     uploadData.textName = $("#readerName").val();
     uploadData.textDesc = $("#readerDescription").val();
     uploadData.textToEdit = textToEdit;
     uploadData.plainText = plainText;
-    uploadData.puncParsedJsonArray = puncParsedJsonArray;
+    uploadData.puncParsedJsonArray = JSON.stringify(puncParsedJsonArray);
     uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
-    uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
-    uploadData.wordArray = wordArr;
-    uploadData.uniqueInfoArray = new Array();
+    uploadData.puncParsedAudioJsonArray = JSON.stringify(puncParsedAudioJsonArray);
+    uploadData.uniqueWordArray = uniqueWordArr;
+    uploadData.wordCount = wordCount;
+    // uploadData.uniqueInfoArray = new Array();
     if (typeof sndArr != 'undefined' && sndArr[0] != null) {
-        var bob = sndArr[0].split("/");
+        const bob = sndArr[0].split("/");
         uploadData.audioFilename = bob[bob.length - 1];
         // uploadData.audioFilename = sndArr[0];
     }
     printObject("data object uploaded by uploadText()", uploadData);
+
+    console.warn("upload data before JSON stringify: " + uploadData);
+
     uploadData = JSON.stringify(uploadData);
+
+    console.warn("upload data after JSON stringify: " + uploadData);
+
     console.log(uploadData);
-    if (!textToEdit) textToEdit = 0;
     var myUrl = url2 + "/php/uploadText.php";
 
     console.log("Editing text number: " + textToEdit);
@@ -281,7 +295,7 @@ function uploadText() {
         url: myUrl,
         //headers: {"userid": userid}, // header must be enabled in cors filter on server
         type: "POST",
-        dataType: "json",
+        // dataType: "text", // The type of data expected as a response
         contentType: "application/json; charset=UTF-8",
         data: uploadData,
         crossDomain: true,
@@ -301,7 +315,7 @@ function uploadText() {
     document.getElementById("audioCheck").checked = false;
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
-    textToEdit = null;
+    textToEdit = 0;
     $("#result").empty();
     $("#superResult").empty();
     $("#audiodiv").hide();

@@ -175,18 +175,19 @@ function editReader(textid) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
-        url: url + "/text/forEdit?textid=" + textid
+        // url: url + "/text/forEdit?textid=" + textid
+        url: url2 + "/php/getTextForEdit.php?textid=" + textid
     }).done(function (resultjson) {
         console.info(`text ${textid} fetched successfully`);
-        // printObject("yes", resultjson);
-        selectedReaderObj = resultjson;
-        document.getElementById("text").value = resultjson.plainText;
+        selectedReaderObj = JSON.parse(resultjson);
+        printObject("Text For Edit", selectedReaderObj);
+        document.getElementById("text").value = selectedReaderObj.plainText;
 
 
         // .innerText = resultjson.plainText;
         console.log("value set for 'text' div");
-        document.getElementById("readerName").value = resultjson.name;
-        document.getElementById("readerDescription").value = resultjson.description;
+        document.getElementById("readerName").value = selectedReaderObj.name;
+        document.getElementById("readerDescription").value = selectedReaderObj.description;
 
         createReader(textid);
 
@@ -245,7 +246,7 @@ function downloadReader() {
 
         // *** using php ***
         selectedReaderObj = JSON.parse(resultjson);
-        selectedReaderObj.serial = selectedReaderObj.serial.toString();
+        // selectedReaderObj.serial = selectedReaderObj.serial.toString();
         var shit = new Array();
         shit = eval(selectedReaderObj.puncParsedJsonArray);
         selectedReaderObj.puncParsedJsonArray = shit;
