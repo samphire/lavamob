@@ -66,7 +66,7 @@ function uploadFiles(event) {
     });
 }
 
-function parseText() { let i;
+function qparseText() { let i;
 // creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
     finalArr = new Array(); // array containing words and punctuation, in order
