@@ -8,5 +8,5 @@ header('Access-Control-Allow-Origin: *');
 while($row = mysqli_fetch_assoc($result)){
     array_push($LL, $row);
 }
-$bob = json_encode($LL);
+$bob = json_encode($LL, JSON_NUMERIC_CHECK);
 echo "{\"list\":" . $bob.  "}";

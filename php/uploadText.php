@@ -36,7 +36,7 @@ foreach ($data['uniqueWordArray'] as $word) {
 $ppxa = json_encode($data['puncParsedJsonArray']);
 $ppAja = json_encode($data['puncParsedAudioJsonArray'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 $uia = json_encode($uniqueInfoArray, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
-$bob = mysqli_real_escape_string($conn, $data['plainText']);
+$plainText = mysqli_real_escape_string($conn, $data['plainText']);
 $ppja = mysqli_real_escape_string($conn, $ppxa); //  json encode with no flags...
 echo "plainText:  " . $data['plainText'];
 echo "after real escape string:  " . $bob;
@@ -49,7 +49,7 @@ $sql = "INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`per
     . "VALUES ('" . $data['textName'] . "', '" . $data['textDesc'] . "', " . $data['wordCount']
     . ", " . $percs[0] . ", " . $percs[1] . ", " . $percs[2] . ", " . $percs[3] . ", " . $percs[4] . ", " . $percs[5]
     . ", " . $percs[6] . ", " . intval($percs[7] / $data['wordCount'] * 100)
-    . ", '" . $data['audioFilename'] . "', '" . $data['videoFilename'] . "', \"" . $bob . "\", '" . $ppja . "', '"
+    . ", '" . $data['audioFilename'] . "', '" . $data['videoFilename'] . "', \"" . $plainText . "\", '" . $ppja . "', '"
     . $data['audioSpriteObjString'] . "', '" . $ppAja . "', '" . $uia . "')";
 
 echo $sql;

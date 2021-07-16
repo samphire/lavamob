@@ -358,7 +358,7 @@ function getLL(textid) {
             downloadReader();
         },
         error: function () {
-            alert("error fetching learning list at /lladd");
+            alert("error fetching learning list at /php/getLL.php");
         }
     });
 }
@@ -439,9 +439,9 @@ function createReader(textid) {
 }
 
 function getVocab(textid) {
-
+    console.log("In getVocab");
     $.ajax({
-        url: url + "/lladd",
+        url: url2 + "/php/getLL.php",
         type: "GET",
         dataType: "json",
         data: {"userid": userid},
@@ -451,24 +451,35 @@ function getVocab(textid) {
             xhr.setRequestHeader("Accept", "application/json");
         },
         success: function (data) {
+            console.log("successfully retrieved ll data");
             llData = data;
-            var thisTextLL = new Array();
+            let thisTextLL = [];
             llData.list.forEach(function (el) {
+                console.log(el);
+                console.log(el.textid);
                 if (el.textid === textid) { // only items in selectedtext
+                    console.log("this one is in our text");
                     thisTextLL.push(el);
                 }
             });
-            $("#selectReader").hide();
+
             $("#vocab").empty();
-            var htmlstr = "";
-            thisTextLL.forEach(function (el, idx) {
-                htmlstr += "<div class='vocabitem'><div class='vocabitemWord'>" + el.word + "</div><img src='assets/img/icons/naver.png' onclick='showDic(\"" + el.word + "\")'>" +
-                    "<div class='vocabitemTranny'>" + el.tranny + "</div><div class='vocabInfo'>next review: " + el.datenext.substr(0, 16) + ", repnum: " + el.repnum + ", ef: " + el.ef + "</div></div>";
-            });
-            $("#vocab").append(htmlstr);
-            $("#selectReader").hide();
-            history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
-            $("#vocab").show();
+
+            if(thisTextLL.length > 0) {
+
+                var htmlstr = "";
+                thisTextLL.forEach(function (el, idx) {
+                    htmlstr += "<div class='vocabitem'><div class='vocabitemWord'>" + el.word + "</div><img src='assets/img/icons/naver.png' onclick='showDic(\"" + el.word + "\")'>" +
+                        "<div class='vocabitemTranny'>" + el.tranny + "</div><div class='vocabInfo'>next review: " + el.datenext.substr(0, 16) + ", repnum: " + el.repnum + ", ef: " + el.ef + "</div></div>";
+                });
+                $("#vocab").append(htmlstr);
+                $("#selectReader").hide();
+                history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
+                $("#vocab").show();
+            } else{
+                swal("이 텍스트에 대한 어휘 항목이 없습니다");
+            }
+
         },
         error: function () {
             alert("oops");
@@ -486,7 +497,7 @@ function getLLData() {
     if (!llData) {
         // alert("llData was empty");
         $.ajax({
-            url: url + "/lladd",
+            url: url2 + "/php/getLL.php",
             type: "GET",
             dataType: "json",
             data: {"userid": userid},
@@ -509,7 +520,7 @@ function studyVocab() {
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
-            url: url + "/lladd",
+            url: url2 + "/php/getLL.php",
             type: "GET",
             dataType: "json",
             data: {"userid": userid},
@@ -687,7 +698,6 @@ function showDic(word) {
                     });
                 }
             });
-            // alert(fuck);
             document.getElementById("dicFrame").innerHTML = "<img id=\"closeIcon\" src=\"assets/img/icons/close.png\" onclick=\"$('#dicFrame').hide()\">" + htmlString;
             $("#dicFrame").show();
             // document.getElementById("dicFrame").srcdoc = data;
@@ -701,9 +711,11 @@ function showDic(word) {
 
 function removeReader(textid, addWords) {
     $.ajax({
-        type: "DELETE",
-        url: url + "/text?userid=" + userid + "&textid=" + textid + "&isAddToLearned=" + addWords,
+        // type: "DELETE",
+        type: "GET",
+        url: url2 + "/php/deleteText.php?userid=" + userid + "&textid=" + textid + "&isAddToLearned=" + addWords,
         crossDomain: true,
+        dataType: "text",
         success: function (result) {
             msg = addWords ? "Reader has been removed.\nWords have been added to learned list." : "Reader has been removed.";
             swal(msg);
