@@ -10,18 +10,18 @@ var soundFinished = new buzz.sound("assets/sound/perfect.mp3");
 var currentVocabIndex = 0;  //global variable to be used by functions in vocab test. corresponds to the index of the item in testList array, which is a whole json object representing the entirety of the database table fields.
 
 function test(list) {
-    console.log("In test");
-    console.log("list length is: " + list.length);
+    // console.log("In test");
+    // console.log("list length is: " + list.length);
     testList = list;// all the elements for this date
 
-    var testListtmp = testList.slice(0);
+    let testListtmp = testList.slice(0);
 
     testListtmp.forEach(function (val, idx) {
         val.idxInTestList = idx; // add property to each object for when getting random 4 or 6 and need to retrieve the object being tested because random4 method uses splice and removes items from the array
     });
 
     var sessionList = [];
-    var htmlstr;
+    let htmlstr;
     doneList = [];
     wrongList = [];
     var htmlstrArray = new Array(20);
@@ -32,21 +32,21 @@ function test(list) {
     // MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
     var sizeArr = testListtmp.length;
 
-    console.log("Size of testListtmp is: " + sizeArr);
+    // console.log("Size of testListtmp is: " + sizeArr);
 
     for (var q = 0; q < numPerSession; q++) {
-        console.log("In a for loop of size " + numPerSession);
+        // console.log("In a for loop of size " + numPerSession);
         var rand = Math.floor(Math.random() * sizeArr);
         var myItem = testListtmp.splice(rand, 1)[0]; //removes items from the array testListtmp
         // printObject("from testListTmp, item to splice: " + JSON.stringify(myItem));
         // console.log(JSON.stringify(myItem));
-        console.log("rand is " + rand + " and spliced item is " + myItem.word);
+        // console.log("rand is " + rand + " and spliced item is " + myItem.word);
         sessionList.push(myItem);
         sizeArr--;
     } //sessionList now contains numPerSession words to test
 
     testListtmp = null;
-    console.log("sessionList contains " + sessionList.length + " items");
+    // console.log("sessionList contains " + sessionList.length + " items");
 
     sessionList.forEach(function (val, idx) {
 
@@ -54,15 +54,15 @@ function test(list) {
                 currentVocabIndex = val.idxInTestList;
             }
 
-            console.log("Item in sessionList - word: " + val.word + ", tranny: " + val.tranny + ",repnum: " + val.repnum + ", ef: " + val.ef);
+            // console.log("Item in sessionList - word: " + val.word + ", tranny: " + val.tranny + ",repnum: " + val.repnum + ", ef: " + val.EF);
 
             var idxToPlace = 0;
             switch (val.repnum) {
                 default:
                     // console.log("This is default in the switch statement");
-                    console.log("In default. Word's repnum is " + val.repnum + " and ef is " + val.ef);
-                    if (val.ef > 2.5) {
-                        console.log("value of ef is greater than 2.5");
+                    // console.log("In default. Word's repnum is " + val.repnum + " and ef is " + val.EF);
+                    if (val.EF > 2.5) {
+                        // console.log("value of ef is greater than 2.5");
                         randItems = makeRand6(val);
                         idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                         htmlstrArray[idxToPlace] = makeQ(4, val);
@@ -70,8 +70,8 @@ function test(list) {
                         idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                         htmlstrArray[idxToPlace] = makeQ(5, val);
                     } else {
-                        if (val.ef < 1.5) {
-                            console.log("value of ef is less than 1.5");
+                        if (val.EF < 1.5) {
+                            // console.log("value of ef is less than 1.5");
                             randItems = makeRand4(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(1, val);
@@ -79,7 +79,7 @@ function test(list) {
                             idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                             htmlstrArray[idxToPlace] = makeQ(2, val);
                         } else {
-                            console.log("value of ef is greater than 1.5 and less than 2.5");
+                            // console.log("value of ef is greater than 1.5 and less than 2.5");
                             randItems = makeRand6(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -89,7 +89,7 @@ function test(list) {
                     }
                     break;
                 case 0:
-                    console.log("repnum is zero");
+                    // console.log("repnum is zero");
                     randItems = makeRand4(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(1, val);
@@ -100,7 +100,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 1:
-                    console.log("In case 1");
+                    // console.log("In case 1");
                     randItems = makeRand4(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     // console.log("about to make a type 2 question");
@@ -110,7 +110,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 2:
-                    console.log("In case 2");
+                    // console.log("In case 2");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(1, val);
@@ -118,7 +118,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 3:
-                    console.log("In case 3");
+                    // console.log("In case 3");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -129,7 +129,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 4:
-                    console.log("In case 4");
+                    // console.log("In case 4");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
@@ -137,7 +137,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 5:
-                    console.log("In case 5");
+                    // console.log("In case 5");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -148,7 +148,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 6:
-                    console.log("In case 6");
+                    // console.log("In case 6");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -159,7 +159,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 7:
-                    console.log("In case 7");
+                    // console.log("In case 7");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -170,7 +170,7 @@ function test(list) {
                     htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 8:
-                    console.log("In case 8");
+                    // console.log("In case 8");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -184,9 +184,9 @@ function test(list) {
         }
     );
     $("section").not("#vocaTest").hide(); //is this duplicating work of makeVocaTest()?
-    console.log("Size of htmlstrArray is " + htmlstrArray.length);
+    // console.log("Size of htmlstrArray is " + htmlstrArray.length);
     htmlstrArray.forEach(function (el, idx) {
-        console.log("Appending the following string: " + el + "\n\nat index " + el.idxInTestList + "\n\n");
+        // console.log("Appending the following string: " + el + "\n\nat index " + el.idxInTestList + "\n\n");
         $("#vocaTest").append(el);
     });
 
@@ -336,14 +336,16 @@ function calcDateNext(daysInterval) {
     var newDate = new Date(newDateInMilliseconds);
     newDate.setHours(5);
     newDate.setMinutes(0);
-    console.log("New Date \(should be 5 in the morning\) is: " + newDate);
-    return newDate;
+    // console.log("New Date \(should be 5 in the morning\) is: " + newDate);
+    const mySQLDate = newDate.toJSON().slice(0, 19).replace('T', ' ')
+    console.log(mySQLDate);
+    return mySQLDate;
 }
 
 function updateItem(right, idx) {
-    var myEl = testList[idx];
+    let myEl = testList[idx];
+    // console.log("updateItem: " + printObject("before updating", testList[idx]));
     myEl.repnum += 1;
-    console.log("updateItem: " + printObject("hey", testList[idx]));
     if (right) {
 
         switch (myEl.repnum) {
@@ -364,35 +366,35 @@ function updateItem(right, idx) {
                 break;
             case 6:
                 myEl.datenext = calcDateNext(2); //I assume that the list was learned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.EF *= 1.2;
                 break;
             case 7:
-                myEl.datenext = calcDateNext(myEl.ef * 2); //I assume that the list was learned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 2); //I assume that the list was learned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             case 8:
-                myEl.datenext = calcDateNext(myEl.ef * 4); //I assume that the list was learned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 4); //I assume that the list was learned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             case 9:
-                myEl.datenext = calcDateNext(myEl.ef * 5); //I assume that the list was lwarned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 5); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             case 10:
-                myEl.datenext = calcDateNext(myEl.ef * 6); //I assume that the list was lwarned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 6); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             case 11:
-                myEl.datenext = calcDateNext(myEl.ef * 7); //I assume that the list was lwarned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 7); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             case 12:
-                myEl.datenext = calcDateNext(myEl.ef * 8); //I assume that the list was lwarned to perfection today!
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 8); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.2;
                 break;
             default:
-                myEl.datenext = calcDateNext(myEl.ef * myEl.repnum);
-                myEl.ef *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * myEl.repnum);
+                myEl.EF *= 1.2;
         }
 
     } else {
@@ -403,45 +405,45 @@ function updateItem(right, idx) {
                 break;
             case 6:
                 // alert("in case 6");
-                myEl.ef *= .8;
-                alert("ef is: " + myEl.ef);
+                myEl.EF *= .8;
+                alert("ef is: " + myEl.EF);
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 1;
                 break;
             case 7:
                 // alert("in case 7");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 2;
                 break;
 
             case 8:
                 // alert("in case 8");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 2;
                 break;
             case 9:
                 // alert("in case 9");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 2;
                 break;
             case 10:
                 // alert("in case 10");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 3;
                 break;
             case 11:
                 // alert("in case 11");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 3;
                 break;
             case 12:
                 // alert("in case 12");
-                myEl.ef *= .8;
+                myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
                 myEl.repnum -= 4;
                 break;
@@ -451,23 +453,24 @@ function updateItem(right, idx) {
 }
 
 function updateLLItem(myLLItem) {
-    console.log("datenext is" + myLLItem.datenext);
-    myLLItem.datenext = myLLItem.datenext.getTime();
-    console.log("datenext is" + myLLItem.datenext);
-    printObject("check myLLItem's data before ajaxing via post", myLLItem);
-    console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
+    // console.log("datenext is" + myLLItem.datenext);
+    // myLLItem.datenext = myLLItem.datenext.getTime();
+    // console.log("datenext is" + myLLItem.datenext);
+    // printObject("check myLLItem's data before ajaxing via post", myLLItem);
+    // console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
+
+    // console.warn("EF is " + myLLItem.EF);
+    // console.warn("datenext is " + myLLItem.datenext);
 
     $.ajax({
         type: "POST",
-        url: url + "/lladd/edit",
+        url: url2 + "/php/llEdit.php",
         crossDomain: true,
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         data: {
             "userid": userid,
-            "word": myLLItem.word,
             "wordid": myLLItem.wordid,
-            "tranny": myLLItem.tranny,
-            "ef": myLLItem.ef,
+            "ef": myLLItem.EF,
             "datenext": myLLItem.datenext,
             "repnum": myLLItem.repnum
         },

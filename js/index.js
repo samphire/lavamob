@@ -180,7 +180,7 @@ function editReader(textid) {
     }).done(function (resultjson) {
         console.info(`text ${textid} fetched successfully`);
         selectedReaderObj = JSON.parse(resultjson);
-        printObject("Text For Edit", selectedReaderObj);
+        // printObject("Text For Edit", selectedReaderObj);
         document.getElementById("text").value = selectedReaderObj.plainText;
 
 
@@ -259,7 +259,7 @@ function downloadReader() {
         // selectedReaderObj = resultjson;
 
 
-        printObject("All Properties of resultjson", selectedReaderObj);
+        // printObject("All Properties of resultjson", selectedReaderObj);
         //Initialize sound
         howl = null;
         howlSpriteObj = null;
@@ -515,7 +515,7 @@ function getLLData() {
 }
 
 function studyVocab() {
-    console.log("In study vocab, makeVocaTest is next");
+    // console.log("In study vocab, makeVocaTest is next");
     llData = null;
     if (!llData) {
         console.log("There was no llData. Downloading now...");
@@ -533,15 +533,17 @@ function studyVocab() {
                 llData = data;
                 // alert(JSON.stringify(data));
                 nowList = new Array();
-                console.log("size of json array is: " + llData.list.length);
+                // console.log("size of json array is: " + llData.list.length);
                 llData.list.forEach(function (el, idx) {
 
-                    var d = convertDateToNumber(el.datenext); // this is overwritten below... delete this line?
-                    var t = el.datenext.split(/[- :]/);
-                    var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
-                    var d = Date.parse(datestr);
+                    //var d = convertDateToNumber(el.datenext); // this is overwritten below... delete this line?
+                    // console.log(typeof el.datenext + ", " + el.datenext);
+                    // var t = el.datenext.split(/[- :]/);
+                    // var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
+                    // var d = Date.parse(datestr);
                     // alert("Now: "+Date.now() + "\nitem datenext" + d);
-                    console.log("Checking nowlist. value of d is: " + d + ", value of now is: " + Date.now());
+                    var d = Date.parse(el.datenext);
+                    // console.log("Checking nowlist. value of d is: " + d + ", value of now is: " + Date.now());
                     if (d < Date.now()) {
                         nowList.push(el);
                     }
@@ -566,12 +568,12 @@ function studyVocab() {
 }
 
 function makeVocaTest() {
-    console.log("In makeVocaTest. then promise is next");
+    // console.log("In makeVocaTest. then promise is next");
 
     swal({
         text: "You have " + nowList.length + " items to review"
     }).then(function () {
-        console.log("In then promise. test is next");
+        // console.log("In then promise. test is next");
         if (nowList.length < 7) {
             swal({text: "Sorry, there are not enough items to make a test"});
             $("section").hide();
@@ -580,7 +582,7 @@ function makeVocaTest() {
         }
 
         history.pushState({page_id: 3, page: "vocab"}, null, "/lavamob/testVocab");
-        console.log("push state page 3 vocab");
+        // console.log("push state page 3 vocab");
         $("section").hide();
         $("#vocaTest").show();
         test(nowList); //why am I passing nowList? It is a global variable.
@@ -626,7 +628,7 @@ function showDic(word) {
 
             htmlString += "<h3>" + $wowElement.parent().parent().find(".desc_lst").find("a")[0].innerHTML + "</h3>";
 
-            printObject("different method", $wowElement.parent().parent().find(".desc_lst").find("span")[0]);
+            // printObject("different method", $wowElement.parent().parent().find(".desc_lst").find("span")[0]);
 
             htmlString += "<div>" + $wowElement.parent().parent().parent().find(".example_wrap").find("p")[0].innerHTML + "</div>";
             // printObject("real", $wowElement.parent().parent().parent().find(".example_wrap").find("p")[1]);

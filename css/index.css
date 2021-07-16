@@ -661,7 +661,7 @@ and (max-height: 2560px) {
 
     #vocaTest {
         padding: 3% 4%;
-        margin-top: -6%;
+        /*margin-top: -6%;*/
     }
 
     body {
