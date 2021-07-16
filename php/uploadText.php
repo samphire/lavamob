@@ -34,7 +34,7 @@ foreach ($data['uniqueWordArray'] as $word) {
     }
 }
 $ppxa = json_encode($data['puncParsedJsonArray']);
-$ppAja = json_encode($data['puncParsedAudioJsonArray'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+$ppAja = json_encode($data['puncParsedAudioJsonArray']);
 $uia = json_encode($uniqueInfoArray, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 $plainText = mysqli_real_escape_string($conn, $data['plainText']);
 $ppja = mysqli_real_escape_string($conn, $ppxa); //  json encode with no flags...
