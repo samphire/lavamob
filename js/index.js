@@ -225,7 +225,7 @@ function deleteReader(node, textid) {
 
 function getReader(textid) {
     history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/studyText");
-    console.log("push state page 5 studyText");
+    console.log("push state page 5 studyText. History object size is " + History.length);
     selectedTextid = textid;
     getLL(textid);
     $("#reader").show();
@@ -371,7 +371,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         swal(tom.word + "\n" + tom.tranny);
         return;
     }
-    $(el).addClass("clicked");
+
     readerYScroll = document.documentElement.scrollTop;
 
     var dicUrl = "http://endic.naver.com/search.nhn?query=" + word;
@@ -410,6 +410,7 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 "thouTranch": 5
             },
             success: function (result) {
+                $(el).addClass("clicked");
                 $(".readerPanel").remove();
                 getLL(selectedTextid);
             },
@@ -424,15 +425,17 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 
 function studyReader() {
     history.pushState({page_id: 2, page: "readers"}, null, "/lavamob/studyReader");
-    console.log("push state page 2 readers");
+    console.log("push state page 2 readers History object size is " + History.length);
     $("section").hide();
     $("#reader").empty();
     $("#selectReader").show();
 }
 
 function createReader(textid) {
+    if(textid === 0){
+        cleanupCreateReader();
+    }
     history.pushState({page_id: 1, page: "create"}, null, "/lavamob/createReader");
-    console.log("push state page 1 create");
     textToEdit = textid;
     $('section').hide();
     $('#createReader').show();
@@ -475,6 +478,7 @@ function getVocab(textid) {
                 $("#vocab").append(htmlstr);
                 $("#selectReader").hide();
                 history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
+                console.log("History object size is " + History.length);
                 $("#vocab").show();
             } else{
                 swal("이 텍스트에 대한 어휘 항목이 없습니다");
@@ -582,7 +586,7 @@ function makeVocaTest() {
         }
 
         history.pushState({page_id: 3, page: "vocab"}, null, "/lavamob/testVocab");
-        // console.log("push state page 3 vocab");
+         console.log("push state page 3 vocab History object size is " + History.length);
         $("section").hide();
         $("#vocaTest").show();
         test(nowList); //why am I passing nowList? It is a global variable.

@@ -312,6 +312,10 @@ function uploadText() {
         }
     });
     // cleanup
+    cleanupCreateReader();
+}
+
+function cleanupCreateReader(){
     document.getElementById("audioCheck").checked = false;
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";

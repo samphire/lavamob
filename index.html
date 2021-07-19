@@ -26,13 +26,14 @@
     <script>
 
         window.onpopstate = function (event) {
+            history.go(-(history.length + 1));
             // var content = "";
             if (event.state) {
                 // content = ;
 
                 console.log("HISTORY\nPage id is " + event.state.page_id + ", size of history stack is " + history.length);
                 console.log("history state object data: " + event.state.page + ", " + history.state.hre);
-
+                console.log(history.state);
                 switch (event.state.page_id) {
                     case 1:
                         $('section').hide();
