@@ -3,6 +3,40 @@
 html {
     height: 100%;
 }
+#welcomeRow{
+    display: grid;
+    grid-template-columns: repeat(5, 14%);
+    grid-template-rows: repeat(3, 70px);
+    grid-gap: 10px;
+    margin: 30px auto;
+    justify-content: center;
+}
+.info{
+    background: white;
+    grid-row: span 3;
+}
+
+.btnContainer{
+    grid-column: span 3;
+    grid-row:span 3;
+    display: grid;
+    align-content: space-between;
+}
+
+.welcomeRowItem{
+    border-radius: 5px;
+    padding: 10px 16px;
+    box-shadow: 5px 5px 10px;
+}
+
+.btnActivity {
+    font-size: 2rem;
+    font-family: 'Bitter', serif;
+    background-color: moccasin;
+    border: 3px solid darkgoldenrod;
+    text-align: center;
+    cursor: pointer;
+  }
 
 body {
     height: 100%;
@@ -151,19 +185,6 @@ fieldset{
     width: 80%;
 }
 
-.btnActivity {
-    font-size: 2rem;
-    font-family: 'Bitter', serif;
-    width: 500px;
-    border-radius: 5px;
-    margin: 30px auto;
-    background-color: moccasin;
-    border: 3px solid darkgoldenrod;
-    text-align: center;
-    padding: 10px 16px;
-    cursor: pointer;
-    box-shadow: 5px 5px 10px;
-}
 
 .hideo {
     width: 80%;

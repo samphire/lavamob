@@ -90,34 +90,36 @@ function getGoalsInfo() {
             blob.textContent = "end: " + goalData.end_date;
 
             // Date value
-            var day = 1000 * 60 * 60 * 24;
-            var now = new Date();
-            var startDate = new Date(goalData.start_date);
-            var endDate = new Date(goalData.end_date);
-            var diff = Math.ceil((endDate - startDate) / day);
-            var timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
+            const day = 1000 * 60 * 60 * 24;
+            const now = new Date();
+            const startDate = new Date(goalData.start_date);
+            const endDate = new Date(goalData.end_date);
+            const diff = Math.ceil((endDate - startDate) / day);
+            const timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
 
             // Progress value
-            var range = goalData.unit_target_value - goalData.unit_start_value;
-            var valProg = Math.ceil(goalData.actual / range * 100);
+            const range = goalData.unit_target_value - goalData.unit_start_value;
+            const valProg = Math.ceil((goalData.actual-goalData.unit_start_value) / range * 100);
+            const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
             console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
                 + "\ngoal actual value: " + goalData.actual + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
 
             // Colors
-            var col = '';
-            var percGood = valProg / timeProg;
+            let col;
+            let percGood = valProg / timeProg;
             if (percGood > 1.2) col = "#44ff4b";
             if (percGood < 1.2) col = "#abce39";
             if (percGood < 1.05) col = "#cecb39";
             if (percGood < 0.9) col = "#ce9c39";
             if (percGood < 0.75) col = "#ce3939";
 
-            var prog1 = clone.querySelector('.progressBar1');
-            var prog2 = clone.querySelector('.progressBar2');
+            const prog1 = clone.querySelector('.progressBar1');
+            const prog2 = clone.querySelector('.progressBar2');
             goalPlate.parentNode.appendChild(clone);
             progress(valProg, $(prog1), true, col);
             progress(timeProg, $(prog2), false);
-
+            document.querySelector("#learned").innerHTML = "<h3>Learned<br>words</h3><h1>" + goalData.actual + "</h1>";
+            document.querySelector("#learning").innerHTML = "<h3>Testing<br>words</h3><h1>" + learning + "</h1>";
 
         }
 

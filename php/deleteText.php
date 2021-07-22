@@ -8,12 +8,13 @@ $isAddToLearned = $_GET['isAddToLearned'];
 echo "isAddToLearned: " . $isAddToLearned;
 
 if ($isAddToLearned) {
-
     $sql = "SELECT `uniqueInfoArray` FROM `text` WHERE id={$textid}";
     $result = mysqli_query($conn, $sql) or die("query problem in deleteText.php\n\n{$sql}\n\n");
     $words = json_decode(mysqli_fetch_row($result)[0]);
     print("\n\n");
     print_r(sizeof($words));
+
+
 
     foreach ($words as $item) {
         print_r($item);
