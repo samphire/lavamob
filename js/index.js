@@ -118,8 +118,8 @@ function getGoalsInfo() {
             goalPlate.parentNode.appendChild(clone);
             progress(valProg, $(prog1), true, col);
             progress(timeProg, $(prog2), false);
-            document.querySelector("#learned").innerHTML = "<h3>Learned<br>words</h3><h1>" + goalData.actual + "</h1>";
-            document.querySelector("#learning").innerHTML = "<h3>Testing<br>words</h3><h1>" + learning + "</h1>";
+            // document.querySelector("#learned").innerHTML = "<h1>" + goalData.actual + "</h1>";
+            document.querySelector("#learning").innerHTML = "Word Score: " + (parseInt(learning) + parseInt(goalData.actual));
 
         }
 

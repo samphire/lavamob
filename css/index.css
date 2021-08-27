@@ -23,6 +23,13 @@ html {
     align-content: space-between;
 }
 
+#learned{
+    display: none;
+}
+#learning{
+
+}
+
 .welcomeRowItem{
     border-radius: 5px;
     padding: 10px 16px;
@@ -36,6 +43,7 @@ html {
     border: 3px solid darkgoldenrod;
     text-align: center;
     cursor: pointer;
+    grid-column: 2 / 4;
   }
 
 body {
@@ -435,6 +443,16 @@ input#llWord.llWord, input#tranny.tranny {
         text-align: center;
     }
 
+    #learning {
+        grid-row: 1;
+        grid-column: span 5;
+        font-size: x-large;
+    }
+
+    #learned{
+        display: none;
+    }
+
     #welcome > h1 {
         font-size: 2rem;
         text-align: center;
@@ -460,6 +478,10 @@ input#llWord.llWord, input#tranny.tranny {
         /*background-size: cover;*/
 
         background-position: 20%;
+    }
+
+    .btnContainer{
+        grid-column: 2 / 5;
     }
 
     .btnActivity {

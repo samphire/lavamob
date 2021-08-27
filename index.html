@@ -69,7 +69,7 @@
             $('#fileinput').on('change', prepareUpload);
             $('#audioform').on('submit', uploadFiles);
 
-            document.getElementById('showusername').innerText = "Welcome, " + localStorage.getItem('userEmail');
+            document.getElementById('showusername').innerText = "Welcome, " + localStorage.getItem('userEmail') + ", " + localStorage.getItem('userid');
 //            localStorage.clear();
             $('section').hide();
             $('#menu').hide();
@@ -158,13 +158,13 @@
 
     <h1>Choose Your Activity</h1>
     <div id="welcomeRow">
-        <div class="info welcomeRowItem" id="learned">Words Learned</div>
+        <div class="info welcomeRowItem" id="learned"></div>
         <div class="btnContainer">
             <div class="btnActivity welcomeRowItem" onclick="createReader(0)">Create Reader</div>
             <div class="btnActivity welcomeRowItem" onclick="studyReader()">Study Reader</div>
             <div class="btnActivity welcomeRowItem" onclick="studyVocab()">Test Vocabulary</div>
         </div>
-        <div class="info welcomeRowItem" id="learning">Words Learning</div>
+        <div class="info welcomeRowItem" id="learning"></div>
     </div>
 </section>
 <section id="selectReader" class="hideo">
