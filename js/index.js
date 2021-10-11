@@ -3,6 +3,8 @@
  */
 var readers;
 var userid = 0;
+var language;
+var dicurl;
 var goals;
 var selectedTextid;
 var selectedReaderObj;
@@ -36,9 +38,12 @@ function login() {
                 localStorage.clear();
                 return;
             }
-            userid = data;
+            const myData=JSON.parse(data);
+            userid = myData[0];
+            language = myData[1];
             localStorage.setItem("userEmail", document.getElementById("userEmail").value);
             localStorage.setItem("userid", userid);
+            localStorage.setItem("language", language);
             $(".login").hide();
             document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
             $("#welcome").show();
@@ -66,7 +71,6 @@ function progress(percent, $element, boolAnimColor, col) {
 }
 
 function getGoalsInfo() {
-
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -99,10 +103,10 @@ function getGoalsInfo() {
 
             // Progress value
             const range = goalData.unit_target_value - goalData.unit_start_value;
-            const valProg = Math.ceil((goalData.actual-goalData.unit_start_value) / range * 100);
+            const valProg = Math.ceil((goalData.learned-goalData.unit_start_value) / range * 100);
             const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
             console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
-                + "\ngoal actual value: " + goalData.actual + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
+                + "\ngoal actual value: " + goalData.learned + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
 
             // Colors
             let col;
@@ -118,8 +122,8 @@ function getGoalsInfo() {
             goalPlate.parentNode.appendChild(clone);
             progress(valProg, $(prog1), true, col);
             progress(timeProg, $(prog2), false);
-            // document.querySelector("#learned").innerHTML = "<h1>" + goalData.actual + "</h1>";
-            document.querySelector("#learning").innerHTML = "Word Score: " + (parseInt(learning) + parseInt(goalData.actual));
+            // document.querySelector("#learned").innerHTML = "<h1>" + goalData.learned + "</h1>";
+            document.querySelector("#learning").innerHTML = "Word Score: " + (parseInt(learning) + parseInt(goalData.learned));
 
         }
 
@@ -155,12 +159,13 @@ function getReaderInfo() {
             return;
         }
         $.each(resultjson.readers, function (idx, val) {
-            htmlstr = "<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(" + val.id + ")'>" + val.name + "</div>";
-            htmlstr += "<div class='readerlistitemvocab' onclick='getVocab(" + val.id + ")'>V</div>";
-            htmlstr += "<i class='fa fa-pencil-square-o fa-2x' aria-hidden='true' onclick='editReader(" + val.id + ")'></i>";
+            htmlstr = `<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(${val.id})'>${val.name}</div>`;
+            htmlstr += `<div class='itemStats'>${val.wordcount} words<br>${val.rarityQuot} rarity</div>`;
+            htmlstr += `<div class='readerlistitemvocab' onclick='getVocab(` + val.id + ")'>V</div>";
+            htmlstr += `<i class='fa fa-pencil-square-o fa-2x' aria-hidden='true' onclick='editReader(` + val.id + ")'></i>";
             // htmlstr += "<img class='delreader' onclick='var el = this.parentNode; this.parentNode.parentNode.removeChild(el);deleteReader(" + val.id + ");' src='assets/img/icons/mission_complete.png'>";
-            htmlstr += "<img class='delreader' onclick='deleteReader(this.parentNode," + val.id + ");' src='assets/img/icons/mission_complete.png'>";
-            htmlstr += "</div>";
+            htmlstr += `<img class='delreader' onclick='deleteReader(this.parentNode,` + val.id + ");' src='assets/img/icons/mission_complete.png'>";
+            htmlstr += `</div>`;
             $('#selectReader').append(htmlstr);
         });
     }).fail(function (jqXHR, status, err) {
@@ -376,10 +381,29 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 
     readerYScroll = document.documentElement.scrollTop;
 
-    var dicUrl = "http://endic.naver.com/search.nhn?query=" + word;
+    // var dicUrl = "http://endic.naver.com/search.nhn?query=" + word;
+    // var dicUrl = "https://dict.naver.com/rukodict/#/search?query=" + word;
+    // var dicUrl = "https://www.bing.com/translator/?from=en&to=ru&text=" + word;
+
+    language=localStorage.getItem('language');
+
+    switch(language){
+        case '1':
+        case '4':
+            dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
+            break;
+        case '2':
+            dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
+            break;
+        case '3':
+            dicurl = "https://zh.dict.naver.com/#/search?query=" + word;
+            break;
+        default:
+            dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
+    }
     var name = "dictionary";
     var specs = "width=500, height=500, resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes";
-    naverPopup = window.open(dicUrl, name, specs);
+    naverPopup = window.open(dicurl, name, specs);
 
     swal({
         title: 'Add to List',
@@ -522,6 +546,7 @@ function getLLData() {
 
 function studyVocab() {
     // console.log("In study vocab, makeVocaTest is next");
+    $("#vocaTest").empty();
     llData = null;
     if (!llData) {
         console.log("There was no llData. Downloading now...");

@@ -3,7 +3,8 @@
 html {
     height: 100%;
 }
-#welcomeRow{
+
+#welcomeRow {
     display: grid;
     grid-template-columns: repeat(5, 14%);
     grid-template-rows: repeat(3, 70px);
@@ -11,26 +12,28 @@ html {
     margin: 30px auto;
     justify-content: center;
 }
-.info{
+
+.info {
     background: white;
     grid-row: span 3;
 }
 
-.btnContainer{
+.btnContainer {
     grid-column: span 3;
-    grid-row:span 3;
+    grid-row: span 3;
     display: grid;
     align-content: space-between;
 }
 
-#learned{
+#learned {
     display: none;
 }
-#learning{
+
+#learning {
 
 }
 
-.welcomeRowItem{
+.welcomeRowItem {
     border-radius: 5px;
     padding: 10px 16px;
     box-shadow: 5px 5px 10px;
@@ -44,7 +47,7 @@ html {
     text-align: center;
     cursor: pointer;
     grid-column: 2 / 4;
-  }
+}
 
 body {
     height: 100%;
@@ -78,11 +81,11 @@ textarea {
     margin-top: 20px;
 }
 
-.textPanel img{
+.textPanel img {
     opacity: 0.5;
 }
 
-.textPanel img:hover{
+.textPanel img:hover {
     opacity: 1;
 }
 
@@ -92,11 +95,27 @@ textarea {
     background-color: dodgerblue;
     color: seashell;
     margin-top: 10px;
-    width: 60%;
+    width: 50%;
+    height: 28px;
     text-align: center;
     padding: 2% 3%;
     cursor: pointer;
     float: left;
+}
+
+.itemStats{
+    background-color: darkslategray;
+    font-size: medium;
+    border-radius: 3px;
+    margin-top: 10px;
+    margin-left: 2%;
+    width: 10%;
+    min-height: 28px;
+    text-align: left;
+    padding: 2% 1%;
+    cursor: pointer;
+    float: left;
+    color: snow;
 }
 
 .vocabInfo {
@@ -123,7 +142,7 @@ textarea {
     text-align: left;
 }
 
-#audiodiv input{
+#audiodiv input {
     display: block;
     margin-bottom: 1.6rem;
 }
@@ -138,11 +157,11 @@ textarea {
     color: sandybrown;
 }
 
-.audioOptions input{
+.audioOptions input {
     margin-left: 20px;
 }
 
-fieldset{
+fieldset {
     margin-top: 2.3rem;
     height: 312px;
 }
@@ -154,6 +173,7 @@ fieldset{
     margin-top: 10px;
     margin-left: 2%;
     width: 10%;
+    min-height: 28px;
     text-align: center;
     padding: 2% 1%;
     cursor: pointer;
@@ -161,7 +181,7 @@ fieldset{
     color: yellow;
 }
 
-.delreader{
+.delreader {
     margin: 2% 0 0 0;
     width: 4%;
     cursor: pointer;
@@ -217,11 +237,11 @@ fieldset{
     padding: 1%;
 }
 
-.readerPanel img{
+.readerPanel img {
     opacity: 0.5;
 }
 
-.readerPanel img:hover{
+.readerPanel img:hover {
     opacity: 1;
 }
 
@@ -276,7 +296,7 @@ fieldset{
     overflow: auto;
 }
 
-#selectReader i{
+#selectReader i {
     margin: 0.55em;
     float: left;
 }
@@ -378,33 +398,34 @@ input#llWord.llWord, input#tranny.tranny {
     height: 30%;
 }
 
-.goalContainer{
+.goalContainer {
     border-radius: 3px;
     padding: 1%;
     width: 92%;
     margin: 0 auto 20px auto;
-    background-color: rgba(12,12,12,0.5);
+    background-color: rgba(12, 12, 12, 0.5);
     color: white;
 }
 
-.goalName{
+.goalName {
     font-size: 1.4rem;
     font-family: "Maiandra GD", Georgia, sans-serif;
 }
 
-.goalDescription{
+.goalDescription {
     font-size: 0.9rem;
 }
 
-.progressBar1, .progressBar2{
+.progressBar1, .progressBar2 {
     clear: both;
     border-radius: 3px;
     height: 16px;
     border: 1px solid #111;
     background-color: #aaaaaa;
-    box-shadow: 0 0 10px #111111 ;
+    box-shadow: 0 0 10px #111111;
 }
-.progressBar1 div, .progressBar2 div{
+
+.progressBar1 div, .progressBar2 div {
     border-radius: 3px;
     margin-left: 0;
     height: 100%;
@@ -415,19 +436,20 @@ input#llWord.llWord, input#tranny.tranny {
     background-color: #333333;
 }
 
-.progressBar2{
+.progressBar2 {
     margin-top: 10px;
 }
 
-.progressBar2 div{
+.progressBar2 div {
     background-color: royalblue;
 }
 
-.startDate{
+.startDate {
     float: left;
     margin-left: 3%;
 }
-.endDate{
+
+.endDate {
     float: right;
     margin-right: 3%;
 }
@@ -449,7 +471,7 @@ input#llWord.llWord, input#tranny.tranny {
         font-size: x-large;
     }
 
-    #learned{
+    #learned {
         display: none;
     }
 
@@ -480,7 +502,7 @@ input#llWord.llWord, input#tranny.tranny {
         background-position: 20%;
     }
 
-    .btnContainer{
+    .btnContainer {
         grid-column: 2 / 5;
     }
 
@@ -519,15 +541,17 @@ input#llWord.llWord, input#tranny.tranny {
         padding: 3% 4%;
     }
 
-    #selectReader i{
+    #selectReader i {
         margin: 0.3em 0.2em;
     }
-    .item{
+
+    .item {
         position: relative;
         width: 100%;
         overflow: hidden;
     }
-    .readerlistitem{
+
+    .readerlistitem {
         width: 56%;
     }
 
@@ -545,7 +569,7 @@ input#llWord.llWord, input#tranny.tranny {
         color: yellow;
     }
 
-    .delreader{
+    .delreader {
         width: 8%;
         margin: 0.7em 0 0 0.5em;
     }
@@ -784,6 +808,40 @@ and (max-height: 2560px) {
 /*   phones   */
 @media (max-width: 599px) {
 
+    .delreader {
+        margin: 0.7em 0 0 0;
+    }
+
+    .readerlistitem {
+        font-size: medium;
+        min-height: 25px;
+        height: auto;
+        width: 40%;
+    }
+
+    .readerlistitemvocab {
+        font-size: large;
+        width: 6%;
+        min-height: 25px;
+
+    }
+
+    .itemStats{
+        font-size: xx-small;
+        min-height: 25px;
+    }
+
+    .hideo {
+        width: 100%;
+        padding: 3% 2%;
+    }
+
+    .swal2-modal button.styled{
+        margin: 15px auto 5px 30px;
+    }
+button{
+    transform: scale(1);
+}
 }
 
 /*   tablets portrait   */
@@ -799,7 +857,7 @@ and (max-height: 2560px) {
 /*   desktops   */
 @media only screen and (min-width: 1200px) {
 
-    .goalContainer{
+    .goalContainer {
         /*float:left;*/
         width: 50%;
     }
@@ -813,11 +871,13 @@ and (max-height: 2560px) {
         background-color: #ffffff;
         display: none;
     }
-    #createReader{
+
+    #createReader {
         width: 80%;
         margin-top: 0;
     }
-    #parseBtn{
+
+    #parseBtn {
         border-radius: 4px;
         border: 2px solid #23203b;
         padding: 10px 20px;
@@ -830,6 +890,6 @@ and (max-height: 2560px) {
 
 }
 
-.fa-cloud-upload:hover{
+.fa-cloud-upload:hover {
     color: green;
 }
