@@ -564,21 +564,20 @@ function studyVocab() {
                 llData = data;
                 // alert(JSON.stringify(data));
                 nowList = new Array();
-                // console.log("size of json array is: " + llData.list.length);
+                // alert("size of json array is: " + llData.list.length);
+                // alert("type of llData.list is " + typeof llData.list);
                 llData.list.forEach(function (el, idx) {
+                    // alert(el.datenext + ", " + typeof el.datenext);
+                    // let d = Date.parse(el.datenext);
+                    let arr = el.datenext.split(/[- :]/);
+                    let d=new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
 
-                    //var d = convertDateToNumber(el.datenext); // this is overwritten below... delete this line?
-                    // console.log(typeof el.datenext + ", " + el.datenext);
-                    // var t = el.datenext.split(/[- :]/);
-                    // var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
-                    // var d = Date.parse(datestr);
-                    // alert("Now: "+Date.now() + "\nitem datenext" + d);
-                    var d = Date.parse(el.datenext);
-                    // console.log("Checking nowlist. value of d is: " + d + ", value of now is: " + Date.now());
+                    // alert (d);
                     if (d < Date.now()) {
                         nowList.push(el);
                     }
                 });
+                // alert("size of nowList is " + nowList.length);
                 makeVocaTest();
             }
         });
