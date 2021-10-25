@@ -67,7 +67,6 @@ function progress(percent, $element, boolAnimColor, col) {
     // $element.find('div').animate({width: progressBarWidth}, 500).html(percent + "%");
     $element.find('div').animate({width: progressBarWidth}, 500);
     if (boolAnimColor) $element.find('div').animate({backgroundColor: col}, 1800);
-
 }
 
 function getGoalsInfo() {
