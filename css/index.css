@@ -4,6 +4,25 @@ html {
     height: 100%;
 }
 
+.readerPanel {
+    /*background-color: cornsilk;*/
+    /*background-color: floralwhite;*/
+    /*background-color: ivory;*/
+    /*background-color: khaki;*/
+    /*background-color: lemonchiffon;*/
+    /*background-color: lightyellow;*/
+    /*background-color: linen;*/
+    /*background-color: moccasin;*/
+    background-color: navajowhite;
+    /*background-color: seashell;*/
+    /*background-color: wheat;*/
+    padding: 20px 8px 200px 16px;
+    text-align: left;
+    line-height: 160%;
+    margin-top: -28px;
+}
+
+
 #welcomeRow {
     display: grid;
     grid-template-columns: repeat(5, 14%);
@@ -27,10 +46,6 @@ html {
 
 #learned {
     display: none;
-}
-
-#learning {
-
 }
 
 .welcomeRowItem {
@@ -59,7 +74,6 @@ body {
     background-color: #40572b;
     background-image: url("https://www.transparenttextures.com/patterns/tiny-grid.png");
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-    overflow-x: hidden;
 }
 
 textarea {
@@ -103,7 +117,7 @@ textarea {
     float: left;
 }
 
-.itemStats{
+.itemStats {
     background-color: darkslategray;
     font-size: medium;
     border-radius: 3px;
@@ -211,38 +225,6 @@ fieldset {
     margin: 0 auto;
     /*margin-top: 40px;*/
     width: 80%;
-}
-
-
-.hideo {
-    width: 80%;
-    /*height: 100%;*/
-    margin: auto;
-    border: solid blue 2px;
-    padding: 2%;
-    background-color: #ffffff;
-    display: none;
-}
-
-#reader {
-    text-align: left;
-    padding: 3% 4%;
-    line-height: 200%;
-}
-
-.readerPanel {
-    border: 1px solid black;
-    border-radius: 3px;
-    background-color: cornsilk;
-    padding: 1%;
-}
-
-.readerPanel img {
-    opacity: 0.5;
-}
-
-.readerPanel img:hover {
-    opacity: 1;
 }
 
 #reader > a {
@@ -455,15 +437,6 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 @media only screen and (max-device-width: 736px) and (orientation: portrait) {
-    .hideo {
-        width: 92%;
-        min-height: 97%;
-        padding: 2%;
-        border: none;
-        background-color: #e8e3c3;
-        display: none;
-        text-align: center;
-    }
 
     #learning {
         grid-row: 1;
@@ -480,11 +453,6 @@ input#llWord.llWord, input#tranny.tranny {
         text-align: center;
     }
 
-    #reader {
-        margin-top: -6%;
-        min-height: 97%;
-    }
-
     #vocab {
         min-height: 97%;
         padding: 3% 4%;
@@ -494,12 +462,6 @@ input#llWord.llWord, input#tranny.tranny {
     #vocaTest {
         padding: 3% 4%;
         margin-top: -6%;
-    }
-
-    body {
-        /*background-size: cover;*/
-
-        background-position: 20%;
     }
 
     .btnContainer {
@@ -523,11 +485,6 @@ input#llWord.llWord, input#tranny.tranny {
 
     button {
         /*transform: scale(2);*/
-    }
-
-    body {
-        font-size: 1.2rem;
-        /*text-align: left;*/
     }
 
     #audiodiv {
@@ -579,14 +536,6 @@ input#llWord.llWord, input#tranny.tranny {
         padding: 0;
         margin-top: -46px;
         min-height: 100%;
-    }
-
-    .readerPanel {
-        border: none;
-        background-color: inherit;
-        padding: 0;
-        font-size: 1.4rem;
-        line-height: 260%;
     }
 
     .swal2-modal button.styled {
@@ -700,24 +649,9 @@ input#llWord.llWord, input#tranny.tranny {
 and (max-width: 1440px)
 and (max-height: 2560px) {
 
-    .hideo {
-        width: 92%;
-        min-height: 97%;
-        padding: 2%;
-        border: none;
-        background-color: #e8e3c3;
-        display: none;
-        text-align: center;
-    }
-
     #welcome > h1 {
         font-size: 2rem;
         text-align: center;
-    }
-
-    #reader {
-        /*margin-top: -6%;*/
-        min-height: 97%;
     }
 
     #vocab {
@@ -729,11 +663,6 @@ and (max-height: 2560px) {
     #vocaTest {
         padding: 3% 4%;
         /*margin-top: -6%;*/
-    }
-
-    body {
-        /*background-size: cover;*/
-        background-position: 20%;
     }
 
     .btnActivity {
@@ -755,11 +684,6 @@ and (max-height: 2560px) {
         transform: scale(2);
     }
 
-    body {
-        font-size: 1.2rem;
-        /*text-align: left;*/
-    }
-
     #audiodiv {
         width: 100%;
         float: left;
@@ -772,19 +696,21 @@ and (max-height: 2560px) {
     }
 
     #createReader {
+        box-sizing: border-box;
         width: 100%;
-        /*padding: 0;*/
-        margin-top: -46px;
-        min-height: 100%;
+        background: cornsilk;
+        margin-top: -48px;
+        padding-top: 3%;
     }
 
-    .readerPanel {
-        border: none;
-        background-color: inherit;
-        padding: 0;
-        font-size: 1.4rem;
-        line-height: 260%;
+    #audioOpt {
+        display: none;
     }
+
+    #readerBlurb div input:not([type=checkbox]){
+        width: 90%;
+    }
+
 
     .swal2-modal button.styled {
         padding: 5px 16px;
@@ -826,55 +752,38 @@ and (max-height: 2560px) {
 
     }
 
-    .itemStats{
+    .itemStats {
         font-size: xx-small;
         min-height: 25px;
     }
 
-    .hideo {
-        width: 100%;
-        padding: 3% 2%;
-    }
-
-    .swal2-modal button.styled{
+    .swal2-modal button.styled {
         margin: 15px auto 5px 30px;
     }
-button{
-    transform: scale(1);
-}
-}
 
-/*   tablets portrait   */
-@media (min-width: 600px) {
-
-}
-
-/*   tablets landscape   */
-@media (max-width: 900px) {
-
+    button {
+        transform: scale(1);
+    }
 }
 
 /*   desktops   */
 @media only screen and (min-width: 1200px) {
+
+    .readerPanel {
+        padding: 3% 24%;
+    }
 
     .goalContainer {
         /*float:left;*/
         width: 50%;
     }
 
-    .hideo {
-        width: 80%;
-        /*height: 100%;*/
-        margin: auto;
-        border: solid blue 2px;
-        padding: 2%;
-        background-color: #ffffff;
-        display: none;
-    }
-
     #createReader {
+        box-sizing: border-box;
         width: 80%;
-        margin-top: 0;
+        margin: auto;
+        background: white;
+        padding: 3%;
     }
 
     #parseBtn {
