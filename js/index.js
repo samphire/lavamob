@@ -391,6 +391,9 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         case '4':
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
             break;
+        case '5':
+            dicurl = "https://translate.google.com/?hl=th&sl=en&tl=th&text=" + word;
+            break;
         case '2':
             dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
             break;
