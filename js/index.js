@@ -388,17 +388,20 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
 
     switch(language){
         case '1':
+        case '2':
+            dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
+            break;
+        case '3':
+            dicurl = "https://zh.dict.naver.com/#/search?query=" + word;
+            break;
         case '4':
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
             break;
         case '5':
             dicurl = "https://translate.google.com/?hl=th&sl=en&tl=th&text=" + word;
             break;
-        case '2':
-            dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
-            break;
-        case '3':
-            dicurl = "https://zh.dict.naver.com/#/search?query=" + word;
+        case '6':
+            dicurl = "https://translate.google.com/?hl=fr&sl=en&tl=fr&text=" + word;
             break;
         default:
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
