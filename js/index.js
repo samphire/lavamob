@@ -387,13 +387,13 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     language=localStorage.getItem('language');
 
     switch(language){
-        case '1':
         case '2':
             dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
             break;
         case '3':
             dicurl = "https://zh.dict.naver.com/#/search?query=" + word;
             break;
+        case '1':
         case '4':
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
             break;
