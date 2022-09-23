@@ -2,8 +2,6 @@ var testList, doneList, wrongList;
 var numPerSession = 7;
 var randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
-// var soundRight = new buzz.sound("assets/sound/bells-1-half.mp3");
-// var soundWrong = new buzz.sound("assets/sound/saliva-2.mp3");
 var soundRight = new buzz.sound("assets/sound/correct.mp3");
 var soundWrong = new buzz.sound("assets/sound/wrong2.mp3");
 var soundFinished = new buzz.sound("assets/sound/perfect.mp3");
@@ -32,21 +30,14 @@ function test(list) {
     // MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
     var sizeArr = testListtmp.length;
 
-    // console.log("Size of testListtmp is: " + sizeArr);
-
     for (var q = 0; q < numPerSession; q++) {
-        // console.log("In a for loop of size " + numPerSession);
         var rand = Math.floor(Math.random() * sizeArr);
         var myItem = testListtmp.splice(rand, 1)[0]; //removes items from the array testListtmp
-        // printObject("from testListTmp, item to splice: " + JSON.stringify(myItem));
-        // console.log(JSON.stringify(myItem));
-        // console.log("rand is " + rand + " and spliced item is " + myItem.word);
         sessionList.push(myItem);
         sizeArr--;
     } //sessionList now contains numPerSession words to test
 
     testListtmp = null;
-    // console.log("sessionList contains " + sessionList.length + " items");
 
     sessionList.forEach(function (val, idx) {
 
@@ -54,15 +45,12 @@ function test(list) {
                 currentVocabIndex = val.idxInTestList;
             }
 
-            // console.log("Item in sessionList - word: " + val.word + ", tranny: " + val.tranny + ",repnum: " + val.repnum + ", ef: " + val.EF);
-
             var idxToPlace = 0;
             switch (val.repnum) {
                 default:
-                    // console.log("This is default in the switch statement");
-                    // console.log("In default. Word's repnum is " + val.repnum + " and ef is " + val.EF);
+                    console.log("This is default in the switch statement");
                     if (val.EF > 2.5) {
-                        // console.log("value of ef is greater than 2.5");
+                        console.log("value of ef is greater than 2.5");
                         randItems = makeRand6(val);
                         idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                         htmlstrArray[idxToPlace] = makeQ(4, val);
@@ -71,7 +59,7 @@ function test(list) {
                         htmlstrArray[idxToPlace] = makeQ(5, val);
                     } else {
                         if (val.EF < 1.5) {
-                            // console.log("value of ef is less than 1.5");
+                            console.log("value of ef is less than 1.5");
                             randItems = makeRand4(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(1, val);
@@ -79,7 +67,7 @@ function test(list) {
                             idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                             htmlstrArray[idxToPlace] = makeQ(2, val);
                         } else {
-                            // console.log("value of ef is greater than 1.5 and less than 2.5");
+                            console.log("value of ef is greater than 1.5 and less than 2.5");
                             randItems = makeRand6(val);
                             idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                             htmlstrArray[idxToPlace] = makeQ(3, val);
@@ -96,8 +84,8 @@ function test(list) {
                     randItems = makeRand4(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(2, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 1:
                     // console.log("In case 1");
@@ -105,17 +93,17 @@ function test(list) {
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     // console.log("about to make a type 2 question");
                     htmlstrArray[idxToPlace] = makeQ(2, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
-                    // console.log("about to make a type 5 question");
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    // // console.log("about to make a type 5 question");
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 2:
                     // console.log("In case 2");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(1, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 3:
                     // console.log("In case 3");
@@ -125,16 +113,16 @@ function test(list) {
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 4:
                     // console.log("In case 4");
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, 0);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 5:
                     // console.log("In case 5");
@@ -144,8 +132,8 @@ function test(list) {
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 6:
                     // console.log("In case 6");
@@ -155,8 +143,8 @@ function test(list) {
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 7:
                     // console.log("In case 7");
@@ -166,8 +154,8 @@ function test(list) {
                     randItems = makeRand6(val);
                     idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 3);
                     htmlstrArray[idxToPlace] = makeQ(4, val);
-                    idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
-                    htmlstrArray[idxToPlace] = makeQ(5, val);
+                    // idxToPlace = findFirstEmptySlot(htmlstrArray, idxToPlace + 4);
+                    // htmlstrArray[idxToPlace] = makeQ(5, val);
                     break;
                 case 8:
                     // console.log("In case 8");
@@ -366,35 +354,35 @@ function updateItem(right, idx) {
                 break;
             case 6:
                 myEl.datenext = calcDateNext(2); //I assume that the list was learned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.EF *= 1.1;
                 break;
             case 7:
-                myEl.datenext = calcDateNext(myEl.EF * 2); //I assume that the list was learned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF); //I assume that the list was learned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             case 8:
-                myEl.datenext = calcDateNext(myEl.EF * 4); //I assume that the list was learned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF); //I assume that the list was learned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             case 9:
-                myEl.datenext = calcDateNext(myEl.EF * 5); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             case 10:
-                myEl.datenext = calcDateNext(myEl.EF * 6); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 1.2); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             case 11:
-                myEl.datenext = calcDateNext(myEl.EF * 7); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 1.5); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             case 12:
-                myEl.datenext = calcDateNext(myEl.EF * 8); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.2;
+                myEl.datenext = calcDateNext(myEl.EF * 1.5); //I assume that the list was lwarned to perfection today!
+                myEl.EF *= 1.1;
                 break;
             default:
                 myEl.datenext = calcDateNext(myEl.EF * myEl.repnum);
-                myEl.EF *= 1.2;
+                myEl.EF *= 1.1;
         }
 
     } else {
@@ -405,47 +393,47 @@ function updateItem(right, idx) {
                 break;
             case 6:
                 // alert("in case 6");
-                myEl.EF *= .8;
+                // myEl.EF *= .6;
                 alert("ef is: " + myEl.EF);
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 1;
+                myEl.repnum = 1;
                 break;
             case 7:
                 // alert("in case 7");
-                myEl.EF *= .8;
+                // myEl.EF *= .6;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 2;
+                myEl.repnum = 2;
                 break;
 
             case 8:
                 // alert("in case 8");
-                myEl.EF *= .8;
+                myEl.EF *= .9;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 2;
+                myEl.repnum = 2;
                 break;
             case 9:
                 // alert("in case 9");
                 myEl.EF *= .8;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 2;
+                myEl.repnum = 3;
                 break;
             case 10:
                 // alert("in case 10");
-                myEl.EF *= .8;
+                myEl.EF *= .7;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 3;
+                myEl.repnum = 4;
                 break;
             case 11:
                 // alert("in case 11");
-                myEl.EF *= .8;
+                myEl.EF *= .6;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 3;
+                myEl.repnum = 6;
                 break;
             case 12:
                 // alert("in case 12");
-                myEl.EF *= .8;
+                myEl.EF *= .5;
                 myEl.datenext = calcDateNext(0);
-                myEl.repnum -= 4;
+                myEl.repnum = 6;
                 break;
         }
     }
@@ -496,7 +484,7 @@ function delLLItem(myLLItem, type) {
     $.ajax({
         type: "DELETE",
         url: url + "/lladd?userid=" + userid + "&wordid=" + myLLItem.wordid +
-        "&headwordid=" + myLLItem.headwordid + "&type=" + type,
+            "&headwordid=" + myLLItem.headwordid + "&type=" + type,
         crossDomain: true,
         success: function (result) {
             console.log("LearningList Item removed successfully");
