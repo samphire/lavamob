@@ -38,7 +38,7 @@ function login() {
                 localStorage.clear();
                 return;
             }
-            const myData=JSON.parse(data);
+            const myData = JSON.parse(data);
             userid = myData[0];
             language = myData[1];
             localStorage.setItem("userEmail", document.getElementById("userEmail").value);
@@ -102,7 +102,7 @@ function getGoalsInfo() {
 
             // Progress value
             const range = goalData.unit_target_value - goalData.unit_start_value;
-            const valProg = Math.ceil((goalData.learned-goalData.unit_start_value) / range * 100);
+            const valProg = Math.ceil((goalData.learned - goalData.unit_start_value) / range * 100);
             const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
             console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
                 + "\ngoal actual value: " + goalData.learned + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
@@ -384,9 +384,9 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     // var dicUrl = "https://dict.naver.com/rukodict/#/search?query=" + word;
     // var dicUrl = "https://www.bing.com/translator/?from=en&to=ru&text=" + word;
 
-    language=localStorage.getItem('language');
+    language = localStorage.getItem('language');
 
-    switch(language){
+    switch (language) {
         case '2':
             dicurl = "https://translate.google.com/?hl=ru&sl=en&tl=ru&text=" + word;
             break;
@@ -463,7 +463,7 @@ function studyReader() {
 }
 
 function createReader(textid) {
-    if(textid === 0){
+    if (textid === 0) {
         cleanupCreateReader();
     }
     history.pushState({page_id: 1, page: "create"}, null, "/lavamob/createReader");
@@ -499,7 +499,7 @@ function getVocab(textid) {
 
             $("#vocab").empty();
 
-            if(thisTextLL.length > 0) {
+            if (thisTextLL.length > 0) {
 
                 var htmlstr = "";
                 thisTextLL.forEach(function (el, idx) {
@@ -511,7 +511,7 @@ function getVocab(textid) {
                 history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
                 console.log("History object size is " + History.length);
                 $("#vocab").show();
-            } else{
+            } else {
                 swal("이 텍스트에 대한 어휘 항목이 없습니다");
             }
 
@@ -567,22 +567,18 @@ function studyVocab() {
             },
             success: function (data) {
                 llData = data;
-                // alert(JSON.stringify(data));
                 nowList = new Array();
-                // alert("size of json array is: " + llData.list.length);
-                // alert("type of llData.list is " + typeof llData.list);
                 llData.list.forEach(function (el, idx) {
-                    // alert(el.datenext + ", " + typeof el.datenext);
-                    // let d = Date.parse(el.datenext);
                     let arr = el.datenext.split(/[- :]/);
-                    let d=new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
-
-                    // alert (d);
-                    if (d < Date.now()) {
+                    let d = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
+                    const offset = new Date().getTimezoneOffset();
+                    const nowWithOffset = Date.now() - offset * 60 * 1000;
+                    let nowWithTimezone = new Date(nowWithOffset).toJSON().slice(0, 19).replace('T', ' ');
+                    nowWithTimezone = new Date(nowWithTimezone);
+                    if (d < nowWithTimezone) {
                         nowList.push(el);
                     }
                 });
-                // alert("size of nowList is " + nowList.length);
                 makeVocaTest();
             }
         });
@@ -592,9 +588,7 @@ function studyVocab() {
             var t = el.datenext.split(/[- :]/);
             var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
             var d = Date.parse(datestr);
-            // alert(Date.now() + "\n" + d);
             if (d < Date.now()) {
-                // alert('hey');
                 nowList.push(el);
             }
         });
@@ -617,7 +611,7 @@ function makeVocaTest() {
         }
 
         history.pushState({page_id: 3, page: "vocab"}, null, "/lavamob/testVocab");
-         console.log("push state page 3 vocab History object size is " + History.length);
+        console.log("push state page 3 vocab History object size is " + History.length);
         $("section").hide();
         $("#vocaTest").show();
         test(nowList); //why am I passing nowList? It is a global variable.

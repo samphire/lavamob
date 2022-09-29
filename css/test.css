@@ -1,9 +1,112 @@
+:root {
+    --primary: #FBBC1BFF;
+    --secondary: #B3D9E2FF;
+    --dark: #212121;
+    --light: #FCF9F4;
+}
+
 .testItem {
     display: none;
 }
 
 .visible {
     display: block;
+}
+
+.card {
+    margin: 100px auto 0;
+    width: 300px;
+    height: 400px;
+    perspective: 800px;
+    border-radius: 16px;
+}
+
+.card__inner {
+    width: 100%;
+    height: 100%;
+    transition: transform .5s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    position: relative;
+}
+
+.card__inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 3px 18px 3px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card__face--front {
+    background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+}
+
+.card__face--front h2 {
+    color: black;
+    font-size: 36px;
+}
+
+.card__face--back {
+    background-color: var(--light);
+    transform: rotateY(180deg);
+}
+
+.card__face--back h2 {
+    color: black;
+    font-size: 36px;
+}
+
+.buttonDiv {
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    margin: 6px;
+    font-size: 0.8em;
+    line-height: 1.42;
+    padding: 0.6em 1.2em;
+    font-weight: bolder;
+    border-width: 0;
+    border-style: solid;
+    /*background-color: #23203b;*/
+    border-radius: 0.5em;
+    cursor: pointer;
+    font-family: "Booster Next FY", "Avenir Next", Avenir, sans-serif;
+    user-select: none;
+    vertical-align: bottom;
+    transition: box-shadow 0.1s, transform 0.1s;
+    border-radius: 12%/50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 1px 10px 1px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active {
+    transform: scale(0.99);
+    box-shadow: 0 2px 6px 1px rgba(0, 0, 0, 0.15) inset;
+    transition-duration: 0.05s;
+}
+
+.btn-know {
+    color: #30b166;
+}
+
+.btn-dunno {
+    color: red;
 }
 
 .wordToTest {

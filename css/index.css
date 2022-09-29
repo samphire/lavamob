@@ -71,8 +71,9 @@ body {
     text-align: center;
     font-size: x-large;
     /*background: url(../assets/img/bg.jpg);*/
-    background-color: #40572b;
-    background-image: url("https://www.transparenttextures.com/patterns/tiny-grid.png");
+    /*background-color: #40572b;*/
+    background-color: #FCF9F4;
+    /*background-image: url("https://www.transparenttextures.com/patterns/tiny-grid.png");*/
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 

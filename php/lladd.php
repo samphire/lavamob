@@ -29,8 +29,8 @@ $sql = "INSERT INTO `reader3`.`learninglist`
         '{$headword}',
         '{$tranny}',
         {$textid},'".date("Y-m-d H:i:s")."',
-        2.5,
-        1);";
+        2,
+        0);";
 $result = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");
 
 echo "done";
