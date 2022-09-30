@@ -1,5 +1,5 @@
 let testList, doneList, wrongList;
-const numPerSession = 2;
+const numPerSession = 7;
 let randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
 const soundRight = new buzz.sound("assets/sound/correct.mp3");
@@ -345,29 +345,30 @@ function endTest() {
     $("#vocaTest").empty();
 }
 
-function calcDateNext(daysInterval) {
-    console.log("in calcDateNext. daysInterval is " + daysInterval);
-    let toAdd = daysInterval * 24 * 60 * 60 * 1000;
-    let now = new Date().getTime();
-    const todaySQLDAte = new Date().toJSON().slice(0, 19).replace('T', ' ');
-    console.log("today is " + todaySQLDAte);
-    let newDateInMilliseconds = now + toAdd;
-    let newDate = new Date(newDateInMilliseconds);
-    // newDate.setHours(5);
-    // newDate.setMinutes(0);
-    // console.log("New Date \(should be 5 in the morning\) is: " + newDate);
-    const mySQLDate = newDate.toJSON().slice(0, 19).replace('T', ' ');
-    // console.log("mySQLDate is: " + mySQLDate);
-    return mySQLDate;
+function calcDateNext(daysInterval) { //returns a string
+    // console.log("in calcDateNext. daysInterval is " + daysInterval);
+    let toAdd = daysInterval * 24 * 60 * 60 * 1000; // convert to milliseconds
+    const todaySQLDate = getCurrentTimezoneDate(new Date()); // converts today's date to include timezone offset
+    let nowms = todaySQLDate.getTime(); // converts to milliseconds
+    // console.log("today is " + todaySQLDate);
+    let newDateInMilliseconds = nowms + toAdd; // adds the interval
+    let newDate = new Date(newDateInMilliseconds); // converts from milliseconds to date object
+    newDate.setHours(5);
+    newDate.setMinutes(0);
+    console.log("New Date \(should be 5 in the morning\) is: " + newDate);
+
+    return newDate.getFullYear() + "-" + (newDate.getMonth() + 1).toString().padStart(2, '0') + "-"
+        + newDate.getDate().toString().padStart(2, '0') + " " + newDate.getHours().toString().padStart(2, '0') + ":"
+        + newDate.getMinutes().toString().padStart(2, '0') + ":" + newDate.getSeconds().toString().padStart(2, '0');
 }
 
 function updateItem(right, idx) {
     let myEl = testList[idx];
     // console.log("updateItem: " + printObject("before updating", testList[idx]));
-    console.log ("in updateItem. word is " + myEl.word + "\nrepnum is " + myEl.repnum + ", which is about to be incremented");
-    myEl.repnum += 1;
+    console.log("in updateItem. word is " + myEl.word + "\nrepnum is " + myEl.repnum + ", which will be incremented IF right");
 
     if (right) {
+        myEl.repnum += 1;
 
         switch (myEl.repnum) {
             case 1:
@@ -415,14 +416,15 @@ function updateItem(right, idx) {
         switch (myEl.repnum) {
 
             default:
-                myEl.repnum /=2;
-                myEl.EF /=2;
+                myEl.repnum /= 2;
+                myEl.EF /= 2;
                 myEl.datenext = calcDateNext(0);
                 break;
+            case 0:
             case 1:
             case 2:
             case 3:
-                myEl.repnum = 1;
+                myEl.repnum = 0;
                 myEl.EF = 2;
                 myEl.datenext = calcDateNext(0);
                 break;

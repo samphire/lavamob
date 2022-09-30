@@ -571,10 +571,8 @@ function studyVocab() {
                 llData.list.forEach(function (el, idx) {
                     let arr = el.datenext.split(/[- :]/);
                     let d = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
-                    const offset = new Date().getTimezoneOffset();
-                    const nowWithOffset = Date.now() - offset * 60 * 1000;
-                    let nowWithTimezone = new Date(nowWithOffset).toJSON().slice(0, 19).replace('T', ' ');
-                    nowWithTimezone = new Date(nowWithTimezone);
+                    // console.log("%%%%%%% " + d + " %%%%%%%");
+                    const nowWithTimezone = getCurrentTimezoneDate(new Date());
                     if (d < nowWithTimezone) {
                         nowList.push(el);
                     }

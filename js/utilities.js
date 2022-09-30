@@ -17,6 +17,17 @@ function printObject(msg, obj) {
     console.log("\n\n******* " + msg + " ***END*\n\n\n\n");
 }
 
+function getCurrentTimezoneDate(date){ //returns date object
+    // console.log("in getCurrentTimezoneDateTime");
+    const offset = new Date().getTimezoneOffset();
+    // console.log(offset);
+    const dateWithOffset = date.getTime() - offset * 60 * 1000;
+    // console.log(dateWithOffset);
+    let dateWithTimezone = new Date(dateWithOffset).toJSON().slice(0, 19).replace('T', ' ');
+    // console.log(dateWithTimezone + ": " + typeof dateWithTimezone);
+    return new Date(dateWithTimezone);
+}
+
 function shuffle(a) {
     var j, x, i;
     for (i = a.length; i; i--) {
