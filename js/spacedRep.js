@@ -1,5 +1,6 @@
 let testList, doneList, wrongList;
 const numPerSession = 7;
+const flashCardsToInclude = 5;
 let randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
 const soundRight = new buzz.sound("assets/sound/correct.mp3");
@@ -21,30 +22,59 @@ function test(list) {
     let sessionList = [];
     doneList = [];
     wrongList = [];
-    let htmlStrArray = new Array(20);
+    let htmlStrArray = new Array(64);
     htmlStrArray.forEach(function (val, idx, arr) { // initialize the array with empty strings so as not to get error when printing the array
         arr[idx] = "";
     });
 
     // TODO  MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
-    let sizeArr = testListtmp.length;
+
+    const flashCardList = testListtmp.filter((val)=>val.repnum === 0);
+    const nonFlashCardList = testListtmp.filter((val)=>val.repnum !== 0);
+
+    console.log("Right... ffs. flashCardList should contain five items and sessionList should have none.\nFlashcardList: ");
+    console.log(flashCardList);
+    console.log("sessionList: ");
+    console.log(sessionList);
+
+    const flashCardLimit = flashCardList.length < flashCardsToInclude?flashCardList.length:flashCardsToInclude;
+    console.log("Limit of flash cards is " + flashCardLimit);
+
+    for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
+        console.log("Flashcardlist: ");
+        console.log(flashCardList);
+        let rand = Math.floor(Math.random() * flashCardList.length);
+        console.log("rand: " + rand + ", " + flashCardList[rand]);
+        sessionList.push(flashCardList.splice(rand, 1)[0]);
+    }
 
     for (let q = 0; q < numPerSession; q++) {
-        let rand = Math.floor(Math.random() * sizeArr);
-        let myItem = testListtmp.splice(rand, 1)[0]; //removes items from the array testListtmp
-        sessionList.push(myItem);
-        sizeArr--;
-    } //sessionList now contains numPerSession words to test
+        let rand = Math.floor(Math.random() * nonFlashCardList.length);
+        // let myItem = nonFlashCardList.splice(rand, 1)[0]; //removes items from the array testListtmp
+        // console.log(sessionList[0]);
+        // console.log("%%% myItem %%%");
+        // console.log(myItem);
+        // sessionList.push(myItem);
+        if(nonFlashCardList.length > 0){
+            sessionList.push(nonFlashCardList.splice(rand,1)[0]);
+        }
+    } //sessionList now contains flashCardsToInclude plus numPerSession words to test
 
-    testListtmp = null;
+    console.log("Size of sessionList is now " + sessionList.length);
+    console.log("start to print sessionList");
+    console.log(sessionList);
+    console.log("end of sessionList");
 
-    sessionList.forEach(function (val, idx) {
+       sessionList.forEach(function (val, idx) {
             console.log("in sessionList.foreach...");
             if (idx === 0) {
                 currentVocabIndex = val.idxInTestList;
             }
 
             let idxToPlace = 0;
+
+            console.log(val);
+
             switch (val.repnum) {
                 default:
                     console.log("This is default in the switch statement");

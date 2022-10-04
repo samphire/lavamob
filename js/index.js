@@ -332,6 +332,8 @@ function downloadReader() {
 
         $('#selectReader').hide();
         $('#reader').empty();
+        $('#reader').append("<div class='readerTitle'>"+ selectedReaderObj.name +"</div>");
+        $('#reader').append("<div class='readerDesc'>"+ selectedReaderObj.description +"</div>");
         $('#reader').append("<div class='readerPanel'></div>");
         if (selectedReaderObj.audio) {
             $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions' onclick='howl.stop()'>" +
@@ -581,6 +583,7 @@ function studyVocab() {
             }
         });
     } else {
+        alert("There was llData, so now I am running from line 586 of index.js");
         nowList = new Array();
         llData.list.forEach(function (el, idx) {
             var t = el.datenext.split(/[- :]/);
