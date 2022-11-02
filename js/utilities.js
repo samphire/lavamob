@@ -2,14 +2,14 @@
  * Created by matthew on 8/3/2016.
  */
 function convertDateToNumber(date) {
-    var t = date.split(/[- :]/);
-    var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
+    let t = date.split(/[- :]/);
+    let datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
 function printObject(msg, obj) {
-    var myStr = "";
-    for (prop in obj) {
+    let myStr = "";
+    for (let prop in obj) {
         myStr += "\n\nProperty Name: " + prop + ", Value: " + obj[prop] + ", \tType: " + typeof obj[prop];
     }
     console.log("\n\n\n\n******* " + msg + " *******\n\n");
@@ -144,3 +144,12 @@ function jaxy(myUrl, type, data, successMessage, errorMessage) {
     });
 }
 
+function removeFromDOM(id) {
+    const myNodeList = document.querySelectorAll(".testItem:not(.visible)");
+    myNodeList.forEach((node, idx, bob) => {
+        if (node.dataset.idxintestlist === id.toString()) {
+            console.warn("Removing child node");
+            node.parentNode.removeChild(node);
+        }
+    })
+}

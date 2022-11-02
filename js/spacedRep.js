@@ -207,21 +207,19 @@ function manageLL(type) {
     console.log(myEl);
     switch (type) {
         case 1: // hard... lower the repnum and the EF
-            // halve the EF and repnum
             myEl.EF = myEl.EF / 2;
             myEl.repnum = Math.ceil(myEl.repnum / 2);
-            // updateLLItem(myEl)
             break;
         case 2: // easy... increase the EF
-            // multiply EF by 1.2 and add 1 to repnum
             myEl.EF = myEl.EF * 2;
             myEl.repnum += 2;
-            // updateLLItem(myEl)
             break;
         case 3:
+            removeFromDOM(currentVocabIndex);
             deleteAndAdd(myEl);
             break;
         case 4:
+            removeFromDOM(currentVocabIndex);
             deleteLLItem(myEl);
             break;
         case 5: // open up the text within which this word occurs and, if possible, zoom in on the actual place where it occurs and/or open a web search on the word and/or naver dictionary.
