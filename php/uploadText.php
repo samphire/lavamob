@@ -20,7 +20,7 @@ $percs = array(0, 0, 0, 0, 0, 0, 0, 0);
 $uniqueInfoArray = array();
 
 foreach ($data['uniqueWordArray'] as $word) {
-    $sql = "SELECT words.id, headwords.id, headword, frequency 
+    $sql = "SELECT words.id, headwords.id, headword, frequency
             FROM words JOIN headwords
             ON words.headword_id=headwords.id
             WHERE word=\"{$word}\"";
@@ -48,9 +48,11 @@ foreach ($data['uniqueWordArray'] as $word) {
 
         $charArr = mbStringToArray($word);
 
+        $stray=1;
         foreach ($charArr as $bob) {
 //            print "\n\nmb ord is: " . (mb_ord($bob));
-            $xWordid += mb_ord($bob);
+            $xWordid += mb_ord($bob) * $stray;
+            $stray++; // each place must have different factor, otherwise different words can add up to the same number!
 //            print "\n\n xwordid is " . $xWordid;
         }
         $uniqueInfoArray[] = $word . "^/" . $xWordid . "^/{$xWordid}^/SLARTIBARTFAST^/3";

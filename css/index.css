@@ -1,27 +1,50 @@
 @import 'login.css';
 
+:root{
+    --bgDark: #262626;
+    --textDark: #e0950d;
+    --textLight: #fdb63d;
+    --superHighlight: #ff3445;
+    --royal: #5f3c8a;
+    --sky: #0c94f7;
+    /*--sky: #5595c4;*/
+    --wine: #8d5571;
+    --life: #0cc162;
+    /*--life: #0d6d31;*/
+    --bordy: 40px;
+    --primary60:  #1f85de;
+    --complementary30: #de1f85;
+    --accent10: #85de1f;
+
+
+}
+
+
 html {
     height: 100%;
 }
 
 .readerPanel {
-    /*background-color: cornsilk;*/
-    /*background-color: floralwhite;*/
-    /*background-color: ivory;*/
-    /*background-color: khaki;*/
-    /*background-color: lemonchiffon;*/
-    /*background-color: lightyellow;*/
-    /*background-color: linen;*/
-    /*background-color: moccasin;*/
-    background-color: navajowhite;
-    /*background-color: seashell;*/
-    /*background-color: wheat;*/
+    background-color: var(--bgDark);
     padding: 20px 8px 200px 16px;
     text-align: left;
     line-height: 160%;
-    margin-top: -28px;
+    color: var(--light);
 }
 
+.readerTitle{
+    font-size: xxx-large;
+    background-color: var(--royal);
+    color: var(--textLight);
+    padding: 15px;
+}
+
+.readerDesc{
+    font-size: large;
+    background: saddlebrown;
+    color: papayawhip;
+    padding: 0 0 10px 0;
+}
 
 #welcomeRow {
     display: grid;
@@ -44,20 +67,27 @@ html {
     align-content: space-between;
 }
 
+#showusername{
+    font-size: small;
+    color: var(--textDark);
+}
+
 #learned {
     display: none;
 }
 
 .welcomeRowItem {
-    border-radius: 5px;
+    border-radius: var(--bordy);
     padding: 10px 16px;
-    box-shadow: 5px 5px 10px;
+    /*box-shadow: 5px 5px 10px;*/
 }
 
 .btnActivity {
     font-size: 2rem;
     font-family: 'Bitter', serif;
-    background-color: moccasin;
+    /*background-color: moccasin;*/
+    background-color: var(--royal);
+    color: var(--textLight);
     border: 3px solid darkgoldenrod;
     text-align: center;
     cursor: pointer;
@@ -72,7 +102,8 @@ body {
     font-size: x-large;
     /*background: url(../assets/img/bg.jpg);*/
     /*background-color: #40572b;*/
-    background-color: #FCF9F4;
+    /*background-color: #FCF9F4;*/
+    background-color: var(--bgDark);
     /*background-image: url("https://www.transparenttextures.com/patterns/tiny-grid.png");*/
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
@@ -106,9 +137,11 @@ textarea {
 
 .readerlistitem {
     font-size: x-large;
-    border-radius: 3px;
-    background-color: dodgerblue;
-    color: seashell;
+    border-radius: var(--bordy);
+    /*background-color: #eaba42;*/
+    background-color: var(--light);
+    /*color: seashell;*/
+    color: var(--dark);
     margin-top: 10px;
     width: 50%;
     height: 28px;
@@ -119,18 +152,38 @@ textarea {
 }
 
 .itemStats {
-    background-color: darkslategray;
+    /*background-color: darkslategray;*/
+    background-color: var(--wine);
     font-size: medium;
-    border-radius: 3px;
+    border-radius: var(--bordy);
     margin-top: 10px;
     margin-left: 2%;
-    width: 10%;
-    min-height: 28px;
+    width: 5%;
+    /*min-height: 28px;*/
     text-align: left;
+    height: 28px;
     padding: 2% 1%;
     cursor: pointer;
     float: left;
-    color: snow;
+    /*color: snow;*/
+    color: var(--textLight);
+}
+
+.readerlistitemvocab {
+    font-size: x-large;
+    border-radius: var(--bordy);
+    /*background-color: purple;*/
+    background-color: var(--royal);
+    margin-top: 10px;
+    margin-left: 2%;
+    width: 5%;
+    min-height: 28px;
+    text-align: center;
+    padding: 2% 1%;
+    cursor: pointer;
+    float: left;
+    /*color: yellow;*/
+    color: var(--textDark);
 }
 
 .vocabInfo {
@@ -164,12 +217,12 @@ textarea {
 
 
 .audioOptions {
-    position: relative;
-    background-color: #888c9e;
+    position: fixed;
+    background-color: #888c9edd;
     display: inline-block;
     border-radius: 10px;
-    padding: 0 20px 0 0;
-    color: sandybrown;
+    padding: 10px;
+    color: black;
 }
 
 .audioOptions input {
@@ -179,21 +232,6 @@ textarea {
 fieldset {
     margin-top: 2.3rem;
     height: 312px;
-}
-
-.readerlistitemvocab {
-    font-size: x-large;
-    border-radius: 3px;
-    background-color: purple;
-    margin-top: 10px;
-    margin-left: 2%;
-    width: 10%;
-    min-height: 28px;
-    text-align: center;
-    padding: 2% 1%;
-    cursor: pointer;
-    float: left;
-    color: yellow;
 }
 
 .delreader {
@@ -233,7 +271,7 @@ fieldset {
 }
 
 .clicked {
-    color: rebeccapurple;
+    color: var(--life);
     font-weight: bold;
 }
 
@@ -382,12 +420,21 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 .goalContainer {
-    border-radius: 3px;
+    border-radius: var(--bordy);
     padding: 1%;
     width: 92%;
     margin: 0 auto 20px auto;
-    background-color: rgba(12, 12, 12, 0.5);
-    color: white;
+    /*background-color: rgba(12, 12, 12, 0.5);*/
+    /*color: white;*/
+    color: var(--textDark);
+}
+
+#learning{
+    background-color: var(--sky);
+    border: darkgoldenrod solid 3px;
+    padding-top: 100px;
+    font-size: x-large;
+    color: var(--royal);
 }
 
 .goalName {

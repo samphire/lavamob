@@ -336,10 +336,10 @@ function downloadReader() {
         $('#reader').append("<div class='readerDesc'>"+ selectedReaderObj.description +"</div>");
         $('#reader').append("<div class='readerPanel'></div>");
         if (selectedReaderObj.audio) {
-            $('#reader .readerPanel').append("<div style='position: relative;' class='audioOptions' onclick='howl.stop()'>" +
-                "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;Continuous Audio?" +
-                "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;Loop?" +
-                "<input type='radio' name='audioOptions'>&nbsp;&nbsp;none</div><br>");
+            $('#reader .readerPanel').append("<div class='audioOptions' onclick='howl.stop()'>" +
+                "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;<img src='assets/img/icons/continue.png'>" +
+                "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;<img src='assets/img/icons/loop.png'>" +
+                "<input type='radio' name='audioOptions'>&nbsp;&nbsp;Stop!</div><br>");
         }
         $('#reader .readerPanel').append(selectedReaderText);
         document.documentElement.scrollTop = readerYScroll;

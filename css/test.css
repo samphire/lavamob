@@ -24,7 +24,7 @@
 .card__inner {
     width: 100%;
     height: 100%;
-    transition: transform .5s;
+    transition: transform 1s;
     transform-style: preserve-3d;
     cursor: pointer;
     position: relative;
@@ -48,7 +48,11 @@
 }
 
 .card__face--front {
-    background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    /*background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));*/
+    /*background: url("https://notborder.org/cobalt/userPics/11%2012%202017%207%2010%20pm%20Office%20Lens.jpg");*/
+    /*background-image: url("https://notborder.org/cobalt/userPics/11%2012%202017%207%2010%20pm%20Office%20Lens.jpg");*/
+    /*background-size: cover;*/
+    background-image: url("../assets/img/food.png");
 }
 
 .card__face--front h2 {
@@ -113,6 +117,7 @@
     font-size: xx-large;
     font-weight: bolder;
     text-align: center;
+    color: var(--primary);
 }
 
 .gridItem {
@@ -146,9 +151,7 @@
 #redbutton {
     width: 80px;
     margin-top: 30px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
+    position: relative;
 }
 
 @media only screen and (max-device-width: 736px) and (orientation: portrait) {

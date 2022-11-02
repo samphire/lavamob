@@ -29,15 +29,15 @@ function test(list) {
 
     // TODO  MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
 
-    const flashCardList = testListtmp.filter((val)=>val.repnum === 0);
-    const nonFlashCardList = testListtmp.filter((val)=>val.repnum !== 0);
+    const flashCardList = testListtmp.filter((val) => val.repnum === 0);
+    const nonFlashCardList = testListtmp.filter((val) => val.repnum !== 0);
 
     console.log("Right... ffs. flashCardList should contain five items and sessionList should have none.\nFlashcardList: ");
     console.log(flashCardList);
     console.log("sessionList: ");
     console.log(sessionList);
 
-    const flashCardLimit = flashCardList.length < flashCardsToInclude?flashCardList.length:flashCardsToInclude;
+    const flashCardLimit = flashCardList.length < flashCardsToInclude ? flashCardList.length : flashCardsToInclude;
     console.log("Limit of flash cards is " + flashCardLimit);
 
     for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
@@ -55,8 +55,8 @@ function test(list) {
         // console.log("%%% myItem %%%");
         // console.log(myItem);
         // sessionList.push(myItem);
-        if(nonFlashCardList.length > 0){
-            sessionList.push(nonFlashCardList.splice(rand,1)[0]);
+        if (nonFlashCardList.length > 0) {
+            sessionList.push(nonFlashCardList.splice(rand, 1)[0]);
         }
     } //sessionList now contains flashCardsToInclude plus numPerSession words to test
 
@@ -65,7 +65,7 @@ function test(list) {
     console.log(sessionList);
     console.log("end of sessionList");
 
-       sessionList.forEach(function (val, idx) {
+    sessionList.forEach(function (val, idx) {
             console.log("in sessionList.foreach...");
             if (idx === 0) {
                 currentVocabIndex = val.idxInTestList;
@@ -112,7 +112,6 @@ function test(list) {
 
                 case 0:
                     console.log("in case 0");
-                    //TODO Use flashcard 3d thingy for first time seen
                     idxToPlace = findFirstEmptySlot(htmlStrArray, 0);
                     htmlStrArray[idxToPlace] = makeFlashCard(val);
                     break;
@@ -187,13 +186,11 @@ function test(list) {
         }
     );
     $("section").not("#vocaTest").hide(); //is this duplicating work of makeVocaTest()?
-    // console.log("Size of htmlStrArray is " + htmlStrArray.length);
     htmlStrArray.forEach(function (el, idx) {
-        // console.log("Appending the following string: " + el + "\n\nat index " + el.idxInTestList + "\n\n");
         $("#vocaTest").append(el);
     });
 
-    $('#vocaTest').append("<div id='testItemActions'><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\")'>" +
+    $('#vocaTest').append("<div id='testItemActions' data-curIdx='0'><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\");document.querySelector(\"#testItemActions\").dataset.curIdx=currentVocabIndex'>" +
         "<div class='slidey'>" +
         "<img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'>" +
         "<img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'>" +
@@ -206,32 +203,37 @@ function test(list) {
 }
 
 function manageLL(type) {
+    let myEl = testList[currentVocabIndex];
+    console.log(myEl);
     switch (type) {
         case 1: // hard... lower the repnum and the EF
-            alert("type 1. item is ");
+            // halve the EF and repnum
+            myEl.EF = myEl.EF / 2;
+            myEl.repnum = Math.ceil(myEl.repnum / 2);
+            // updateLLItem(myEl)
             break;
         case 2: // easy... increase the EF
-            alert("type 2");
+            // multiply EF by 1.2 and add 1 to repnum
+            myEl.EF = myEl.EF * 2;
+            myEl.repnum += 2;
+            // updateLLItem(myEl)
             break;
-        case 3: // learned... remove this item from the learninglist and place into 'learned'
-            alert("type 3");
-            // delLLItem(testList[currentVocabIndex], "" + 3);
+        case 3:
+            deleteAndAdd(myEl);
             break;
-        case 4: // not interested in this item. Just delete it from the learninglist without saving in learned
-            alert("type 4");
-            // delLLItem(testList[currentVocabIndex], 4 + "");
+        case 4:
+            deleteLLItem(myEl);
             break;
         case 5: // open up the text within which this word occurs and, if possible, zoom in on the actual place where it occurs and/or open a web search on the word and/or naver dictionary.
-            alert("type 5");
+            alert("type 5 not yet implemented. sorry...");
             break;
     }
     $(".slidey.slidey-active").toggleClass("slidey-active");
     let $el = $(".testItem.visible");
-    $el.toggleClass("visible");
-    if ($el.next()[0] !== undefined) {
-        $el.next().show().find(".inputAnswer input").focus();
-        currentVocabIndex = $el.next()[0].dataset.idxintestlist;
-    }
+
+    goToNext($el);
+    //TODO: When using emoticons, remember that each item has two questions in the list! So, if we delete on the first item, we have to delete (or skip) the html element corresponding to the
+    // second item, and be very careful that if the second element is the very next element (can happen at the end of the test), we have to correctly proceed to endTest()!!!
 }
 
 function makeFlashCard(val) {
@@ -323,6 +325,16 @@ function makeQ(type, val) {
     }
 }
 
+function goToNext($el) {
+    $el.toggleClass("visible");
+    if ($el.next()[0] !== undefined && $el.next()[0].id !== "testItemActions") {
+        $el.next().toggleClass("visible").find(".inputAnswer input").focus();
+        currentVocabIndex = $el.next()[0].dataset.idxintestlist;
+    } else {
+        endTest();
+    }
+}
+
 function checkResult(event, result, index) { // this is actually the main routine during the test
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -341,13 +353,7 @@ function checkResult(event, result, index) { // this is actually the main routin
     let $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();
     // $el.hide();
     // alert(($el).next().length);
-    $el.toggleClass("visible");
-    if ($el.next()[0] !== undefined && $el.next()[0].id !== "testItemActions") {
-        $el.next().toggleClass("visible").find(".inputAnswer input").focus();
-        currentVocabIndex = $el.next()[0].dataset.idxintestlist;
-    } else {
-        endTest();
-    }
+    goToNext($el);
 }
 
 function endTest() {
@@ -357,8 +363,9 @@ function endTest() {
     doneList = [...new Set(doneList)];
     wrongList = [...new Set(wrongList)];
 
-
+    console.log("##### Done List #####");
     console.log(doneList);
+    console.log("##### Wrong List #####");
     console.log(wrongList);
 
     doneList.forEach((val, idx) => {
@@ -514,35 +521,44 @@ function updateItem(right, idx) {
 
 function updateLLItem(myLLItem) {
     console.log("in updateLLItem");
-    // console.log("datenext is" + myLLItem.datenext);
-    // myLLItem.datenext = calcDateNext(1);
-    // myLLItem.datenext = myLLItem.datenext.getTime();
-    // console.log("datenext is" + myLLItem.datenext);
     printObject("printing LLItem before post", myLLItem);
-    // console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
-
-    // console.warn("EF is " + myLLItem.EF);
     console.warn("datenext is " + myLLItem.datenext);
 
-    $.ajax({
-        type: "POST",
-        url: url2 + "/php/llEdit.php",
-        crossDomain: true,
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        data: {
+    jaxy(url2 + "/php/llEdit.php", "POST",
+        {
             "userid": userid,
             "wordid": myLLItem.wordid,
             "ef": myLLItem.EF,
             "datenext": myLLItem.datenext,
             "repnum": myLLItem.repnum
         },
-        success: function (result) {
-            console.log("LearningList Item edited and uploaded successfully");
+        "Learning List Item successfully updated",
+        "Problem updating Learning List Item"
+    );
+}
+
+function deleteLLItem(myLLItem) {
+    jaxy(url2 + "/php/llDelete.php", "POST",
+        {
+            "userid": userid,
+            "wordid": myLLItem.wordid
         },
-        error: function (jqXHR, status, err) {
-            alert("some problem: " + status + ", " + jqXHR.status + ", " + err);
-        }
-    });
+        "Learning List Item successfully deleted",
+        "Problem deleting learning list item"
+    );
+}
+
+function deleteAndAdd(myLLItem) {
+    jaxy(url2 + "/php/llDeleteAndAdd.php", "POST",
+        {
+            "userid": userid,
+            "wordid": myLLItem.wordid,
+            "headwordid": myLLItem.headwordid,
+            "repnum": myLLItem.repnum
+        },
+        "learning list item successfully deleted and added to learned list",
+        "problem deleting and adding learning list item"
+    );
 }
 
 // function delLLItem(myLLItem, type) { // This appears to require web service, which is no longer operational!!!

@@ -17,7 +17,7 @@ function printObject(msg, obj) {
     console.log("\n\n******* " + msg + " ***END*\n\n\n\n");
 }
 
-function getCurrentTimezoneDate(date){ //returns date object
+function getCurrentTimezoneDate(date) { //returns date object
     // console.log("in getCurrentTimezoneDateTime");
     const offset = new Date().getTimezoneOffset();
     // console.log(offset);
@@ -126,5 +126,21 @@ function replaceSpriteData(event) {
         });
     };
     reader.readAsText(input.files[0]);
+}
+
+function jaxy(myUrl, type, data, successMessage, errorMessage) {
+    $.ajax({
+        type: type,
+        url: myUrl,
+        crossDomain: true,
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        data: data,
+        success: function (result) {
+            console.log(successMessage);
+        },
+        error: function (jqXHR, status, err) {
+            console.log(errorMessage + "\n" + status + ", " + jqXHR.status + ", " + err);
+        }
+    });
 }
 
