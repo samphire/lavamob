@@ -122,7 +122,7 @@ function getGoalsInfo() {
             progress(valProg, $(prog1), true, col);
             progress(timeProg, $(prog2), false);
             // document.querySelector("#learned").innerHTML = "<h1>" + goalData.learned + "</h1>";
-            document.querySelector("#learning").innerHTML = "Word Score: " + (parseInt(learning) + parseInt(goalData.learned));
+            document.querySelector("#learning").innerHTML = (parseInt(learning) + parseInt(goalData.learned)).toString();
 
         }
 
@@ -203,7 +203,6 @@ function editReader(textid) {
 }
 
 function deleteReader(node, textid) {
-
     swal({
         title: 'Are you sure you want to remove Reader id ' + textid + '?',
         text: "You won't be able to revert this!",
@@ -218,7 +217,7 @@ function deleteReader(node, textid) {
         buttonsStyling: true
     }).then(function () {
         node.parentNode.removeChild(node);
-        removeReader(textid, true); // TODO make ajax call to webservice to remove text from usertext table for this user, and to assign all words to the user's 'learned' list
+        removeReader(textid, true);
     }, function (dismiss) {
         // dismiss can be 'cancel', 'overlay',
         // 'close', and 'timer'

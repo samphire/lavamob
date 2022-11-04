@@ -192,11 +192,11 @@ function test(list) {
 
     $('#vocaTest').append("<div id='testItemActions' data-curIdx='0'><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\");document.querySelector(\"#testItemActions\").dataset.curIdx=currentVocabIndex'>" +
         "<div class='slidey'>" +
-        "<img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'>" +
-        "<img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'>" +
-        "<img src='assets/img/icons/emoticons/learned.png' onclick='manageLL(3)'>" +
-        "<img src='assets/img/icons/emoticons/getlost.png' onclick='manageLL(4)'>" +
-        "<img src='assets/img/icons/emoticons/visittext.png' onclick='manageLL(5)'>" +
+        "<span data-tooltip='mark as `difficult` item'><img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'></span>" +
+        "<span data-tooltip='mark as `easy` item'><img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'></span>" +
+        "<span data-tooltip='remove from test list and add to learned list'><img src='assets/img/icons/emoticons/learned.png' onclick='manageLL(3)'></span>" +
+        "<span data-tooltip='just remove from test list'><img src='assets/img/icons/emoticons/getlost.png' onclick='manageLL(4)'></span>" +
+        "<span data-tooltip='I want to study this word'><img src='assets/img/icons/emoticons/visittext.png' onclick='manageLL(5)'></span>" +
         "</div></div>");
     $("#vocaTest").show();
     $(".testItem:first-of-type").toggleClass("visible").find(".inputAnswer input").focus();
@@ -230,9 +230,7 @@ function manageLL(type) {
     let $el = $(".testItem.visible");
 
     goToNext($el);
-    //TODO: When using emoticons, remember that each item has two questions in the list! So, if we delete on the first item, we have to delete (or skip) the html element corresponding to the
-    // second item, and be very careful that if the second element is the very next element (can happen at the end of the test), we have to correctly proceed to endTest()!!!
-}
+   }
 
 function makeFlashCard(val) {
     let returnStr;

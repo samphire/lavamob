@@ -91,6 +91,7 @@
     /*position: absolute;*/
     /*margin-left: -47%;*/
     /*margin-top: -110px;*/
+    color: var(--textDark);
 }
 .mySignout:hover{
     color: darkred;

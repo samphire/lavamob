@@ -14,13 +14,11 @@ if ($isAddToLearned) {
     print("\n\n");
     print_r(sizeof($words));
 
-
-
     foreach ($words as $item) {
         print_r($item);
         $word = explode("^/", $item);
         $headwordid = $word[2];
-        $sql = "INSERT INTO learned (userid, headwordid) 
+        $sql = "INSERT INTO learned (userid, headwordid)
         VALUES ({$userid}, {$headwordid})";
         mysqli_query($conn, $sql);
         print("\n");

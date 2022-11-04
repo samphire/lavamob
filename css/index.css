@@ -1,4 +1,5 @@
 @import 'login.css';
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
 
 :root{
     --bgDark: #262626;
@@ -19,9 +20,12 @@
 
 }
 
-
 html {
     height: 100%;
+}
+
+.fa-solid {
+    padding-right: 16px;
 }
 
 .readerPanel {
@@ -58,6 +62,26 @@ html {
 .info {
     background: white;
     grid-row: span 3;
+    animation: pulsy 0.7s linear 1s 6, wiggle 7s linear 5.2s infinite;
+    color: var(--superHighlight);
+}
+@keyframes pulsy {
+    from, to { transform: scale(1, 1); }
+    25% { transform: scale(0.9, 1.1); }
+    50% { transform: scale(1.1, 0.9); }
+    75% { transform: scale(0.95, 1.05); }
+}
+@keyframes wiggle {
+    /*20% {transform: scale(1.2);}*/
+    /*!*45%, 55%{transform: rotate(-3deg) scale(1.2);}*!*/
+    /*!*50% { transform: rotate(3deg) scale(1.2); }*!*/
+    /*80% { transform: rotate(0deg) scale(1.2); }*/
+    /*100% { transform: scale(1); }*/
+    /*from {transform: rotate(0deg) translateX(8px) rotate(0deg) scale(1.2);}*/
+    /*to {transform:rotate(360deg) translateX(8px) rotate(-360deg) scale(1);}*/
+    from, to{translateX(0px);}
+    25%{transform: translateX(-20px);}
+    75%{transform: translateX(20px);}
 }
 
 .btnContainer {
@@ -68,8 +92,10 @@ html {
 }
 
 #showusername{
-    font-size: small;
     color: var(--textDark);
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 1.2rem;
 }
 
 #learned {
@@ -79,7 +105,18 @@ html {
 .welcomeRowItem {
     border-radius: var(--bordy);
     padding: 10px 16px;
+    display: grid;
+    grid-template-columns: 20% auto;
     /*box-shadow: 5px 5px 10px;*/
+}
+
+.mainIcon{
+    grid-column: 1;
+}
+
+.welcomeRowItem span{
+    grid-column: 2;
+    justify-content: end;
 }
 
 .btnActivity {
@@ -430,11 +467,17 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 #learning{
-    background-color: var(--sky);
-    border: darkgoldenrod solid 3px;
+    /*background-color: var(--sky);*/
+    /*border: darkgoldenrod solid 3px;*/
+    background-color: var(--bgDark);
     padding-top: 100px;
-    font-size: x-large;
-    color: var(--royal);
+    font-size: 4rem;
+    color: var(--life);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sansita Swashed', cursive;
+    z-index: -1;
 }
 
 .goalName {
@@ -489,7 +532,9 @@ input#llWord.llWord, input#tranny.tranny {
     #learning {
         grid-row: 1;
         grid-column: span 5;
-        font-size: x-large;
+        /*font-size: x-large;*/
+        padding-top: 0px;
+        margin-bottom: 10px;
     }
 
     #learned {
@@ -513,7 +558,7 @@ input#llWord.llWord, input#tranny.tranny {
     }
 
     .btnContainer {
-        grid-column: 2 / 5;
+        grid-column: 1 / 6;
     }
 
     .btnActivity {
@@ -814,39 +859,34 @@ and (max-height: 2560px) {
     }
 }
 
-/*   desktops   */
+/*   large desktops more than FullHD   */
 @media only screen and (min-width: 1200px) {
 
-    .readerPanel {
-        padding: 3% 24%;
-    }
+/*    .readerPanel {*/
+/*        padding: 3% 24%;*/
+/*    }*/
 
-    .goalContainer {
-        /*float:left;*/
-        width: 50%;
-    }
+/*    .goalContainer {*/
+/*        !*float:left;*!*/
+/*        width: 50%;*/
+/*    }*/
 
-    #createReader {
-        box-sizing: border-box;
-        width: 80%;
-        margin: auto;
-        background: white;
-        padding: 3%;
-    }
+/*    #createReader {*/
+/*        box-sizing: border-box;*/
+/*        width: 80%;*/
+/*        margin: auto;*/
+/*        background: white;*/
+/*        padding: 3%;*/
+/*    }*/
 
-    #parseBtn {
-        border-radius: 4px;
-        border: 2px solid #23203b;
-        padding: 10px 20px;
-        margin: 40px auto;
-    }
-}
+/*    #parseBtn {*/
+/*        border-radius: 4px;*/
+/*        border: 2px solid #23203b;*/
+/*        padding: 10px 20px;*/
+/*        margin: 40px auto;*/
+/*    }*/
+/*}*/
 
-/*   big desktops   */
-@media (max-width: 1800px) {
-
-}
-
-.fa-cloud-upload:hover {
-    color: green;
-}
+/*.fa-cloud-upload:hover {*/
+/*    color: green;*/
+/*}*/

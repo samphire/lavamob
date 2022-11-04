@@ -17,6 +17,7 @@
     <script src="js/spacedRep.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/sweetalert2.min.js"></script>
+    <script src="https://kit.fontawesome.com/5eff4c7792.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="css/sweetalert2.css">
     <link rel="stylesheet" href="css/index.css?version=6">
     <link rel="stylesheet" type="text/css" href="css/test.css">
@@ -72,7 +73,7 @@
             $('#fileinput').on('change', prepareUpload);
             $('#audioform').on('submit', uploadFiles);
 
-            document.getElementById('showusername').innerText = "Welcome, " + localStorage.getItem('userEmail');
+            document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
 //            localStorage.clear();
             $('section').hide();
             $('#menu').hide();
@@ -142,7 +143,9 @@
 
 <br>
 <section id="welcome">
-    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"
+    <i class="fa-solid fa-user"></i>
+    <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->
+    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-right-from-bracket icon-large mySignout"
                                                         onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
     <template id="goalTemplate">
         <div class="goalContainer">
@@ -163,9 +166,12 @@
     <div id="welcomeRow">
         <div class="info welcomeRowItem" id="learned"></div>
         <div class="btnContainer">
-            <div class="btnActivity welcomeRowItem" onclick="createReader(0)">Create Reader</div>
-            <div class="btnActivity welcomeRowItem" onclick="studyReader()">Study Reader</div>
-            <div class="btnActivity welcomeRowItem" onclick="studyVocab()">Test Vocabulary</div>
+            <div class="btnActivity welcomeRowItem" onclick="createReader(0)"><i
+                    class="fa-solid mainIcon fa-pen-to-square"></i><span>Create Reader</span></div>
+            <div class="btnActivity welcomeRowItem" onclick="studyReader()"><i
+                    class="fa-solid mainIcon fa-book-open-reader"></i><span>Study Reader</span></div>
+            <div class="btnActivity welcomeRowItem" onclick="studyVocab()"><i
+                    class="fa-solid mainIcon fa-graduation-cap"></i><span>Test Vocabulary</span></div>
         </div>
         <div class="info welcomeRowItem" id="learning"></div>
     </div>
@@ -176,7 +182,7 @@
 <section id="createReader" class="hideo">
     <div id="readerBlurb">
         <div id="audioOpt">Audio?&nbsp;<input type="checkbox" id="audioCheck"
-                                       onClick="
+                                              onClick="
                                        if(!$('#audiodiv').is(':visible'))
                                        {
                                            $('#audiodiv').show();$('#btnUploadText').hide();console.info('showing audio')
@@ -219,7 +225,7 @@
 </section>
 <section id="reader" class="hideo"></section>
 <section id="vocab" class="hideo">
-<!--    <div id="dicFrame" src="http://www.naver.com"></div>-->
+    <!--    <div id="dicFrame" src="http://www.naver.com"></div>-->
 </section>
 <section id="vocaTest" class="hideo"></section>
 <div id="preload">

@@ -5,6 +5,38 @@
     --light: #FCF9F4;
 }
 
+/* #####  vocatest emoticons  ##### */
+
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    display: none;
+    text-align: center;
+    white-space: nowrap;
+    left: 50%;
+    transform:translate(-50%);
+    color: var(--secondary);
+    background: var(--bgDark);
+    padding: 3px;
+    border-radius: 5px;
+    z-index: 99;
+    font-size: small;
+}
+
+[data-tooltip]:hover {
+    display: inline-block;
+    border: 1px solid red;
+}
+
+[data-tooltip]:hover:after{
+    display: inline-block;
+    bottom: calc(100% + 6px);
+}
+
 .testItem {
     display: none;
 }
