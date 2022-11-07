@@ -1,7 +1,8 @@
 @import 'login.css';
+@import 'reset.css';
 @import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
 
-:root{
+:root {
     --bgDark: #262626;
     --textDark: #e0950d;
     --textLight: #fdb63d;
@@ -12,16 +13,10 @@
     --wine: #8d5571;
     --life: #0cc162;
     /*--life: #0d6d31;*/
-    --bordy: 40px;
-    --primary60:  #1f85de;
+    --bordy: 16px;
+    --primary60: #1f85de;
     --complementary30: #de1f85;
     --accent10: #85de1f;
-
-
-}
-
-html {
-    height: 100%;
 }
 
 .fa-solid {
@@ -36,14 +31,14 @@ html {
     color: var(--light);
 }
 
-.readerTitle{
+.readerTitle {
     font-size: xxx-large;
     background-color: var(--royal);
     color: var(--textLight);
     padding: 15px;
 }
 
-.readerDesc{
+.readerDesc {
     font-size: large;
     background: saddlebrown;
     color: papayawhip;
@@ -52,11 +47,15 @@ html {
 
 #welcomeRow {
     display: grid;
-    grid-template-columns: repeat(5, 14%);
-    grid-template-rows: repeat(3, 70px);
-    grid-gap: 10px;
-    margin: 30px auto;
+    grid-template-columns: repeat(5, 19%);
+    /*grid-template-rows: repeat(4, 20%);*/
+    /*grid-gap: 1%;*/
+    grid-template-rows: auto;
+    margin: 3% 0 22% 0;
+    column-gap: 1%;
+    row-gap: 4%;
     justify-content: center;
+    align-content: center;
 }
 
 .info {
@@ -65,12 +64,22 @@ html {
     animation: pulsy 0.7s linear 1s 6, wiggle 7s linear 5.2s infinite;
     color: var(--superHighlight);
 }
+
 @keyframes pulsy {
-    from, to { transform: scale(1, 1); }
-    25% { transform: scale(0.9, 1.1); }
-    50% { transform: scale(1.1, 0.9); }
-    75% { transform: scale(0.95, 1.05); }
+    from, to {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(0.9, 1.1);
+    }
+    50% {
+        transform: scale(1.1, 0.9);
+    }
+    75% {
+        transform: scale(0.95, 1.05);
+    }
 }
+
 @keyframes wiggle {
     /*20% {transform: scale(1.2);}*/
     /*!*45%, 55%{transform: rotate(-3deg) scale(1.2);}*!*/
@@ -79,9 +88,15 @@ html {
     /*100% { transform: scale(1); }*/
     /*from {transform: rotate(0deg) translateX(8px) rotate(0deg) scale(1.2);}*/
     /*to {transform:rotate(360deg) translateX(8px) rotate(-360deg) scale(1);}*/
-    from, to{translateX(0px);}
-    25%{transform: translateX(-20px);}
-    75%{transform: translateX(20px);}
+    from, to {
+    translateX(0 px);
+    }
+    25% {
+        transform: translateX(-20px);
+    }
+    75% {
+        transform: translateX(20px);
+    }
 }
 
 .btnContainer {
@@ -91,10 +106,10 @@ html {
     align-content: space-between;
 }
 
-#showusername{
+#showusername {
     color: var(--textDark);
     display: inline-block;
-    margin-bottom: 6px;
+    margin-bottom: 20px;
     font-size: 1.2rem;
 }
 
@@ -107,33 +122,33 @@ html {
     padding: 10px 16px;
     display: grid;
     grid-template-columns: 20% auto;
-    /*box-shadow: 5px 5px 10px;*/
+    align-items: center;
 }
 
-.mainIcon{
+.mainIcon {
     grid-column: 1;
 }
 
-.welcomeRowItem span{
+.welcomeRowItem span {
     grid-column: 2;
     justify-content: end;
 }
 
 .btnActivity {
-    font-size: 2rem;
+    /*font-size: 2rem;*/
     font-family: 'Bitter', serif;
     /*background-color: moccasin;*/
     background-color: var(--royal);
     color: var(--textLight);
     border: 3px solid darkgoldenrod;
-    text-align: center;
+    /*text-align: center;*/
     cursor: pointer;
-    grid-column: 2 / 4;
+    grid-column: 1 / 6;
 }
 
 body {
     height: 100%;
-    margin: 0;
+    margin: 10px;
     padding: 0;
     text-align: center;
     font-size: x-large;
@@ -172,56 +187,67 @@ textarea {
     opacity: 1;
 }
 
+.item {
+    margin: 0 auto;
+    /*margin-top: 40px;*/
+    /*width: 80%;*/
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-row-gap: 8%;
+}
+
 .readerlistitem {
+    grid-row: 1;
+    grid-column: 1 / 5;
+    /*width: 100%;*/
     font-size: x-large;
-    border-radius: var(--bordy);
-    /*background-color: #eaba42;*/
-    background-color: var(--light);
-    /*color: seashell;*/
-    color: var(--dark);
-    margin-top: 10px;
-    width: 50%;
-    height: 28px;
-    text-align: center;
-    padding: 2% 3%;
+    border-radius: var(--bordy) var(--bordy) 0 0;
+    /*border: 2px solid var(--textDark);*/
+    background-color: var(--royal);
+    border: 2px solid white;
+    /*color: var(--textDark);*/
+    padding: 2%;
+    color: white;
     cursor: pointer;
-    float: left;
+}
+
+.item > i {
+    /*padding: 20px 0;*/
+    /*background-color: #0c94f7;*/
+    /*border-radius: 70%;*/
 }
 
 .itemStats {
-    /*background-color: darkslategray;*/
-    background-color: var(--wine);
+    grid-row: 2;
     font-size: medium;
-    border-radius: var(--bordy);
-    margin-top: 10px;
-    margin-left: 2%;
-    width: 5%;
-    /*min-height: 28px;*/
-    text-align: left;
-    height: 28px;
-    padding: 2% 1%;
-    cursor: pointer;
-    float: left;
-    /*color: snow;*/
+    /*cursor: pointer;*/
     color: var(--textLight);
 }
 
-.readerlistitemvocab {
-    font-size: x-large;
-    border-radius: var(--bordy);
-    /*background-color: purple;*/
-    background-color: var(--royal);
-    margin-top: 10px;
-    margin-left: 2%;
-    width: 5%;
-    min-height: 28px;
-    text-align: center;
-    padding: 2% 1%;
-    cursor: pointer;
-    float: left;
-    /*color: yellow;*/
-    color: var(--textDark);
+.itemStats > .rarity {
+    color: #1f85de;
 }
+
+.readerlistitemvocab {
+    grid-row: 2;
+    margin: auto;
+    color: var(--textDark);
+
+}
+
+.fa-trash-can {
+    grid-row: 2;
+    color: red;
+
+}
+
+.fa-pencil-square-o {
+    grid-row: 2;
+    color: green;
+
+}
+
 
 .vocabInfo {
     position: relative;
@@ -297,12 +323,6 @@ fieldset {
     width: 16%;
 }
 
-.item {
-    margin: 0 auto;
-    /*margin-top: 40px;*/
-    width: 80%;
-}
-
 #reader > a {
     color: black;
 }
@@ -340,14 +360,10 @@ fieldset {
 }
 
 #welcome > h1 {
-    font-size: 4rem;
-    background-color: floralwhite;
-    /*background-image: url(../assets/img/natural-canvas-pale.jpg);*/
     background-image: url(../assets/img/flops.jpg);
     padding: 20px;
     font-family: 'Play', sans-serif;
     border: 3px solid darkgoldenrod;
-    margin: 0 30px;
 }
 
 #selectReader {
@@ -458,15 +474,16 @@ input#llWord.llWord, input#tranny.tranny {
 
 .goalContainer {
     border-radius: var(--bordy);
-    padding: 1%;
-    width: 92%;
-    margin: 0 auto 20px auto;
+    /*padding: 1%;*/
+    /*width: 92%;*/
+    /*margin: 0 auto 20px auto;*/
     /*background-color: rgba(12, 12, 12, 0.5);*/
     /*color: white;*/
     color: var(--textDark);
+    margin: 8% 0;
 }
 
-#learning{
+#learning {
     /*background-color: var(--sky);*/
     /*border: darkgoldenrod solid 3px;*/
     background-color: var(--bgDark);
@@ -481,12 +498,14 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 .goalName {
-    font-size: 1.4rem;
+    font-size: 2rem;
+    color: var(--life);
     font-family: "Maiandra GD", Georgia, sans-serif;
 }
 
 .goalDescription {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    margin-bottom: 2%;
 }
 
 .progressBar1, .progressBar2 {
@@ -500,7 +519,6 @@ input#llWord.llWord, input#tranny.tranny {
 
 .progressBar1 div, .progressBar2 div {
     border-radius: 3px;
-    margin-left: 0;
     height: 100%;
     color: #fff;
     text-align: right;
@@ -520,20 +538,22 @@ input#llWord.llWord, input#tranny.tranny {
 .startDate {
     float: left;
     margin-left: 3%;
+    font-size: 1rem;
 }
 
 .endDate {
     float: right;
     margin-right: 3%;
+    font-size: 1rem;
 }
-
+/*   Big Smartphones   */
 @media only screen and (max-device-width: 736px) and (orientation: portrait) {
 
     #learning {
         grid-row: 1;
         grid-column: span 5;
         /*font-size: x-large;*/
-        padding-top: 0px;
+        padding-top: 0;
         margin-bottom: 10px;
     }
 
@@ -559,11 +579,6 @@ input#llWord.llWord, input#tranny.tranny {
 
     .btnContainer {
         grid-column: 1 / 6;
-    }
-
-    .btnActivity {
-        font-size: 1.2rem;
-        width: 80%;
     }
 
     input {
@@ -602,21 +617,21 @@ input#llWord.llWord, input#tranny.tranny {
     }
 
     .readerlistitem {
-        width: 56%;
+        /*width: 56%;*/
     }
 
     .readerlistitemvocab {
-        font-size: x-large;
-        border-radius: 3px;
-        background-color: purple;
-        margin-top: 10px;
-        margin-left: 1%;
-        width: 8%;
-        text-align: center;
-        padding: 2% 1%;
-        cursor: pointer;
-        float: left;
-        color: yellow;
+        /*font-size: x-large;*/
+        /*border-radius: 3px;*/
+        /*background-color: purple;*/
+        /*margin-top: 10px;*/
+        /*margin-left: 1%;*/
+        /*width: 8%;*/
+        /*text-align: center;*/
+        /*padding: 2% 1%;*/
+        /*cursor: pointer;*/
+        /*float: left;*/
+        /*color: yellow;*/
     }
 
     .delreader {
@@ -738,9 +753,7 @@ input#llWord.llWord, input#tranny.tranny {
     }
 }
 
-@media only screen /*Samsung Galaxy S7 Edge*/
-and (max-width: 1440px)
-and (max-height: 2560px) {
+@media only screen and (max-width: 1440px) and (max-height: 2560px) {
 
     #welcome > h1 {
         font-size: 2rem;
@@ -756,11 +769,6 @@ and (max-height: 2560px) {
     #vocaTest {
         padding: 3% 4%;
         /*margin-top: -6%;*/
-    }
-
-    .btnActivity {
-        font-size: 1.2rem;
-        width: 80%;
     }
 
     input {
@@ -800,7 +808,7 @@ and (max-height: 2560px) {
         display: none;
     }
 
-    #readerBlurb div input:not([type=checkbox]){
+    #readerBlurb div input:not([type=checkbox]) {
         width: 90%;
     }
 
@@ -824,8 +832,38 @@ and (max-height: 2560px) {
 
 }
 
-/*   phones   */
-@media (max-width: 599px) {
+/*   smallest phones, i.e. Apple iPhone 5/SE   */
+@media only screen and (max-width: 389px) {
+
+    html {
+        font-size: 14px;
+    }
+
+    body {
+        font-size: large;
+        margin-top: 0;
+    }
+
+    #welcomeRow {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    #learning {
+        margin-bottom: 0;
+    }
+
+    .goalContainer {
+        margin-top: 30px;
+    }
+
+    .goalName {
+        font-size: 22px;
+    }
+
+    #showusername {
+        margin-bottom: 0;
+    }
 
     .delreader {
         margin: 0.7em 0 0 0;
@@ -833,21 +871,10 @@ and (max-height: 2560px) {
 
     .readerlistitem {
         font-size: medium;
-        min-height: 25px;
-        height: auto;
-        width: 40%;
-    }
-
-    .readerlistitemvocab {
-        font-size: large;
-        width: 6%;
-        min-height: 25px;
-
     }
 
     .itemStats {
-        font-size: xx-small;
-        min-height: 25px;
+        font-size: small;
     }
 
     .swal2-modal button.styled {
@@ -859,34 +886,166 @@ and (max-height: 2560px) {
     }
 }
 
+/* Apple iPad Pro 12.9 inch landscape and upwards (india, fullHD desktop etc) */
+@media only screen and (min-width: 1024px) and (orientation: landscape) {
+    body {
+        /*margin: 5% 25%;*/
+    }
+
+    #welcome {
+        margin: 0 25%;
+    }
+
+    #welcomeRow {
+        display: grid;
+        grid-template-columns: repeat(3, 32%);
+        grid-template-rows: repeat(2, 30%);
+        justify-content: center;
+        align-content: center;
+        margin: 0;
+    }
+
+    .btnActivity {
+        grid-column: unset;
+    }
+
+    .welcomeRowItem:nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .welcomeRowItem:nth-child(3) {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .welcomeRowItem:nth-child(4) {
+        grid-column: 3;
+        grid-row: 2;
+    }
+
+    .info {
+        grid-row: 1;
+    }
+
+    #learning {
+        grid-column: 2;
+        padding-top: 0;
+        font-size: 6rem;
+        margin-bottom: 50%;
+    }
+
+    .item {
+        margin: 0 auto;
+        /*margin-top: 40px;*/
+        /*width: 80%;*/
+        display: flex;
+        align-items: center;
+           }
+
+    .readerlistitem {
+        flex-grow: 1;
+        grid-row: unset;
+        grid-column: unset;
+        font-size: x-large;
+        border-radius: var(--bordy);
+        background-color: var(--royal);
+        border: 2px solid white;
+        padding: 1rem;
+        color: white;
+        cursor: pointer;
+        margin: 1rem;
+    }
+
+    .item > i {
+               font-size: 2rem;
+    }
+
+    .itemStats {
+        grid-row: unset;
+        /*cursor: pointer;*/
+        color: var(--textLight);
+        font-size: large;
+        line-height: 1.7rem;
+        min-width: 8rem;
+    }
+
+    .readerlistitemvocab {
+        grid-row: unset;
+        margin: auto;
+        color: var(--textDark);
+
+    }
+
+    .fa-trash-can {
+        grid-row: unset;
+        color: red;
+
+    }
+
+    .fa-pencil-square-o {
+        grid-row: unset;
+        color: green;
+
+    }
+
+}
+
+/* India etc... */
+@media only screen and (min-width: 1024px) and (max-height: 768px) and (orientation: landscape) {
+    .goalContainer {
+        margin-top: 0;
+    }
+}
+
+/* iPad pro 12.9 portrait mode */
+@media only screen and (min-width: 1024px) and (orientation: portrait) {
+    body {
+        /*margin: 8% 10%;*/
+    }
+
+    #welcome {
+        margin: 0 15%;
+    }
+
+    .welcomeRowItem {
+        grid-column: 2 / 5;
+    }
+
+    #welcomeRow {
+        margin-bottom: 200px;
+    }
+
+    .btnActivity {
+        font-size: xx-large;
+    }
+
+    .goalName {
+        font-size: 40px;
+    }
+
+    .goalDescription {
+        font-size: 24px;
+    }
+
+    .progressBar1 {
+        margin-top: 50px;
+    }
+
+    #learning {
+        font-size: 6rem;
+    }
+}
+
+/*   full HD Desktops   */
+@media only screen and (min-width: 1920px){
+    #selectReader{
+        padding: 0 20%;
+    }
+}
+
 /*   large desktops more than FullHD   */
 @media only screen and (min-width: 1200px) {
 
-/*    .readerPanel {*/
-/*        padding: 3% 24%;*/
-/*    }*/
 
-/*    .goalContainer {*/
-/*        !*float:left;*!*/
-/*        width: 50%;*/
-/*    }*/
-
-/*    #createReader {*/
-/*        box-sizing: border-box;*/
-/*        width: 80%;*/
-/*        margin: auto;*/
-/*        background: white;*/
-/*        padding: 3%;*/
-/*    }*/
-
-/*    #parseBtn {*/
-/*        border-radius: 4px;*/
-/*        border: 2px solid #23203b;*/
-/*        padding: 10px 20px;*/
-/*        margin: 40px auto;*/
-/*    }*/
-/*}*/
-
-/*.fa-cloud-upload:hover {*/
-/*    color: green;*/
-/*}*/
+}

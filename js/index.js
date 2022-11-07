@@ -62,14 +62,14 @@ function login() {
 
 function progress(percent, $element, boolAnimColor, col) {
     percent = percent > 100 ? 100 : percent;
-    if (percent == 100) col = "#000000";
-    var progressBarWidth = percent * $element.width() / 100;
+    if (percent === 100) col = "#000000";
+    let progressBarWidth = Math.floor(percent * $element.width() / 100);
     // $element.find('div').animate({width: progressBarWidth}, 500).html(percent + "%");
     $element.find('div').animate({width: progressBarWidth}, 500);
     if (boolAnimColor) $element.find('div').animate({backgroundColor: col}, 1800);
 }
 
-function getGoalsInfo() {
+function getGoalsInfo() { // the returned object contains avg repnum and learned and learning count
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -100,12 +100,16 @@ function getGoalsInfo() {
             const diff = Math.ceil((endDate - startDate) / day);
             const timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
 
+            // Value of learned and learning combined
+            const wordScore = calcValForGoal(goalData.learned, goalData.learning, goalData.avgRepnum);
+            console.log("valForGoal is " + wordScore);
+
             // Progress value
             const range = goalData.unit_target_value - goalData.unit_start_value;
-            const valProg = Math.ceil((goalData.learned - goalData.unit_start_value) / range * 100);
-            const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
-            console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
-                + "\ngoal actual value: " + goalData.learned + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
+            const valProg = Math.ceil((wordScore - goalData.unit_start_value) / range * 100);
+            // const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
+            // console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
+            //     + "\ngoal actual value: " + goalData.learned + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
 
             // Colors
             let col;
@@ -122,7 +126,7 @@ function getGoalsInfo() {
             progress(valProg, $(prog1), true, col);
             progress(timeProg, $(prog2), false);
             // document.querySelector("#learned").innerHTML = "<h1>" + goalData.learned + "</h1>";
-            document.querySelector("#learning").innerHTML = (parseInt(learning) + parseInt(goalData.learned)).toString();
+            document.querySelector("#learning").innerHTML = (wordScore);
 
         }
 
@@ -159,11 +163,13 @@ function getReaderInfo() {
         }
         $.each(resultjson.readers, function (idx, val) {
             htmlstr = `<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(${val.id})'>${val.name}</div>`;
-            htmlstr += `<div class='itemStats'>${val.wordcount} words<br>${val.rarityQuot} rarity</div>`;
-            htmlstr += `<div class='readerlistitemvocab' onclick='getVocab(` + val.id + ")'>V</div>";
-            htmlstr += `<i class='fa fa-pencil-square-o fa-2x' aria-hidden='true' onclick='editReader(` + val.id + ")'></i>";
+            htmlstr += `<div class='itemStats'>${val.wordcount} words<br><span class='rarity'>${val.rarityQuot} rarity</span></div>`;
+            // htmlstr += `<div class='readerlistitemvocab' onclick='getVocab(` + val.id + `)'>V</div>`;
+            htmlstr += `<i class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + val.id + `)'></i>`;
+            htmlstr += `<i class='fa fa-pencil-square-o' aria-hidden='true' onclick='editReader(` + val.id + `)'></i>`;
             // htmlstr += "<img class='delreader' onclick='var el = this.parentNode; this.parentNode.parentNode.removeChild(el);deleteReader(" + val.id + ");' src='assets/img/icons/mission_complete.png'>";
-            htmlstr += `<img class='delreader' onclick='deleteReader(this.parentNode,` + val.id + ");' src='assets/img/icons/mission_complete.png'>";
+            // htmlstr += `<img class='delreader' onclick='deleteReader(this.parentNode,` + val.id + ");' src='assets/img/icons/mission_complete.png'>";
+            htmlstr += `<i class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + val.id + `);'></i>`;
             htmlstr += `</div>`;
             $('#selectReader').append(htmlstr);
         });

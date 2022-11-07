@@ -147,6 +147,21 @@
     <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->
     <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-right-from-bracket icon-large mySignout"
                                                         onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
+
+
+<!--    <h1>Choose Your Activity</h1>-->
+    <div id="welcomeRow">
+        <!--        <div class="info welcomeRowItem" id="learned"></div>-->
+        <div class="info welcomeRowItem" id="learning"></div>
+        <!--        <div class="btnContainer">-->
+        <div class="btnActivity welcomeRowItem" onclick="createReader(0)"><i
+                class="fa-solid mainIcon fa-pen-to-square"></i><span>Create Reader</span></div>
+        <div class="btnActivity welcomeRowItem" onclick="studyReader()"><i
+                class="fa-solid mainIcon fa-book-open-reader"></i><span>Study Reader</span></div>
+        <div class="btnActivity welcomeRowItem" onclick="studyVocab()"><i
+                class="fa-solid mainIcon fa-graduation-cap"></i><span>Test Vocabulary</span></div>
+        <!--        </div>-->
+    </div>
     <template id="goalTemplate">
         <div class="goalContainer">
             <div class="goalName"></div>
@@ -161,20 +176,6 @@
             </div>
         </div>
     </template>
-
-    <h1>Choose Your Activity</h1>
-    <div id="welcomeRow">
-        <div class="info welcomeRowItem" id="learned"></div>
-        <div class="btnContainer">
-            <div class="btnActivity welcomeRowItem" onclick="createReader(0)"><i
-                    class="fa-solid mainIcon fa-pen-to-square"></i><span>Create Reader</span></div>
-            <div class="btnActivity welcomeRowItem" onclick="studyReader()"><i
-                    class="fa-solid mainIcon fa-book-open-reader"></i><span>Study Reader</span></div>
-            <div class="btnActivity welcomeRowItem" onclick="studyVocab()"><i
-                    class="fa-solid mainIcon fa-graduation-cap"></i><span>Test Vocabulary</span></div>
-        </div>
-        <div class="info welcomeRowItem" id="learning"></div>
-    </div>
 </section>
 <section id="selectReader" class="hideo">
     <h1>Select Reader</h1>
