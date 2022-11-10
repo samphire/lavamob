@@ -45,6 +45,10 @@
     padding: 0 0 10px 0;
 }
 
+#welcome{
+    margin: 10px;
+}
+
 #welcomeRow {
     display: grid;
     grid-template-columns: repeat(5, 19%);
@@ -148,7 +152,7 @@
 
 body {
     height: 100%;
-    margin: 10px;
+    /*margin: 10px;*/
     padding: 0;
     text-align: center;
     font-size: x-large;
@@ -209,6 +213,10 @@ textarea {
     /*color: var(--textDark);*/
     padding: 2%;
     color: white;
+    cursor: pointer;
+}
+
+#selectReader .fa-graduation-cap, .fa-pencil-square-o, .fa-trash-can{
     cursor: pointer;
 }
 
@@ -779,10 +787,6 @@ input#llWord.llWord, input#tranny.tranny {
 
     input:valid {
         background: white;
-    }
-
-    button {
-        transform: scale(2);
     }
 
     #audiodiv {

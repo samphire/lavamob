@@ -316,15 +316,21 @@ function uploadText() {
 }
 
 function cleanupCreateReader(){
-    document.getElementById("audioCheck").checked = false;
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
     textToEdit = 0;
     $("#result").empty();
     $("#superResult").empty();
-    $("#audiodiv").hide();
     document.getElementById("text").value = "";
     $("#text").show();
+    if(document.getElementById("audioOpt")){
+        cleanupAudioOptAndDiv();
+    }
+}
+
+function cleanupAudioOptAndDiv(){
+    document.getElementById("audioCheck").checked = false;
+    $("#audiodiv").hide();
 }
 
 function pastey(e) {

@@ -29,7 +29,6 @@
 
 [data-tooltip]:hover {
     display: inline-block;
-    border: 1px solid red;
 }
 
 [data-tooltip]:hover:after{
@@ -188,7 +187,45 @@
 
 @media only screen and (max-device-width: 736px) and (orientation: portrait) {
     .slidey img {
-        width: 70px;
-        margin-top: 120px;
+        width: 60px;
+    }
+    .card{
+        margin: 80px auto 10px auto;
+        width: 300px;
+        height: 400px;
+
+    }
+    #redbutton {
+        width: 60px;
+        margin-top: 20px;
+        position: relative;
+    }
+    .slidey{
+        display: flex;
+        justify-content: space-evenly;
     }
 }
+
+@media only screen and (max-width: 389px) {
+    .card{
+        margin: 10px auto;
+        width: 280px;
+        height: 300px;
+    }
+    .buttonDiv{
+        margin-top: 10px;
+    }
+    .card__face h2 {
+        font-size: 28px;
+    }
+    #redbutton {
+        width: 50px;
+        margin-top: 10px;
+        position: relative;
+    }
+    .slidey img {
+        width: 50px;
+    }
+
+}
+

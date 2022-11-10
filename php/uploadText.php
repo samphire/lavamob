@@ -32,15 +32,15 @@ foreach ($data['uniqueWordArray'] as $word) {
     $numRows = mysqli_num_rows($result);
     print "\n\nthere are " . $numRows . " rows.\n\n";
 
-    if ($numRows > 0) {
+    if ($numRows > 0) {                 //TODO Fix the percentage stuff
         print "query returned a single result";
         $uniqueInfoArray[] = $word . "^/" . $row[0] . "^/" . $row[1] . "^/" . $row[2] . "^/" . $row[3];
         if ($row[3] < 7) {
             $percs[$row[3] - 1]++;
             $percs[7] += $row[3];
-        } else {
+        } else {                        /* NOT A CLUE WHAT IS HAPPENING HERE */
             $percs[6]++;
-            $percs7 += 7;
+            $percs7 += 7;               /* WHAT ON EARTCH IS PERCS7... DON'T I MEAN PERCS[7]? */
         }
     } else {
         print "\nno query result. There must be a korean word.";

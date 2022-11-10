@@ -3,6 +3,7 @@
  */
 var readers;
 var userid = 0;
+let group = 0;
 var language;
 var dicurl;
 var goals;
@@ -13,8 +14,6 @@ var llData, nowList;
 var naverPopup;
 var howlSpriteObj;
 var howl;
-
-
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 var readerYScroll = 0;
@@ -41,9 +40,12 @@ function login() {
             const myData = JSON.parse(data);
             userid = myData[0];
             language = myData[1];
+            group = myData[2];
             localStorage.setItem("userEmail", document.getElementById("userEmail").value);
             localStorage.setItem("userid", userid);
             localStorage.setItem("language", language);
+            localStorage.setItem("group", group);
+
             $(".login").hide();
             document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
             $("#welcome").show();
@@ -75,66 +77,74 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
         crossDomain: true,
         url: url2 + "/php/goals.php?userid=" + userid
     }).done(function (resultjson) {
-        goals = JSON.parse(resultjson);
+            goals = JSON.parse(resultjson);
+            console.log(resultjson);
+            let wordScore = 0;
 
-        console.log(resultjson);
+            if (goals[0].goal_name !== 'blank') {
 
-        var goalPlate = document.querySelector('#goalTemplate');
-        for (var i = 0; i < goals.length; i++) {
-            var goalData = goals[i];
-            var clone = goalPlate.content.cloneNode(true);
-            var blob = clone.querySelector('.goalName');
-            blob.textContent = goalData.goal_name;
-            blob = clone.querySelector('.goalDescription');
-            blob.textContent = goalData.goal_description;
-            blob = clone.querySelector('.startDate');
-            blob.textContent = "start: " + goalData.start_date;
-            blob = clone.querySelector('.endDate');
-            blob.textContent = "end: " + goalData.end_date;
+                const goalPlate = document.querySelector('#goalTemplate');
+                for (let i = 0; i < goals.length; i++) {
+                    let goalData = goals[i];
+                    // Value of learned and learning combined
+                    wordScore = calcValForGoal(goalData.learned, goalData.learning, goalData.avgRepnum);
+                    let clone = goalPlate.content.cloneNode(true);
+                    clone.querySelector('.goalName').textContent = goalData.goal_name;
+                    clone.querySelector('.goalDescription').textContent = goalData.goal_description;
+                    clone.querySelector('.startDate').textContent = "start: " + goalData.start_date;
+                    clone.querySelector('.endDate').textContent = "end: " + goalData.end_date;
 
-            // Date value
-            const day = 1000 * 60 * 60 * 24;
-            const now = new Date();
-            const startDate = new Date(goalData.start_date);
-            const endDate = new Date(goalData.end_date);
-            const diff = Math.ceil((endDate - startDate) / day);
-            const timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
+                    // Date value
+                    const day = 1000 * 60 * 60 * 24;
+                    const now = new Date();
+                    const startDate = new Date(goalData.start_date);
+                    const endDate = new Date(goalData.end_date);
+                    const diff = Math.ceil((endDate - startDate) / day);
+                    const timeProg = Math.ceil((((now - startDate) / day) / diff) * 100);
 
-            // Value of learned and learning combined
-            const wordScore = calcValForGoal(goalData.learned, goalData.learning, goalData.avgRepnum);
-            console.log("valForGoal is " + wordScore);
+                    // Progress value
+                    const range = goalData.unit_target_value - goalData.unit_start_value;
+                    const valProg = Math.ceil((wordScore - goalData.unit_start_value) / range * 100);
 
-            // Progress value
-            const range = goalData.unit_target_value - goalData.unit_start_value;
-            const valProg = Math.ceil((wordScore - goalData.unit_start_value) / range * 100);
-            // const learning = Math.ceil(goalData.learning * goalData.avgRepnum * 0.1);
-            // console.log("goal unit_start_value: " + goalData.unit_start_value + "\ngoal unit_target_value: " + goalData.unit_target_value
-            //     + "\ngoal actual value: " + goalData.learned + "\nvalProg: " + valProg + "\ntimeProg: " + timeProg);
+                    // Colors
+                    let col;
+                    let percGood = valProg / timeProg;
+                    if (percGood > 1.2) col = "#44ff4b";
+                    if (percGood < 1.2) col = "#abce39";
+                    if (percGood < 1.05) col = "#cecb39";
+                    if (percGood < 0.9) col = "#ce9c39";
+                    if (percGood < 0.75) col = "#ce3939";
 
-            // Colors
-            let col;
-            let percGood = valProg / timeProg;
-            if (percGood > 1.2) col = "#44ff4b";
-            if (percGood < 1.2) col = "#abce39";
-            if (percGood < 1.05) col = "#cecb39";
-            if (percGood < 0.9) col = "#ce9c39";
-            if (percGood < 0.75) col = "#ce3939";
-
-            const prog1 = clone.querySelector('.progressBar1');
-            const prog2 = clone.querySelector('.progressBar2');
-            goalPlate.parentNode.appendChild(clone);
-            progress(valProg, $(prog1), true, col);
-            progress(timeProg, $(prog2), false);
-            // document.querySelector("#learned").innerHTML = "<h1>" + goalData.learned + "</h1>";
+                    const prog1 = clone.querySelector('.progressBar1');
+                    const prog2 = clone.querySelector('.progressBar2');
+                    goalPlate.parentNode.appendChild(clone);
+                    progress(valProg, $(prog1), true, col);
+                    progress(timeProg, $(prog2), false);
+                }
+            } else {
+                // Value of learned and learning combined
+                wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
+            }
             document.querySelector("#learning").innerHTML = (wordScore);
-
         }
-
-    }).fail(function (jqXHR, status, err) {
+    ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call to get goals data");
     });
+}
 
-
+function updateWordscore() {
+    $.ajax({
+        type: "GET",
+        crossDomain: true,
+        url: url2 + "/php/goals.php?userid=" + userid
+    }).done(function (resultjson) {
+            goals = JSON.parse(resultjson);
+            const wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
+            document.querySelector("#learning").innerHTML = (wordScore);
+        }
+    ).fail(function (jqXHR, status, err) {
+        console.log("failed ajax call to get goals data");
+    });
 }
 
 function getReaderInfo() {
@@ -337,8 +347,8 @@ function downloadReader() {
 
         $('#selectReader').hide();
         $('#reader').empty();
-        $('#reader').append("<div class='readerTitle'>"+ selectedReaderObj.name +"</div>");
-        $('#reader').append("<div class='readerDesc'>"+ selectedReaderObj.description +"</div>");
+        $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
+        $('#reader').append("<div class='readerDesc'>" + selectedReaderObj.description + "</div>");
         $('#reader').append("<div class='readerPanel'></div>");
         if (selectedReaderObj.audio) {
             $('#reader .readerPanel').append("<div class='audioOptions' onclick='howl.stop()'>" +

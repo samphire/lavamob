@@ -156,5 +156,5 @@ function removeFromDOM(id) {
 
 function calcValForGoal(learned, learning, avgRepnum) {
     console.log("learned: " + learned + ", learning: " + learning + ", avgRepnum: " + avgRepnum);
-    return Math.floor(parseInt(learned) + (parseInt(learning) * parseInt(avgRepnum) * 0.1));
+    return Math.floor(parseInt(learned) + (parseInt(learning) * parseFloat(avgRepnum) * 0.1));
 }

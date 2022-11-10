@@ -376,6 +376,7 @@ function endTest() {
     $("#welcome").show();
     swal("End of Test\nYour score is " + Math.floor(doneList.length / (doneList.length + wrongList.length) * 100) + "%");
     $("#vocaTest").empty();
+    updateWordscore();
 }
 
 function calcDateNext(daysInterval) { //returns a string
