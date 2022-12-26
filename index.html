@@ -72,11 +72,14 @@
         };
 
         window.onload = function () {
+
+            console.info(localStorage);
+
             history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
             $('#fileinput').on('change', prepareUpload);
             $('#audioform').on('submit', uploadFiles);
 
-            document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
+            document.getElementById('showusername').innerText = localStorage.getItem('username');
 //            localStorage.clear();
             $('section').hide();
             $('#menu').hide();
@@ -96,6 +99,9 @@
                 getReaderInfo();
                 return;
             } else {
+
+                console.info(localStorage);
+
                 if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
                     document.getElementById("userEmail").value = localStorage.getItem("userEmail");
                     $('.login').show();

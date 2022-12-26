@@ -69,6 +69,28 @@
     color: var(--superHighlight);
 }
 
+#printerIcon{
+    position: absolute;
+    top: 27px;
+    right: 30px;
+    height: 90px;
+    width: 110px;
+}
+
+#downloadIcon{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 30px;
+    right: 160px;
+}
+
+#printerIcon:hover, #downloadIcon:hover{
+    cursor: pointer;
+    background-color: rgba(50, 50, 50, 0.3);
+}
+
+
 @keyframes pulsy {
     from, to {
         transform: scale(1, 1);
@@ -1052,4 +1074,23 @@ input#llWord.llWord, input#tranny.tranny {
 @media only screen and (min-width: 1200px) {
 
 
+}
+
+@media print{
+    .audioOptions{
+        display: none;
+    }
+    .readerTitle{
+        font-size: x-large;
+    }
+    .readerPanel{
+        line-height: 100%;
+        font-size: large;
+    }
+    .readerPanel > .audioIcon{
+        display: none;
+    }
+    #printerIcon{
+        display: none;
+    }
 }

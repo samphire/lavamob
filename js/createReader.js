@@ -14,13 +14,10 @@
  *
  * */
 
+let finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, sndArr, wordArr, textToEdit;
 
-var finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, lastPosi,
-    lastPosx, sndArr, wordArr, textToEdit;
-// var userid = userid;
-
-var lastPos = 0;
-var files;
+let lastPos = 0;
+let files;
 
 function prepareUpload(event) {
     files = event.target.files;
@@ -32,14 +29,13 @@ function uploadFiles(event) {
 
     // start loading spinner
 
-    var data = new FormData();
+    let data = new FormData();
     $.each(files, function (key, value) {
         data.append(key, value);
     });
 
     $.ajax({
-        url: 'https://notborder.org/readeraudio/upload.php?files',
-        // url: 'http://notborder.org/lavamob/upload.php?files',
+        url: audiourl + '/upload.php?files',
         type: 'POST',
         data: data,
         crossDomain: true,
@@ -144,7 +140,7 @@ function parseText() { let i;
     for (let m = 0; m < singleDimensionalFinalArr.length; m++) {
         console.log(singleDimensionalFinalArr[m]);
         if (!singleDimensionalFinalArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
-            checkString += "<img src='play_hover.png' onclick='makeSprite(this, " + m + ")'>";
+            checkString += "<img src='play_hover.png' class='audioIcon' onclick='makeSprite(this, " + m + ")'>";
         }
         checkString += singleDimensionalFinalArr[m];
     }
@@ -220,7 +216,7 @@ function makeSprite(obj, pos) {
     }
     lastPos = pos;
 
-    makeSpriteArr.push("<img src='play_hover.png' onclick='playSound(" + spriteNum + ")'>");
+    makeSpriteArr.push("<img src='play_hover.png' class='audioIcon' onclick='playSound(" + spriteNum + ")'>");
     finalArrWithAudio.push("^&" + spriteNum);
     for (var nm = 0; nm < makeSpriteArr.length; nm++) {
         // console.log("makeSpriteArr:  " + makeSpriteArr[nm]);
@@ -333,7 +329,7 @@ function cleanupAudioOptAndDiv(){
     $("#audiodiv").hide();
 }
 
-function pastey(e) {
+function pastey(e) { // says it is unused, but it is...
     console.log("in pastey");
     var clipboardData;
     // e.preventDefault();

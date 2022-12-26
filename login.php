@@ -28,4 +28,5 @@ $arr = array();
 array_push($arr, $userid);
 array_push($arr, $languageid);
 array_push($arr, $group);
+array_push($arr, $username);
 echo json_encode($arr);

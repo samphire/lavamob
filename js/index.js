@@ -4,6 +4,7 @@
 var readers;
 var userid = 0;
 let group = 0;
+let username;
 var language;
 var dicurl;
 var goals;
@@ -41,13 +42,19 @@ function login() {
             userid = myData[0];
             language = myData[1];
             group = myData[2];
+            username = myData[3];
             localStorage.setItem("userEmail", document.getElementById("userEmail").value);
             localStorage.setItem("userid", userid);
             localStorage.setItem("language", language);
             localStorage.setItem("group", group);
+            localStorage.setItem("username", username);
+
+            console.log(localStorage);
 
             $(".login").hide();
-            document.getElementById('showusername').innerText = localStorage.getItem('userEmail');
+            // document.getElementById('showusername').innerText = localStorage.getItem('username');
+            document.getElementById('showusername').innerText = "user: " + username;
+            console.log("username is " + username);
             $("#welcome").show();
             $("#menu").show();
             getReaderInfo();
@@ -125,7 +132,9 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
                 // Value of learned and learning combined
                 wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
             }
-            document.querySelector("#learning").innerHTML = (wordScore);
+            if (!isNaN(wordscore)) {
+                document.querySelector("#learning").innerHTML = (wordScore);
+            }
         }
     ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call to get goals data");
@@ -140,7 +149,10 @@ function updateWordscore() {
     }).done(function (resultjson) {
             goals = JSON.parse(resultjson);
             const wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
-            document.querySelector("#learning").innerHTML = (wordScore);
+
+            if (!isNaN(wordscore)) {
+                document.querySelector("#learning").innerHTML = (wordScore);
+            }
         }
     ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call to get goals data");
@@ -148,6 +160,9 @@ function updateWordscore() {
 }
 
 function getReaderInfo() {
+
+    group = localStorage.getItem("group");
+
     $('#selectReader').empty();
     var htmlstr;
     $.ajax({
@@ -160,32 +175,51 @@ function getReaderInfo() {
             xhr.setRequestHeader('Accept', 'application/json');
         },
         dataType: "json",
-        //url: url + "/textinfo",
-        url: "https://notborder.org/lavamob/php/getTextInfo.php",
+        // url: "https://notborder.org/lavamob/php/getTextInfo.php",
+        url: url2 + "/php/getTextInfo.php",
         data: {"userid": userid}
     }).done(function (resultjson) {
         console.log("\n\nresultjson: " + JSON.stringify(resultjson) + "\n\n");
-        console.log("\n\nresultjson.readers[0]:\n" + JSON.stringify(resultjson.readers[0]) + "\n\n");
-        // alert(JSON.stringify(resultjson));
         if (!resultjson) {
             console.log("resultjson evaluates to false. Probably there are no readers");
             return;
         }
+
+        let newEl = document.createElement("div");
+        // newEl.style.color='red';
+
+
         $.each(resultjson.readers, function (idx, val) {
-            htmlstr = `<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(${val.id})'>${val.name}</div>`;
-            htmlstr += `<div class='itemStats'>${val.wordcount} words<br><span class='rarity'>${val.rarityQuot} rarity</span></div>`;
-            // htmlstr += `<div class='readerlistitemvocab' onclick='getVocab(` + val.id + `)'>V</div>`;
-            htmlstr += `<i class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + val.id + `)'></i>`;
-            htmlstr += `<i class='fa fa-pencil-square-o' aria-hidden='true' onclick='editReader(` + val.id + `)'></i>`;
-            // htmlstr += "<img class='delreader' onclick='var el = this.parentNode; this.parentNode.parentNode.removeChild(el);deleteReader(" + val.id + ");' src='assets/img/icons/mission_complete.png'>";
-            // htmlstr += `<img class='delreader' onclick='deleteReader(this.parentNode,` + val.id + ");' src='assets/img/icons/mission_complete.png'>";
-            htmlstr += `<i class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + val.id + `);'></i>`;
-            htmlstr += `</div>`;
-            $('#selectReader').append(htmlstr);
+            if (val.groupid > 0) {
+                $('#selectReader').append(createGroupItem(val));
+                return;
+            }
+            $('#selectReader').append(createReaderItem(val));
         });
     }).fail(function (jqXHR, status, err) {
         console.log("failed ajax call in getReaderInfo" + status + err);
     });
+}
+
+function createReaderItem(data) {
+
+    let mystr = `<div class='item'>&nbsp;<div class='readerlistitem' onclick='getReader(${data.id})'>${data.name}</div>`;
+    mystr += `<div class='itemStats'>${data.wordcount} words<br><span class='rarity'>${data.rarityQuot} rarity</span></div>`;
+    mystr += `<i class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + data.id + `)'></i>`;
+    mystr += `<i ` + (group === "USER" ? `style='visibility: hidden'` : ``) + ` class='fa fa-pencil-square-o' onclick='editReader(` + data.id + `)'></i>`;
+    mystr += `<i class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + data.id + `);'></i>`;
+    mystr += `</div>`;
+    return mystr;
+}
+
+function createGroupItem(data) {
+    let mystr = `<div class='item'>&nbsp;<div class='readerlistitem'>${data.groupname}</div>`;
+    mystr += `<div class='itemStats'>${data.wordcount} words<br><span class='rarity'>${data.rarityQuot} rarity</span></div>`;
+    mystr += `<i style='visibility: hidden' class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + data.id + `)'></i>`;
+    mystr += `<i style='visibility: hidden' class='fa fa-pencil-square-o' aria-hidden='true' onclick='editReader(` + data.id + `)'></i>`;
+    mystr += `<i style='visibility: hidden' class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + data.id + `);'></i>`;
+    mystr += `</div>`;
+    return mystr;
 }
 
 function editReader(textid) {
@@ -338,16 +372,18 @@ function downloadReader() {
         selectedReaderText = "";
         finalTextArr.forEach(function (el, idx) {
             if (el.indexOf("^&") > -1) {
-                finalTextArr[idx] = "<img src=\"play_hover.png\" onclick=\"playSound(" + el.slice(2) + ")\">";
+                finalTextArr[idx] = "<img src=\"play_hover.png\" class=\"audioIcon\" onclick=\"playSound(" + el.slice(2) + ")\">";
                 selectedReaderText += finalTextArr[idx];
             } else {
                 selectedReaderText += el;
             }
         });
-
+console.log(selectedReaderObj.audio);
         $('#selectReader').hide();
         $('#reader').empty();
         $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
+        $('#reader').append("<a href='"+ audiourl + "/" + selectedReaderObj.audio +"'><svg id='downloadIcon' viewBox='0 0 30 30'><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"></path></svg></a>");
+        $('#reader').append("<img id='printerIcon' src='assets/img/icons/printer.png' onclick='window.print()'>");
         $('#reader').append("<div class='readerDesc'>" + selectedReaderObj.description + "</div>");
         $('#reader').append("<div class='readerPanel'></div>");
         if (selectedReaderObj.audio) {
