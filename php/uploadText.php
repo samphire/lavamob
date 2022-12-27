@@ -35,12 +35,12 @@ foreach ($data['uniqueWordArray'] as $word) {
     if ($numRows > 0) {                 //TODO Fix the percentage stuff
         print "query returned a single result";
         $uniqueInfoArray[] = $word . "^/" . $row[0] . "^/" . $row[1] . "^/" . $row[2] . "^/" . $row[3];
-        if ($row[3] < 7) {
-            $percs[$row[3] - 1]++;
-            $percs[7] += $row[3];
-        } else {                        /* NOT A CLUE WHAT IS HAPPENING HERE */
-            $percs[6]++;
-            $percs7 += 7;               /* WHAT ON EARTCH IS PERCS7... DON'T I MEAN PERCS[7]? */
+        if ($row[3] < 7) { // one of the top 6000 words
+            $percs[$row[3] - 1]++;  // add 1 to the relevant frequency field (perc1 etc...)
+            $percs[7] += (min($row["frequency"], 7));  // rarityQuot is simply the sum of the frequencies... good idea
+        } else {
+            $percs[6]++; // add 1 to percREST
+            $percs7 += 7;  // this does nothing. it implicitly instantiates a variable that is never used.
         }
     } else {
         print "\nno query result. There must be a korean word.";
