@@ -221,6 +221,15 @@ textarea {
     grid-template-rows: 1fr auto;
     grid-template-columns: repeat(4, 1fr);
     grid-row-gap: 8%;
+    user-select: none;
+}
+
+.placeholder{
+    height: 100px;
+    width: 100%;
+    border: 2px dashed white;
+    margin: 20px 0;
+    border-radius: 5px;
 }
 
 .readerlistitem {
@@ -236,6 +245,7 @@ textarea {
     padding: 2%;
     color: white;
     cursor: pointer;
+    user-select: none;
 }
 
 #selectReader .fa-graduation-cap, .fa-pencil-square-o, .fa-trash-can{

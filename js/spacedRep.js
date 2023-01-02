@@ -468,45 +468,35 @@ function updateItem(right, idx) {
                 myEl.datenext = calcDateNext(0);
                 break;
             case 6:
-                alert("in case 6");
-                // myEl.EF *= .6;
-                alert("ef is: " + myEl.EF);
                 myEl.repnum = 4;
                 myEl.datenext = calcDateNext(0);
                 break;
             case 7:
-                alert("in case 7");
-                // myEl.EF *= .6;
                 myEl.repnum = 4;
                 myEl.datenext = calcDateNext(0);
                 break;
 
             case 8:
-                // alert("in case 8");
                 myEl.EF *= .9;
                 myEl.repnum = 4;
                 myEl.datenext = calcDateNext(0);
                 break;
             case 9:
-                // alert("in case 9");
                 myEl.EF *= .8;
                 myEl.repnum = 5;
                 myEl.datenext = calcDateNext(0);
                 break;
             case 10:
-                // alert("in case 10");
                 myEl.EF *= .7;
                 myEl.repnum = 6;
                 myEl.datenext = calcDateNext(0);
                 break;
             case 11:
-                // alert("in case 11");
                 myEl.EF *= .6;
                 myEl.repnum = 7;
                 myEl.datenext = calcDateNext(0);
                 break;
             case 12:
-                // alert("in case 12");
                 myEl.EF *= .5;
                 myEl.repnum = 8;
                 myEl.datenext = calcDateNext(0);

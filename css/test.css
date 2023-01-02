@@ -18,7 +18,7 @@
     text-align: center;
     white-space: nowrap;
     left: 50%;
-    transform:translate(-50%);
+    transform: translate(-50%);
     color: var(--secondary);
     background: var(--bgDark);
     padding: 3px;
@@ -31,7 +31,7 @@
     display: inline-block;
 }
 
-[data-tooltip]:hover:after{
+[data-tooltip]:hover:after {
     display: inline-block;
     bottom: calc(100% + 6px);
 }
@@ -83,7 +83,7 @@
     /*background: url("https://notborder.org/cobalt/userPics/11%2012%202017%207%2010%20pm%20Office%20Lens.jpg");*/
     /*background-image: url("https://notborder.org/cobalt/userPics/11%2012%202017%207%2010%20pm%20Office%20Lens.jpg");*/
     /*background-size: cover;*/
-    background-image: url("../assets/img/food.png");
+    background-image: url("../assets/img/kings.png");
 }
 
 .card__face--front h2 {
@@ -115,7 +115,7 @@
     border-width: 0;
     border-style: solid;
     /*background-color: #23203b;*/
-    border-radius: 0.5em;
+    /*border-radius: 0.5em;*/
     cursor: pointer;
     font-family: "Booster Next FY", "Avenir Next", Avenir, sans-serif;
     user-select: none;
@@ -165,7 +165,7 @@
 .typingInput {
     margin-top: 2rem;
     font-size: larger;
-    width: 100%;
+    width: 50%;
 }
 
 .slidey {
@@ -189,43 +189,53 @@
     .slidey img {
         width: 60px;
     }
-    .card{
+
+    .card {
         margin: 80px auto 10px auto;
         width: 300px;
         height: 400px;
 
     }
+
     #redbutton {
         width: 60px;
         margin-top: 20px;
         position: relative;
     }
-    .slidey{
+
+    .slidey {
         display: flex;
         justify-content: space-evenly;
     }
 }
 
 @media only screen and (max-width: 389px) {
-    .card{
+    .card {
         margin: 10px auto;
         width: 280px;
         height: 300px;
     }
-    .buttonDiv{
+
+    .buttonDiv {
         margin-top: 10px;
     }
+
     .card__face h2 {
         font-size: 28px;
     }
+
     #redbutton {
         width: 50px;
         margin-top: 10px;
         position: relative;
     }
+
     .slidey img {
         width: 50px;
     }
 
+    .typingInput {
+        width: 100%;
+    }
 }
 
