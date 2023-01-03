@@ -97,7 +97,6 @@ const mouseUpHandler = function () {
     enumerateItems();
 
     if (targetEle) {
-        // alert("source is " + draggingEle.innerText + " and target is " + targetEle.innerText);
         resetTarget();
     }
 
@@ -127,26 +126,38 @@ const swap = (nodeA, nodeB) => {
     parentA.insertBefore(nodeB, siblingA);
 }
 
-
 function enumerateItems() {
+    let orderArr = []; // modern way to instantiate an array
+    let order = 0;
     document.querySelectorAll(".item").forEach((item) => {
-        console.log(item.dataset.textid);
-    })
-}
+        let myObj = {};
+        myObj.textid = item.dataset.textid;
+        myObj.userid = userid;
+        myObj.order = order++;
+        orderArr.push(myObj);
+    });
 
+    let orderingData = JSON.stringify(orderArr);
+    const myUrl = url2 + "/php/reorderReaders.php";
 
-const deleteTextNodes = () => {
-    list.childNodes.forEach((nodey) => {
-        if (nodey.nodeType === 3) {
-            nodey.parentNode.removeChild(nodey);
+    // How about using this opportunity to try a different way of uploading than ajax... er... fetch?
+    $.ajax({
+        url: myUrl,
+        type: "POST",
+        contentType: "application/json; charset=UTF-8",
+        data: orderingData,
+        crossDomain: true,
+        success: function () {
+            console.log("Uploaded Reordering Data Successfully");
+        },
+        error: function () {
+            console.error("Problem Uploading Reordering Data:");
         }
-    })
-};
+    });
+}
 
 const resetTarget = () => {
     targetEle?.style.removeProperty('background');
     targetEle = null;
     isTargetTime = false;
 }
-
-// deleteTextNodes();
