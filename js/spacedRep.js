@@ -230,7 +230,7 @@ function manageLL(type) {
     let $el = $(".testItem.visible");
 
     goToNext($el);
-   }
+}
 
 function makeFlashCard(val) {
     let returnStr;
@@ -381,6 +381,12 @@ function endTest() {
 
 function calcDateNext(daysInterval) { //returns a string
     // console.log("in calcDateNext. daysInterval is " + daysInterval);
+    if (daysInterval > 9) {
+        const oldInterval = daysInterval;
+        const randy = Math.random() * daysInterval / 5;
+        daysInterval = daysInterval - daysInterval / 10 + randy;
+        alert("daysInterval is " + oldInterval + ". randy is " + randy + ". New daysInterval is " + daysInterval);
+    }
     let toAdd = daysInterval * 24 * 60 * 60 * 1000; // convert to milliseconds
     const todaySQLDate = getCurrentTimezoneDate(new Date()); // converts today's date to include timezone offset
     let nowms = todaySQLDate.getTime(); // converts to milliseconds

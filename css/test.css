@@ -160,6 +160,8 @@
     font-size: large;
     font-weight: bold;
     width: 40%;
+    user-select: none;
+    cursor: pointer;
 }
 
 .typingInput {
