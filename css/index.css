@@ -2,50 +2,79 @@
 @import 'reset.css';
 @import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
 
+/*:root {*/
+/*    --bg: #bcaa99;*/
+/*    --textDark: #e0950d;*/
+/*    --textLight: #fdb63d;*/
+/*    --superHighlight: #ff3445;*/
+/*    --royal: #5f3c8a;*/
+/*    --sky: #0c94f7;*/
+/*    !*--sky: #5595c4;*!*/
+/*    --wine: #8d5571;*/
+/*    --life: #0cc162;*/
+/*    !*--life: #0d6d31;*!*/
+/*    --bordy: 16px;*/
+/*    --primary60: #1f85de;*/
+/*    --complementary30: #de1f85;*/
+/*    --accent10: #85de1f;*/
+/*}*/
+
+/*light*/
+/*monochrome greeny*/
 :root {
-    --bgDark: #262626;
-    --textDark: #e0950d;
-    --textLight: #fdb63d;
-    --superHighlight: #ff3445;
-    --royal: #5f3c8a;
-    --sky: #0c94f7;
-    /*--sky: #5595c4;*/
-    --wine: #8d5571;
-    --life: #0cc162;
-    /*--life: #0d6d31;*/
     --bordy: 16px;
-    --primary60: #1f85de;
-    --complementary30: #de1f85;
-    --accent10: #85de1f;
+    --bg: hsl(41, 43%, 85%); /* dark slate gray */
+    --bgText: hsl(194, 8%, 32%);
+    --paperBg: hsl(96, 12%, 92%); /* ash gray */
+    --paperText: hsl(276, 12%, 8%);
+    --buttonBg: hsl(13, 75%, 60%);
+    --buttonText: hsl(34, 94%, 7%);
+    --accent1: hsl(338, 91%, 25%);
+    --accent2: hsl(115, 91%, 25%);
+    --buttonHover: hsl(29, 65%, 40%);
+    --neutral: hsl(0, 40%, 80%);
 }
 
-.fa-solid {
-    padding-right: 16px;
+/*dark*/
+:root {
+
 }
 
 .readerPanel {
-    background-color: var(--bgDark);
-    padding: 20px 8px 200px 16px;
+    background-color: var(--bg);
     text-align: left;
     line-height: 160%;
-    color: var(--light);
+    color: var(--bgText);
+    padding: 0 2%;
 }
 
 .readerTitle {
-    font-size: xxx-large;
-    background-color: var(--royal);
-    color: var(--textLight);
+    font-size: large;
+    background-color: var(--buttonBg);
+    color: var(--buttonText);
     padding: 15px;
+}
+
+@media only screen and (min-width: 48em){
+    .readerTitle{
+        font-size: xx-large;
+    }
+    .fa-trash-can{
+        font-size: xx-large;
+    }
+    .fa-graduation-cap{
+        font-size: xx-large; 
+    }
 }
 
 .readerDesc {
     font-size: large;
-    background: saddlebrown;
-    color: papayawhip;
+    background: var(--paperBg);
+    color: var(--paperText);
     padding: 0 0 10px 0;
 }
 
-#welcome{
+#welcome {
     margin: 10px;
 }
 
@@ -66,10 +95,10 @@
     background: white;
     grid-row: span 3;
     animation: pulsy 0.7s linear 1s 6, wiggle 7s linear 5.2s infinite;
-    color: var(--superHighlight);
+    color: var(--primary);
 }
 
-#printerIcon{
+#printerIcon {
     position: absolute;
     top: 27px;
     right: 30px;
@@ -77,7 +106,7 @@
     width: 110px;
 }
 
-#downloadIcon{
+#downloadIcon {
     width: 100px;
     height: 100px;
     position: absolute;
@@ -85,7 +114,7 @@
     right: 160px;
 }
 
-#printerIcon:hover, #downloadIcon:hover{
+#printerIcon:hover, #downloadIcon:hover {
     cursor: pointer;
     background-color: rgba(50, 50, 50, 0.3);
 }
@@ -133,7 +162,7 @@
 }
 
 #showusername {
-    color: var(--textDark);
+    color: var(--bgText);
     display: inline-block;
     margin-bottom: 20px;
     font-size: 1.2rem;
@@ -164,12 +193,19 @@
     /*font-size: 2rem;*/
     font-family: 'Bitter', serif;
     /*background-color: moccasin;*/
-    background-color: var(--royal);
-    color: var(--textLight);
-    border: 3px solid darkgoldenrod;
+    background-color: var(--buttonBg);
+    color: var(--buttonText);
+    /*border: 1px solid var(--accent2);*/
     /*text-align: center;*/
     cursor: pointer;
     grid-column: 1 / 6;
+    /*box-shadow: #212121 0px 1px 4px;*/
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.btnActivity:hover{
+    background-color: var(--buttonHover);
+    color: var(--paperText);
 }
 
 body {
@@ -179,20 +215,22 @@ body {
     text-align: center;
     font-size: x-large;
     /*background: url(../assets/img/bg.jpg);*/
-    /*background-color: #40572b;*/
-    /*background-color: #FCF9F4;*/
-    background-color: var(--bgDark);
+    /*background-color: var(--bg);*/
     /*background-image: url("https://www.transparenttextures.com/patterns/tiny-grid.png");*/
-    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    background-image: url(../assets/img/samy2.png);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: var(--bg);
 }
 
-textarea {
+#createReaderTextPanel {
     width: 90%;
     min-height: 300px;
     margin-top: 3rem;
+    resize: vertical;
 }
 
-#result {
+#audioSpriteSelectPanel {
     display: none;
     line-height: 3rem;
     font-size: x-large;
@@ -214,9 +252,6 @@ textarea {
 }
 
 .item {
-    margin: 0 auto;
-    /*margin-top: 40px;*/
-    /*width: 80%;*/
     display: grid;
     grid-template-rows: 1fr auto;
     grid-template-columns: repeat(4, 1fr);
@@ -224,7 +259,7 @@ textarea {
     user-select: none;
 }
 
-.placeholder{
+.placeholder {
     height: 100px;
     width: 100%;
     border: 2px dashed white;
@@ -239,16 +274,16 @@ textarea {
     font-size: x-large;
     border-radius: var(--bordy) var(--bordy) 0 0;
     /*border: 2px solid var(--textDark);*/
-    background-color: var(--royal);
+    background-color: var(--buttonBg);
     border: 2px solid white;
     /*color: var(--textDark);*/
     padding: 2%;
-    color: white;
+    color: var(--buttonText);
     cursor: pointer;
     user-select: none;
 }
 
-#selectReader .fa-graduation-cap, .fa-pencil-square-o, .fa-trash-can{
+#selectReader .fa-graduation-cap, .fa-pencil-square-o, .fa-trash-can {
     cursor: pointer;
 }
 
@@ -262,17 +297,13 @@ textarea {
     grid-row: 2;
     font-size: medium;
     /*cursor: pointer;*/
-    color: var(--textLight);
-}
-
-.itemStats > .rarity {
-    color: #1f85de;
+    color: var(--bgText);
 }
 
 .readerlistitemvocab {
     grid-row: 2;
     margin: auto;
-    color: var(--textDark);
+    color: var(--bgText);
 
 }
 
@@ -324,8 +355,10 @@ textarea {
     background-color: #888c9edd;
     display: inline-block;
     border-radius: 10px;
-    padding: 10px;
+    padding: 7px;
     color: black;
+    left: 9px;
+    top: 34%;
 }
 
 .audioOptions input {
@@ -368,7 +401,7 @@ fieldset {
 }
 
 .clicked {
-    color: var(--life);
+    color: var(--accent2);
     font-weight: bold;
 }
 
@@ -423,7 +456,7 @@ input#llWord.llWord, input#tranny.tranny {
     margin-bottom: 10px;
 }
 
-#readerBlurb div {
+#createReaderBlurb div {
     position: relative;
     margin-top: 1.4rem;
     overflow: hidden;
@@ -434,7 +467,7 @@ input#llWord.llWord, input#tranny.tranny {
     overflow: hidden;
 }
 
-#readerBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
+#createReaderBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
     width: 50%;
     border: 2px solid gray;
     background: none;
@@ -446,15 +479,15 @@ input#llWord.llWord, input#tranny.tranny {
     outline: 0;
 }
 
-#readerBlurb div input:valid, #audiodiv + div textarea:valid {
+#createReaderBlurb div input:valid, #audiodiv + div textarea:valid {
     background: white;
 }
 
-#readerBlurb div input:focus, #audiodiv + div textarea:focus {
+#createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
     border-color: #f06d06;
 }
 
-#readerBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
+#createReaderBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
     background: #f06d06;
     color: white;
     font-size: 70%;
@@ -463,23 +496,23 @@ input#llWord.llWord, input#tranny.tranny {
     text-transform: uppercase;
 }
 
-#readerBlurb div label, #audiodiv + div textarea + label {
+#createReaderBlurb div label, #audiodiv + div textarea + label {
     transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
     position: absolute;
     color: #999;
     padding: 7px 6px;
 }
 
-#audiodiv + div textarea {
-    resize: vertical;
-    width: 90%;
-}
+/*#audiodiv + div textarea {*/
+/*    resize: vertical;*/
+/*    width: 90%;*/
+/*}*/
 
-#readerBlurb div input, #audiodiv + div textarea {
+#createReaderBlurb div input, #audiodiv + div textarea {
     padding: 12px 12px 12px 12px;
 }
 
-#readerBlurb div label {
+#createReaderBlurb div label {
     top: 0;
     bottom: 0;
     left: 0;
@@ -493,11 +526,11 @@ input#llWord.llWord, input#tranny.tranny {
     width: 100%;
 }
 
-#readerBlurb div input:focus, #audiodiv + div textarea:focus {
+#createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
     padding: 4px 6px 20px 6px;
 }
 
-#readerBlurb div input:focus + label {
+#createReaderBlurb div input:focus + label {
     top: 26%;
     margin-top: 16px;
 }
@@ -508,7 +541,7 @@ input#llWord.llWord, input#tranny.tranny {
     /*margin-top: 16px;*/
 }
 
-#text {
+#createReaderTextPanel {
     height: 30%;
 }
 
@@ -519,17 +552,16 @@ input#llWord.llWord, input#tranny.tranny {
     /*margin: 0 auto 20px auto;*/
     /*background-color: rgba(12, 12, 12, 0.5);*/
     /*color: white;*/
-    color: var(--textDark);
+    color: var(--bgText);
     margin: 8% 0;
 }
 
 #learning {
-    /*background-color: var(--sky);*/
-    /*border: darkgoldenrod solid 3px;*/
-    background-color: var(--bgDark);
+    background-color: rgba(0,0,0,0);
     padding-top: 100px;
     font-size: 4rem;
-    color: var(--life);
+    color: var(--accent2);
+    grid-column: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,7 +571,6 @@ input#llWord.llWord, input#tranny.tranny {
 
 .goalName {
     font-size: 2rem;
-    color: var(--life);
     font-family: "Maiandra GD", Georgia, sans-serif;
 }
 
@@ -586,6 +617,7 @@ input#llWord.llWord, input#tranny.tranny {
     margin-right: 3%;
     font-size: 1rem;
 }
+
 /*   Big Smartphones   */
 @media only screen and (max-device-width: 736px) and (orientation: portrait) {
 
@@ -698,7 +730,7 @@ input#llWord.llWord, input#tranny.tranny {
         width: 60%;
     }
 
-    #readerBlurb div {
+    #createReaderBlurb div {
         position: relative;
         margin-top: 1.4rem;
         overflow: hidden;
@@ -709,7 +741,7 @@ input#llWord.llWord, input#tranny.tranny {
         overflow: hidden;
     }
 
-    #readerBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
+    #createReaderBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
         width: 50%;
         border: 2px solid gray;
         background: none;
@@ -721,15 +753,15 @@ input#llWord.llWord, input#tranny.tranny {
         outline: 0;
     }
 
-    #readerBlurb div input:valid, #audiodiv + div textarea:valid {
+    #createReaderBlurb div input:valid, #audiodiv + div textarea:valid {
         background: white;
     }
 
-    #readerBlurb div input:focus, #audiodiv + div textarea:focus {
+    #createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
         border-color: #f06d06;
     }
 
-    #readerBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
+    #createReaderBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
         background: #f06d06;
         color: white;
         font-size: 70%;
@@ -738,7 +770,7 @@ input#llWord.llWord, input#tranny.tranny {
         text-transform: uppercase;
     }
 
-    #readerBlurb div label, #audiodiv + div textarea + label {
+    #createReaderBlurb div label, #audiodiv + div textarea + label {
         transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
         position: absolute;
         color: #999;
@@ -750,11 +782,11 @@ input#llWord.llWord, input#tranny.tranny {
         width: 90%;
     }
 
-    #readerBlurb div input, #audiodiv + div textarea {
+    #createReaderBlurb div input, #audiodiv + div textarea {
         padding: 12px 12px 12px 12px;
     }
 
-    #readerBlurb div label {
+    #createReaderBlurb div label {
         top: 0;
         bottom: 0;
         left: 0;
@@ -768,11 +800,11 @@ input#llWord.llWord, input#tranny.tranny {
         width: 100%;
     }
 
-    #readerBlurb div input:focus, #audiodiv + div textarea:focus {
+    #createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
         padding: 4px 6px 20px 6px;
     }
 
-    #readerBlurb div input:focus + label {
+    #createReaderBlurb div input:focus + label {
         top: 26%;
         margin-top: 16px;
     }
@@ -783,13 +815,21 @@ input#llWord.llWord, input#tranny.tranny {
         /*margin-top: 16px;*/
     }
 
-    #text {
+    #createReaderTextPanel {
         height: 30%;
     }
 
     input#llWord.llWord, input#tranny.tranny {
 
         margin-bottom: 50px;
+    }
+
+    #printerIcon {
+        display: none;
+    }
+
+    #downloadIcon {
+        display: none;
     }
 }
 
@@ -844,7 +884,7 @@ input#llWord.llWord, input#tranny.tranny {
         display: none;
     }
 
-    #readerBlurb div input:not([type=checkbox]) {
+    #createReaderBlurb div input:not([type=checkbox]) {
         width: 90%;
     }
 
@@ -973,11 +1013,9 @@ input#llWord.llWord, input#tranny.tranny {
 
     .item {
         margin: 0 auto;
-        /*margin-top: 40px;*/
-        /*width: 80%;*/
         display: flex;
         align-items: center;
-           }
+    }
 
     .readerlistitem {
         flex-grow: 1;
@@ -985,31 +1023,33 @@ input#llWord.llWord, input#tranny.tranny {
         grid-column: unset;
         font-size: x-large;
         border-radius: var(--bordy);
-        background-color: var(--royal);
-        border: 2px solid white;
+        background-color: var(--neutral);
+        /*border: 1px solid #7a0631;*/
+        border: unset;
         padding: 1rem;
-        color: white;
+        color: var(--buttonText);
         cursor: pointer;
         margin: 1rem;
+        box-shadow: rgba(0, 0, 0, 0.38) 0px 2px 4px;
     }
 
     .item > i {
-               font-size: 2rem;
+        font-size: 2rem;
     }
 
     .itemStats {
         grid-row: unset;
         /*cursor: pointer;*/
-        color: var(--textLight);
+        color: var(--bgText);
         font-size: large;
         line-height: 1.7rem;
-        min-width: 8rem;
+        min-width: 5rem;
     }
 
     .readerlistitemvocab {
         grid-row: unset;
         margin: auto;
-        color: var(--textDark);
+        color: var(--bgText);
 
     }
 
@@ -1074,8 +1114,8 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 /*   full HD Desktops   */
-@media only screen and (min-width: 1920px){
-    #selectReader{
+@media only screen and (min-width: 1920px) {
+    #selectReader {
         padding: 0 20%;
     }
 }
@@ -1086,24 +1126,38 @@ input#llWord.llWord, input#tranny.tranny {
 
 }
 
-@media print{
-    .audioOptions{
+@media print {
+
+
+
+    .audioOptions {
         display: none;
     }
-    .readerTitle{
+
+    .readerTitle {
         font-size: x-large;
     }
-    .readerPanel{
-        line-height: 100%;
+
+    .readerPanel {
+        line-height: 150%;
         font-size: large;
+        color: black;
     }
-    .readerPanel > .audioIcon{
+
+    .readerPanel > .audioIcon {
         display: none;
     }
-    #printerIcon{
+
+    #printerIcon {
         display: none;
     }
-    #downloadIcon{
+
+    #downloadIcon {
         display: none;
+    }
+
+    .clicked {
+        color: unset;
+        font-weight: unset;
     }
 }

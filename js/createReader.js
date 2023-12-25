@@ -71,7 +71,7 @@ function parseText() { let i;
     finalArrWithAudio = new Array();
     wordArr = new Array(); // array containing ONLY words, without any punctuation
     var w = 0;
-    var text = document.getElementById('text').value;
+    var text = document.getElementById('createReaderTextPanel').value;
     var paragraphArr = text.split(/[\r\n]/g);
     var tmpArr = paragraphArr;
     for (var q = tmpArr.length; q > 0; q--) {
@@ -146,9 +146,9 @@ function parseText() { let i;
     }
 
     if ($("#audioCheck").is(":checked")) {
-        $("#text").hide();
-        document.getElementById("result").innerHTML = checkString; // Don't worry. this text is never uploaded. It's just for the gui to make sound sprites.
-        $("#result").show();
+        $("#createReaderTextPanel").hide();
+        document.getElementById("audioSpriteSelectPanel").innerHTML = checkString; // Don't worry. this text is never uploaded. It's just for the gui to make sound sprites.
+        $("#audioSpriteSelectPanel").show();
     } else {
         uploadText();
     }
@@ -233,7 +233,7 @@ function finish() {
     for (var u = 0; u < makeSpriteArr.length; u++) {
         frog += makeSpriteArr[u];
     }
-    $("#result").hide();
+    $("#audioSpriteSelectPanel").hide();
     document.getElementById("superResult").innerHTML = frog;
     printObject("finalArrWithAudio", finalArrWithAudio);
     uploadText();
@@ -242,20 +242,15 @@ function finish() {
 //noinspection JSAnnotator
 function uploadText() {
     let plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
-    plainText = document.getElementById("text").value;
-    console.log("plainText is: " + plainText);
+    plainText = document.getElementById("createReaderTextPanel").value;
+    // console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
-
     printObject("finalArrWithAudio", finalArrWithAudio);
-
     puncParsedAudioJsonArray = finalArrWithAudio;
-
     let uniqueWordArr = Array.from(new Set(wordArr));
     let wordCount = uniqueWordArr.length;
-
-    console.info("\nsize of wordArr: " + wordArr.length);
-    console.info("size of uniqueWordArr: " + wordCount);
-
+    // console.info("\nsize of wordArr: " + wordArr.length);
+    // console.info("size of uniqueWordArr: " + wordCount);
     if (!textToEdit) textToEdit = 0;
     let uploadData = {};
     uploadData.userid = userid;
@@ -275,18 +270,13 @@ function uploadText() {
         // uploadData.audioFilename = sndArr[0];
     }
     printObject("data object uploaded by uploadText()", uploadData);
-
-    console.warn("upload data before JSON stringify: " + uploadData);
-
+    // console.warn("upload data before JSON stringify: " + uploadData);
     uploadData = JSON.stringify(uploadData);
-
-    console.warn("upload data after JSON stringify: " + uploadData);
-
-    console.log(uploadData);
+    // console.warn("upload data after JSON stringify: " + uploadData);
+    // console.log(uploadData);
     const myUrl = url2 + "/php/uploadText.php";
-
-    console.log("Editing text number: " + textToEdit);
-    console.log("upload url is: " + myUrl);
+    // console.log("Editing text number: " + textToEdit);
+    // console.log("upload url is: " + myUrl);
     $.ajax({
         url: myUrl,
         //headers: {"userid": userid}, // header must be enabled in cors filter on server
@@ -315,15 +305,17 @@ function cleanupCreateReader(){
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
     textToEdit = 0;
-    $("#result").empty();
+    $("#audioSpriteSelectPanel").empty();
     $("#superResult").empty();
-    document.getElementById("text").value = "";
-    $("#text").show();
+    document.getElementById("createReaderTextPanel").value = "";
+    $("#createReaderTextPanel").show();
     if(document.getElementById("audioOpt")){
         cleanupAudioOptAndDiv();
     }
+    $('#btnUploadText').show()
 }
 
+// This is the only usage, so why is it in it's own method???
 function cleanupAudioOptAndDiv(){
     document.getElementById("audioCheck").checked = false;
     $("#audiodiv").hide();
@@ -338,5 +330,5 @@ function pastey(e) { // says it is unused, but it is...
     printObject("clipboard data on paste", clipboardData);
     var pastedData = clipboardData.getData("text/plain");
     // alert(pastedData);
-    document.getElementById("text").setAttribute("pasted", pastedData);
+    document.getElementById("createReaderTextPanel").setAttribute("pasted", pastedData);
 }

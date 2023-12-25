@@ -17,7 +17,8 @@ $numrows = mysqli_num_rows($query);
 
 header('Access-Control-Allow-Origin: *');
 
-if ($numrows == 0) {
+if ($numrows < 1 ) {
+    echo "sql has failed. maybe has no group. Here is the sql \n$sql";
     exit("fail login");
 }
 list($userid, $username, $group) = mysqli_fetch_row($query);

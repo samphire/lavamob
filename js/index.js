@@ -5,6 +5,7 @@ var readers;
 var userid = 0;
 let group = 0;
 let username;
+let wordScore;
 var language;
 var dicurl;
 var goals;
@@ -85,7 +86,7 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
         url: url2 + "/php/goals.php?userid=" + userid
     }).done(function (resultjson) {
             goals = JSON.parse(resultjson);
-            console.log(resultjson);
+            console.log("resultjson from goals.php" + resultjson);
             let wordScore = 0;
 
             if (goals[0].goal_name !== 'blank') {
@@ -132,8 +133,8 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
                 // Value of learned and learning combined
                 wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
             }
-            if (!isNaN(wordscore)) {
-                document.querySelector("#learning").innerHTML = (wordScore);
+            if (!isNaN(wordScore)) {
+                document.querySelector("#learning").innerHTML = wordScore.toString(10);
             }
         }
     ).fail(function (jqXHR, status, err) {
@@ -212,6 +213,7 @@ function createReaderItem(data) {
     return mystr;
 }
 
+//TODO: implement grouping of readers
 function createGroupItem(data) {
     let mystr = `<div class='item'>&nbsp;<div class='readerlistitem'>${data.groupname}</div>`;
     mystr += `<div class='itemStats'>${data.wordcount} words<br><span class='rarity'>${data.rarityQuot} rarity</span></div>`;
@@ -237,7 +239,7 @@ function editReader(textid) {
         console.info(`text ${textid} fetched successfully`);
         selectedReaderObj = JSON.parse(resultjson);
         // printObject("Text For Edit", selectedReaderObj);
-        document.getElementById("text").value = selectedReaderObj.plainText;
+        document.getElementById("createReaderTextPanel").value = selectedReaderObj.plainText;
 
 
         // .innerText = resultjson.plainText;
@@ -611,9 +613,9 @@ function getLLData() {
 }
 
 function studyVocab() {
-    // console.log("In study vocab, makeVocaTest is next");
+    console.log("In study vocab, makeVocaTest is next");
     $("#vocaTest").empty();
-    llData = null;
+    // llData = null;
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
@@ -625,25 +627,41 @@ function studyVocab() {
             accepts: "application/json",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
+                console.log('ajax request header set');
             },
             success: function (data) {
+                console.log('in success function of studyVocab function line 633');
                 llData = data;
-                nowList = new Array();
+                nowList = [];
                 llData.list.forEach(function (el, idx) {
                     let arr = el.datenext.split(/[- :]/);
-                    let d = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]);
-                    // console.log("%%%%%%% " + d + " %%%%%%%");
+                    let incomingSQLDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); // constructor to make javascript date from mysql date
+                    // console.log(el.tranny);
+                    // console.log("Incoming MySQL date: %%%%%%% " + incomingSQLDate + " %%%%%%%");
                     const nowWithTimezone = getCurrentTimezoneDate(new Date());
-                    if (d < nowWithTimezone) {
+                    // console.log("date right now: %%%%%%%%%%" + nowWithTimezone + "%%%%%%%%%%%%%");
+                    // console.log('dateString: ' + nowWithTimezone.toDateString());
+                    // console.log('ISOString: ' + nowWithTimezone.toISOString());
+                    // console.log('localeDateString: ' + nowWithTimezone.toLocaleDateString());
+                    if (incomingSQLDate < nowWithTimezone) {
+                        // console.log('pushing' + el + 'to nowList');
                         nowList.push(el);
                     }
                 });
+                console.log("size of nowList is " + nowList.length);
                 makeVocaTest();
             }
+        }).done(function(){
+            console.log('success');
+        }).fail(function(){
+            console.log('error');
+        }).always(function(){
+            console.log('complete');
         });
     } else {
-        alert("There was llData, so now I am running from line 586 of index.js");
-        nowList = new Array();
+        // I don't think this EVER runs because llData was set to null above
+        console.log("There was llData, so now I am running from line 586 of index.js");
+        nowList = [];
         llData.list.forEach(function (el, idx) {
             var t = el.datenext.split(/[- :]/);
             var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
@@ -657,7 +675,7 @@ function studyVocab() {
 }
 
 function makeVocaTest() {
-    // console.log("In makeVocaTest. then promise is next");
+    console.log("In makeVocaTest. then promise is next");
 
     swal({
         text: "You have " + nowList.length + " items to review"

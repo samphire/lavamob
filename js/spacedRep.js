@@ -9,8 +9,8 @@ const soundFinished = new buzz.sound("assets/sound/perfect.mp3");
 let currentVocabIndex = 0;  //global variable to be used by functions in vocab test. corresponds to the index of the item in testList array, which is a whole json object representing the entirety of the database table fields.
 
 function test(list) {
-    console.log("In test");
-    console.log("list length is: " + list.length);
+    // console.log("In test");
+    // console.log("list length is: " + list.length);
     testList = list;// all the elements for this date
 
     let testListtmp = testList.slice(0);
@@ -30,21 +30,23 @@ function test(list) {
     // TODO  MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
 
     const flashCardList = testListtmp.filter((val) => val.repnum === 0);
+    // console.log("size of flashcardlist is " + flashCardList.length);
     const nonFlashCardList = testListtmp.filter((val) => val.repnum !== 0);
+    // console.log("size of non-flashcardlist is " + nonFlashCardList.length);
 
-    console.log("Right... ffs. flashCardList should contain five items and sessionList should have none.\nFlashcardList: ");
-    console.log(flashCardList);
-    console.log("sessionList: ");
-    console.log(sessionList);
+    // console.log("Right... ffs. flashCardList should contain five items and sessionList should have none.\nFlashcardList: ");
+    // console.log(flashCardList);
+    // console.log("sessionList: ");
+    // console.log(sessionList);
 
     const flashCardLimit = flashCardList.length < flashCardsToInclude ? flashCardList.length : flashCardsToInclude;
     console.log("Limit of flash cards is " + flashCardLimit);
 
     for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
-        console.log("Flashcardlist: ");
-        console.log(flashCardList);
+        // console.log("Flashcardlist: ");
+        // console.log(flashCardList);
         let rand = Math.floor(Math.random() * flashCardList.length);
-        console.log("rand: " + rand + ", " + flashCardList[rand]);
+        // console.log("rand: " + rand + ", " + flashCardList[rand]);
         sessionList.push(flashCardList.splice(rand, 1)[0]);
     }
 
@@ -379,23 +381,19 @@ function endTest() {
     updateWordscore();
 }
 
-function calcDateNext(daysInterval) { //returns a string
-    // console.log("in calcDateNext. daysInterval is " + daysInterval);
+function calcDateNext(daysInterval) { //returns a MySQL date string for use in MySQL queries
     if (daysInterval > 9) {
         const oldInterval = daysInterval;
         const randy = Math.random() * daysInterval / 5;
         daysInterval = daysInterval - daysInterval / 10 + randy;
-        alert("daysInterval is " + oldInterval + ". randy is " + randy + ". New daysInterval is " + daysInterval);
     }
     let toAdd = daysInterval * 24 * 60 * 60 * 1000; // convert to milliseconds
     const todaySQLDate = getCurrentTimezoneDate(new Date()); // converts today's date to include timezone offset
     let nowms = todaySQLDate.getTime(); // converts to milliseconds
-    // console.log("today is " + todaySQLDate);
     let newDateInMilliseconds = nowms + toAdd; // adds the interval
     let newDate = new Date(newDateInMilliseconds); // converts from milliseconds to date object
     newDate.setHours(5);
     newDate.setMinutes(0);
-    console.log("New Date \(should be 5 in the morning\) is: " + newDate);
 
     return newDate.getFullYear() + "-" + (newDate.getMonth() + 1).toString().padStart(2, '0') + "-"
         + newDate.getDate().toString().padStart(2, '0') + " " + newDate.getHours().toString().padStart(2, '0') + ":"

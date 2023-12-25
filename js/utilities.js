@@ -18,14 +18,15 @@ function printObject(msg, obj) {
 }
 
 function getCurrentTimezoneDate(date) { //returns date object
-    // console.log("in getCurrentTimezoneDateTime");
-    const offset = new Date().getTimezoneOffset();
-    // console.log(offset);
-    const dateWithOffset = date.getTime() - offset * 60 * 1000;
-    // console.log(dateWithOffset);
-    let dateWithTimezone = new Date(dateWithOffset).toJSON().slice(0, 19).replace('T', ' ');
-    // console.log(dateWithTimezone + ": " + typeof dateWithTimezone);
-    return new Date(dateWithTimezone);
+    // const offset = new Date().getTimezoneOffset();
+    // const dateWithOffset = date.getTime() - offset * 60 * 1000;
+    // let dateWithTimezone = new Date(dateWithOffset).toJSON().slice(0, 19).replace('T', ' ');
+    // return new Date(dateWithTimezone);
+return date;
+//TODO get rid of this method, just delete it. There are only two usags
+    // This method is a joke. It is only used ONCE
+    // It takes a perfectly good date object, changes its value according to timezone, then assumes that a new date object has 'T' in its value.
+
 }
 
 function shuffle(a) {

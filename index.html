@@ -251,7 +251,7 @@
     <h1>Select Reader</h1>
 </section>
 <section id="createReader" class="hideo">
-    <div id="readerBlurb">
+    <div id="createReaderBlurb">
         <div id="audioOpt">Audio?&nbsp;<input type="checkbox" id="audioCheck"
                                               onClick="
                                        if(!$('#audiodiv').is(':visible'))
@@ -286,10 +286,10 @@
     </div>
 
     <div>
-        <textarea id="text" contenteditable="true" onpaste="pastey(event)" required></textarea>
-        <label for="text">Paste or Type here</label>
+        <textarea id="createReaderTextPanel" contenteditable="true" onpaste="pastey(event)" required></textarea>
+        <label for="createReaderTextPanel">Paste or Type here</label>
     </div>
-    <div id="result" class="textPanel"></div>
+    <div id="audioSpriteSelectPanel" class="textPanel"></div>
     <div id="superResult"></div>
     <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="parseText()" id="btnUploadText"></i>
 
