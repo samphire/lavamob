@@ -614,6 +614,7 @@ function getLLData() {
 
 function studyVocab() {
     console.log("In study vocab, makeVocaTest is next");
+    console.log(llData);
     $("#vocaTest").empty();
     // llData = null;
     if (!llData) {
