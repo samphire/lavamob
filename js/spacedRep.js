@@ -1,6 +1,8 @@
 let testList, doneList, wrongList;
-const numPerSession = 7;
-const flashCardsToInclude = 5;
+// const numPerSession = 7;
+const numPerSession = 5;
+// const flashCardsToInclude = 5;
+const flashCardsToInclude = 3;
 let randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
 const soundRight = new buzz.sound("assets/sound/correct.mp3");
@@ -9,8 +11,6 @@ const soundFinished = new buzz.sound("assets/sound/perfect.mp3");
 let currentVocabIndex = 0;  //global variable to be used by functions in vocab test. corresponds to the index of the item in testList array, which is a whole json object representing the entirety of the database table fields.
 
 function test(list) {
-    // console.log("In test");
-    // console.log("list length is: " + list.length);
     testList = list;// all the elements for this date
 
     let testListtmp = testList.slice(0);
@@ -30,33 +30,18 @@ function test(list) {
     // TODO  MAKE ROUTINE FOR CASE WHERE THERE ARE FEWER THAN 7 WORDS
 
     const flashCardList = testListtmp.filter((val) => val.repnum === 0);
-    // console.log("size of flashcardlist is " + flashCardList.length);
     const nonFlashCardList = testListtmp.filter((val) => val.repnum !== 0);
-    // console.log("size of non-flashcardlist is " + nonFlashCardList.length);
-
-    // console.log("Right... ffs. flashCardList should contain five items and sessionList should have none.\nFlashcardList: ");
-    // console.log(flashCardList);
-    // console.log("sessionList: ");
-    // console.log(sessionList);
 
     const flashCardLimit = flashCardList.length < flashCardsToInclude ? flashCardList.length : flashCardsToInclude;
     console.log("Limit of flash cards is " + flashCardLimit);
 
     for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
-        // console.log("Flashcardlist: ");
-        // console.log(flashCardList);
         let rand = Math.floor(Math.random() * flashCardList.length);
-        // console.log("rand: " + rand + ", " + flashCardList[rand]);
         sessionList.push(flashCardList.splice(rand, 1)[0]);
     }
 
     for (let q = 0; q < numPerSession; q++) {
         let rand = Math.floor(Math.random() * nonFlashCardList.length);
-        // let myItem = nonFlashCardList.splice(rand, 1)[0]; //removes items from the array testListtmp
-        // console.log(sessionList[0]);
-        // console.log("%%% myItem %%%");
-        // console.log(myItem);
-        // sessionList.push(myItem);
         if (nonFlashCardList.length > 0) {
             sessionList.push(nonFlashCardList.splice(rand, 1)[0]);
         }
@@ -72,11 +57,8 @@ function test(list) {
             if (idx === 0) {
                 currentVocabIndex = val.idxInTestList;
             }
-
             let idxToPlace = 0;
-
             console.log(val);
-
             switch (val.repnum) {
                 default:
                     console.log("This is default in the switch statement");
@@ -337,20 +319,14 @@ function checkResult(event, result, index) { // this is actually the main routin
     event.preventDefault();
     event.stopImmediatePropagation();
     if (result) {
-        // alert("right");
         soundRight.play();
         doneList.push(testList[index]);
-        // updateItem(true, index);
     } else {
-        // alert("wrong");
         soundWrong.play();
         alert(testList[index].word + "\n" + testList[index].tranny);
         wrongList.push(testList[index]);
-        // updateItem(false, index);
     }
     let $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();
-    // $el.hide();
-    // alert(($el).next().length);
     goToNext($el);
 }
 
@@ -373,6 +349,9 @@ function endTest() {
     wrongList.forEach((val, idx) => {
         updateItem(false, val.idxInTestList)
     })
+
+    console.log("All processing for end of Test Vocabulary is finished. Here is the nowList for you to check that previous items are not included");
+    console.log(nowList);
 
     $("section").not("#welcome").hide();
     $("#welcome").show();
@@ -401,6 +380,11 @@ function calcDateNext(daysInterval) { //returns a MySQL date string for use in M
 }
 
 function updateItem(right, idx) {
+
+    // remove item from nowList
+
+    nowList = nowList.filter((el)=> el.idxInTestList != idx);
+
     let myEl = testList[idx];
     // console.log("updateItem: " + printObject("before updating", testList[idx]));
     console.log("in updateItem. word is " + myEl.word + "\nrepnum is " + myEl.repnum + ", which will be incremented IF right");

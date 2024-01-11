@@ -519,7 +519,7 @@ function studyReader() {
     $("#selectReader").show();
 
     const section = document.getElementById('selectReader');
-    section.querySelectorAll('.item').forEach((item)=>{
+    section.querySelectorAll('.item').forEach((item) => {
         console.log('adding event listeners');
         item.addEventListener('mousedown', mouseDownHandler);
     });
@@ -616,7 +616,6 @@ function studyVocab() {
     console.log("In study vocab, makeVocaTest is next");
     console.log(llData);
     $("#vocaTest").empty();
-    // llData = null;
     if (!llData) {
         console.log("There was no llData. Downloading now...");
         $.ajax({
@@ -637,40 +636,25 @@ function studyVocab() {
                 llData.list.forEach(function (el, idx) {
                     let arr = el.datenext.split(/[- :]/);
                     let incomingSQLDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); // constructor to make javascript date from mysql date
-                    // console.log(el.tranny);
-                    // console.log("Incoming MySQL date: %%%%%%% " + incomingSQLDate + " %%%%%%%");
                     const nowWithTimezone = getCurrentTimezoneDate(new Date());
-                    // console.log("date right now: %%%%%%%%%%" + nowWithTimezone + "%%%%%%%%%%%%%");
-                    // console.log('dateString: ' + nowWithTimezone.toDateString());
-                    // console.log('ISOString: ' + nowWithTimezone.toISOString());
-                    // console.log('localeDateString: ' + nowWithTimezone.toLocaleDateString());
                     if (incomingSQLDate < nowWithTimezone) {
-                        // console.log('pushing' + el + 'to nowList');
                         nowList.push(el);
                     }
                 });
                 console.log("size of nowList is " + nowList.length);
                 makeVocaTest();
             }
-        }).done(function(){
+        }).done(function () {
             console.log('success');
-        }).fail(function(){
+        }).fail(function () {
             console.log('error');
-        }).always(function(){
+        }).always(function () {
             console.log('complete');
         });
     } else {
-        // I don't think this EVER runs because llData was set to null above
-        console.log("There was llData, so now I am running from line 586 of index.js");
-        nowList = [];
-        llData.list.forEach(function (el, idx) {
-            var t = el.datenext.split(/[- :]/);
-            var datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
-            var d = Date.parse(datestr);
-            if (d < Date.now()) {
-                nowList.push(el);
-            }
-        });
+        console.log("There was llData");
+        // reusing nowList. LLData is untouched
+        console.log("size of nowList is " + nowList.length);
         makeVocaTest();
     }
 }
