@@ -1,6 +1,7 @@
 <?php
 include ("session.inc");
-$openaiKey = "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";
+include ("api.inc");
+
 
 $headers = array(
 'Content-Type: application/json',
