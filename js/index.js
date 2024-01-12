@@ -19,7 +19,8 @@ var howl;
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 var readerYScroll = 0;
-
+const apiKey = "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";
+const openaiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Replace with the appropriate API endpoint
 function login() {
     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
     console.log("In login()");
@@ -312,11 +313,6 @@ function downloadReader() {
         shit = eval(selectedReaderObj.uniqueInfoArray);
         selectedReaderObj.uniqueInfoArray = shit;
 
-        // //*** using glassfish ***
-        // selectedReaderObj = resultjson;
-
-
-        // printObject("All Properties of resultjson", selectedReaderObj);
         //Initialize sound
         howl = null;
         howlSpriteObj = null;
@@ -397,6 +393,7 @@ function downloadReader() {
                 "<input type='radio' name='audioOptions'>&nbsp;&nbsp;Stop!</div><br>");
         }
         $('#reader .readerPanel').append(selectedReaderText);
+        $('#reader .readerPanel').append("<br><br><br><br><br>");
         document.documentElement.scrollTop = readerYScroll;
     }).fail(function (jqXHR, status, err) {
         console.log("failed ajax call in getReader");

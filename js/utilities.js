@@ -22,7 +22,7 @@ function getCurrentTimezoneDate(date) { //returns date object
     // const dateWithOffset = date.getTime() - offset * 60 * 1000;
     // let dateWithTimezone = new Date(dateWithOffset).toJSON().slice(0, 19).replace('T', ' ');
     // return new Date(dateWithTimezone);
-return date;
+    return date;
 //TODO get rid of this method, just delete it. There are only two usags
     // This method is a joke. It is only used ONCE
     // It takes a perfectly good date object, changes its value according to timezone, then assumes that a new date object has 'T' in its value.
@@ -158,4 +158,30 @@ function removeFromDOM(id) {
 function calcValForGoal(learned, learning, avgRepnum) {
     console.log("learned: " + learned + ", learning: " + learning + ", avgRepnum: " + avgRepnum);
     return Math.floor(parseInt(learned) + (parseInt(learning) * parseFloat(avgRepnum) * 0.1));
+}
+
+async function getExampleSentence(promptWord) {
+    try {
+        const response = await fetch(openaiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo-1106",
+                // model: "gpt-4-1106-preview",
+                messages: [{
+                    role: 'user',
+                    content: `give me an example sentence containing the word ${promptWord}`
+                }],
+                max_tokens: 150
+            })
+        });
+        const responseData = await response.json();
+        console.log("openAI response is: " + responseData.choices[0].message.content);
+        return responseData.choices[0].message.content;
+    } catch (error) {
+        console.error('Error making API request:', error.message);
+    }
 }

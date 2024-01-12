@@ -186,34 +186,40 @@ function test(list) {
     $(".testItem:first-of-type").toggleClass("visible").find(".inputAnswer input").focus();
 }
 
-function manageLL(type) {
+async function manageLL(type) {
     let myEl = testList[currentVocabIndex];
     console.log(myEl);
+    let $el = $(".testItem.visible");
     switch (type) {
         case 1: // hard... lower the repnum and the EF
+            swal("EF changed from " + Math.round(myEl.EF * 10) / 10 + " to " + Math.round((myEl.EF / .2)) / 10 + " and repnum from " + myEl.repnum + " to " + Math.ceil(myEl.repnum / 2));
             myEl.EF = myEl.EF / 2;
             myEl.repnum = Math.ceil(myEl.repnum / 2);
             break;
         case 2: // easy... increase the EF
+            swal("EF changed from " + Math.round(myEl.EF * 10) / 10 + " to " + Math.round((myEl.EF * 20)) / 10 + " and repnum from " + myEl.repnum + " to " + (myEl.repnum + 2));
             myEl.EF = myEl.EF * 2;
             myEl.repnum += 2;
             break;
         case 3:
+            swal(myEl.word + " has been deleted from the test system and added to the 'learned' list");
             removeFromDOM(currentVocabIndex);
             deleteAndAdd(myEl);
+            goToNext($el);
             break;
         case 4:
+            swal(myEl.word + " has been removed from the test list");
             removeFromDOM(currentVocabIndex);
             deleteLLItem(myEl);
+            goToNext($el);
             break;
-        case 5: // open up the text within which this word occurs and, if possible, zoom in on the actual place where it occurs and/or open a web search on the word and/or naver dictionary.
-            alert("type 5 not yet implemented. sorry...");
+        case 5: // AI example sentences
+            const aiResponse = await getExampleSentence(myEl.word);
+            swal(aiResponse);
             break;
     }
     $(".slidey.slidey-active").toggleClass("slidey-active");
-    let $el = $(".testItem.visible");
-
-    goToNext($el);
+    // goToNext($el);
 }
 
 function makeFlashCard(val) {
@@ -383,7 +389,7 @@ function updateItem(right, idx) {
 
     // remove item from nowList
 
-    nowList = nowList.filter((el)=> el.idxInTestList != idx);
+    nowList = nowList.filter((el) => el.idxInTestList != idx);
 
     let myEl = testList[idx];
     // console.log("updateItem: " + printObject("before updating", testList[idx]));
