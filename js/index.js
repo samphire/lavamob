@@ -19,7 +19,6 @@ var howl;
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 var readerYScroll = 0;
-const apiKey = "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";
 const openaiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Replace with the appropriate API endpoint
 function login() {
     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");

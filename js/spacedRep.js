@@ -215,6 +215,7 @@ async function manageLL(type) {
             break;
         case 5: // AI example sentences
             const aiResponse = await getExampleSentence(myEl.word);
+            console.log("In manageLL number 5 openai " + aiResponse);
             swal(aiResponse);
             break;
     }

@@ -162,26 +162,18 @@ function calcValForGoal(learned, learning, avgRepnum) {
 
 async function getExampleSentence(promptWord) {
     try {
-        const response = await fetch(openaiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify({
-                model: "gpt-3.5-turbo-1106",
-                // model: "gpt-4-1106-preview",
-                messages: [{
-                    role: 'user',
-                    content: `give me an example sentence containing the word ${promptWord}`
-                }],
-                max_tokens: 150
-            })
+        $.ajax({
+            type: "GET",
+            crossDomain: true,
+            url: url2 + "/php/openai.php?word=" + promptWord
+        }).done(function (resultjson) {
+                resultjson = JSON.parse(resultjson);
+                return resultjson.choices[0].message.content;
+            }
+        ).fail(function (jqXHR, status, err) {
+            console.log("failed ajax call to openai");
         });
-        const responseData = await response.json();
-        console.log("openAI response is: " + responseData.choices[0].message.content);
-        return responseData.choices[0].message.content;
-    } catch (error) {
-        console.error('Error making API request:', error.message);
+    } catch(error){
+        console.log('oops');
     }
 }
