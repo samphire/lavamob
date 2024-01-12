@@ -1,11 +1,12 @@
 <?php
 include ("session.inc");
-$openaiKey = "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";
+$openaiKey = "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";
 
 $headers = array(
 'Content-Type: application/json',
 'Authorization: Bearer '.$openaiKey
 );
+
 
 $data = array(
     'model' => 'gpt-3.5-turbo-1106',
@@ -13,7 +14,7 @@ $data = array(
     'messages' => array(
             array(
                 'role' => 'user',
-                'content' => 'give me an example sentence containing the word'.$_GET['word']
+                'content' => 'give me an example sentence containing the word '.$_GET['word']
             )
     )
 );
