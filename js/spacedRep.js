@@ -216,6 +216,17 @@ async function manageLL(type) {
         case 5: // AI example sentences
             const aiResponse = await getExampleSentence(myEl.word);
             console.log("In manageLL number 5 openai " + aiResponse);
+            // make entry in the activity log table
+                        jaxy(
+                            "php/activityLog.php", "POST",
+                            {
+                                userid: userid,
+                                activityType: 7,
+                                extraInfo: myEl.word
+                            },
+                            "Updated activity log for voca test",
+                            "Problem updating activity log for voca test"
+                        );
             swal(aiResponse);
             break;
     }

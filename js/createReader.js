@@ -287,6 +287,18 @@ function uploadText() {
         crossDomain: true,
         success: function (data) {
             console.log("Uploaded Text Successfully");
+            // make entry in the activity log table
+            jaxy(
+                "php/activityLog.php", "POST",
+                {
+                    userid: userid,
+                    activityType: 1,
+                    extraInfo: wordCount
+                },
+                "Updated activity log for voca test",
+                "Problem updating activity log for voca test"
+            );
+
             swal("Text Uploaded Successfully").then(function () {
                 getReaderInfo();
                 studyReader();

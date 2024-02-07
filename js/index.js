@@ -538,7 +538,8 @@ function getVocab(textid) {
         "php/activityLog.php", "POST",
         {
             userid: userid,
-            activityType: 3
+            activityType: 3,
+            extraInfo: textid
         },
         "Updated activity log for voca test",
         "Problem updating activity log for voca test"
@@ -560,10 +561,10 @@ function getVocab(textid) {
             llData = data;
             let thisTextLL = [];
             llData.list.forEach(function (el) {
-                console.log(el);
-                console.log(el.textid);
+                // console.log(el);
+                // console.log(el.textid);
                 if (el.textid === textid) { // only items in selectedtext
-                    console.log("this one is in our text");
+                    // console.log("this one is in our text");
                     thisTextLL.push(el);
                 }
             });
