@@ -1,5 +1,6 @@
 <?php
 global $conn;
+header('Access-Control-Allow-Origin: *');
 $conn = mysqli_connect("localhost", "root", "Fk!i=a0@:K", "reader3") or die('Error connecting to mysql for conn');
 $conn2 = mysqli_connect("localhost", "root", "Fk!i=a0@:K", "optikon") or die('Error connecting to mysql for conn2');
 mysqli_query($conn, "SET NAMES utf8");
@@ -15,7 +16,6 @@ ON `groups`.group_id = bob.group_id;";
 $query = mysqli_query($conn, $sql) or die("cannot log in from php. something error");
 $numrows = mysqli_num_rows($query);
 
-header('Access-Control-Allow-Origin: *');
 
 if ($numrows < 1 ) {
     echo "sql has failed. maybe has no group. Here is the sql \n$sql";

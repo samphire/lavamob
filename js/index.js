@@ -297,7 +297,7 @@ function downloadReader() {
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Accept', 'application/json');
         },
-        url: url2 + "/php/getText.php?textid=" + selectedTextid
+        url: url2 + "/php/getText.php?textid=" + selectedTextid + "&userid=" + userid
         // url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
 
@@ -533,6 +533,18 @@ function createReader(textid) {
 
 function getVocab(textid) {
     console.log("In getVocab");
+    // make entry in the activity log table
+    jaxy(
+        "php/activityLog.php", "POST",
+        {
+            userid: userid,
+            activityType: 3
+        },
+        "Updated activity log for voca test",
+        "Problem updating activity log for voca test"
+    );
+
+
     $.ajax({
         url: url2 + "/php/getLL.php",
         type: "GET",

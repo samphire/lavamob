@@ -40,6 +40,10 @@
 
 }
 
+.swal2-modal{
+    font-family: "Maiandra GD", Georgia, sans-serif;
+}
+
 .readerPanel {
     background-color: var(--bg);
     text-align: left;
@@ -63,7 +67,7 @@
         font-size: xx-large;
     }
     .fa-graduation-cap{
-        font-size: xx-large; 
+        font-size: xx-large;
     }
 }
 

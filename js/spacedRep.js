@@ -357,6 +357,17 @@ function endTest() {
         updateItem(false, val.idxInTestList)
     })
 
+    // make entry in the activity log table
+    jaxy(
+        "php/activityLog.php", "POST",
+        {
+            userid: userid,
+            activityType: 4
+        },
+        "Updated activity log for voca test",
+        "Problem updating activity log for voca test"
+    );
+
     console.log("All processing for end of Test Vocabulary is finished. Here is the nowList for you to check that previous items are not included");
     console.log(nowList);
 

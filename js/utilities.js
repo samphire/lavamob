@@ -161,9 +161,6 @@ function calcValForGoal(learned, learning, avgRepnum) {
 }
 
 async function getExampleSentence(promptWord) {
-
-    alert(promptWord);
-
     const response = await fetch(url2 + "/php/openai.php?word=" + promptWord,
         {
             method: 'GET',
@@ -175,23 +172,6 @@ async function getExampleSentence(promptWord) {
 
     const responseData = await response.text();
     const myResponse = JSON.parse(responseData);
-    console.log(myResponse);
-    console.log(typeof myResponse);
 return myResponse.choices[0].message.content;
-    //
-    // try {
-    //     $.ajax({
-    //         type: "GET",
-    //         crossDomain: true,
-    //         url:
-    //     }).done(function (resultjson) {
-    //             resultjson = JSON.parse(resultjson);
-    //             return resultjson.choices[0].message.content;
-    //         }
-    //     ).fail(function (jqXHR, status, err) {
-    //         console.log("failed ajax call to openai");
-    //     });
-    // } catch (error) {
-    //     console.log('oops');
-    // }
+
 }

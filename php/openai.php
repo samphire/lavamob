@@ -2,12 +2,10 @@
 include ("session.inc");
 include ("api.inc");
 
-
 $headers = array(
 'Content-Type: application/json',
 'Authorization: Bearer '.$openaiKey
 );
-
 
 $data = array(
     'model' => 'gpt-3.5-turbo-1106',
