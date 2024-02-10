@@ -150,8 +150,7 @@ function updateWordscore() {
     }).done(function (resultjson) {
             goals = JSON.parse(resultjson);
             const wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
-
-            if (!isNaN(wordscore)) {
+            if (!isNaN(wordScore)) {
                 document.querySelector("#learning").innerHTML = (wordScore);
             }
         }
