@@ -293,7 +293,7 @@ function uploadText() {
                 {
                     userid: userid,
                     activityType: 1,
-                    extraInfo: wordCount
+                    extraInfo: 1
                 },
                 "Updated activity log for voca test",
                 "Problem updating activity log for voca test"

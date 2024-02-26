@@ -222,7 +222,7 @@ async function manageLL(type) {
                             {
                                 userid: userid,
                                 activityType: 7,
-                                extraInfo: myEl.word
+                                extraInfo: 1
                             },
                             "Updated activity log for voca test",
                             "Problem updating activity log for voca test"
@@ -373,7 +373,8 @@ function endTest() {
         "php/activityLog.php", "POST",
         {
             userid: userid,
-            activityType: 4
+            activityType: 4,
+            extraInfo: 1
         },
         "Updated activity log for voca test",
         "Problem updating activity log for voca test"

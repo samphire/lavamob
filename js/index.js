@@ -538,7 +538,7 @@ function getVocab(textid) {
         {
             userid: userid,
             activityType: 3,
-            extraInfo: textid
+            extraInfo: 1
         },
         "Updated activity log for voca test",
         "Problem updating activity log for voca test"
