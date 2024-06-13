@@ -72,6 +72,9 @@ function parseText() { let i;
     wordArr = new Array(); // array containing ONLY words, without any punctuation
     var w = 0;
     var text = document.getElementById('createReaderTextPanel').value;
+
+    text = text.replaceAll(/(?<=\S)—(?=\S)/g, ' — '); // deal with the annoying character in Shiloh.pdf
+
     var paragraphArr = text.split(/[\r\n]/g);
     var tmpArr = paragraphArr;
     for (var q = tmpArr.length; q > 0; q--) {
@@ -90,7 +93,7 @@ function parseText() { let i;
             endPuncArr = new Array();
 
             var startPunc = function recursiveStartPunc(myStr) {
-                if (myStr.slice(0, 1).search(/[\`\~\#\(\{\[\"\'\<\u2026\u201c]/g) > -1) {
+                if (myStr.slice(0, 1).search(/[\`\~\#\(\{\[\"\'\<\u2026\u201c]/g) > -1) { // u2026 is horizontal elipsis. u201c is left double quote
                     finalArr[w].push(myStr.slice(0, 1));
                     return startPunc(myStr.slice(1));
                 }

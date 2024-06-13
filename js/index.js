@@ -1,6 +1,7 @@
 /**
  * Created by matthew on 7/28/2016.
  */
+
 var readers;
 var userid = 0;
 let group = 0;
@@ -426,7 +427,46 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         var tom = llData.list.find(function (currentValue, index, arr) {
             return parseInt(currentValue.wordid) === parseInt(wordid);
         });
-        swal(tom.word + "\n" + tom.tranny);
+        // swal(tom.word + "\n" + tom.tranny);
+
+        swal({
+            title: `${tom.word} </br> ${tom.tranny}`,
+            html: "이것을 삭제하시겠습니까?",
+            showConfirmButton: true,
+            showCancelButton: true
+        })
+            .then((value) => {
+                swal({
+                    title: '확실합니까?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '해보자!'
+                })
+                    .then((result) => {
+                        if (result) {
+                            fetch(url2 + '/php/llDelete.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: 'wordid=' + encodeURIComponent(tom.wordid) + '&userid=' + encodeURIComponent(tom.userid)
+                            })
+                                .then(response => response.text())
+                                .then(data => {
+                                    swal({
+                                        title: '항목이 삭제되었습니다.',
+                                        timer: 1500,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        icon: 'success'
+                                    });
+                                    $(".readerPanel").remove();
+                                    getLL(selectedTextid);
+                                });
+                        }
+                    });
+            });
+
         return;
     }
 
