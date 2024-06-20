@@ -13,7 +13,7 @@ var goals;
 var selectedTextid;
 var selectedReaderObj;
 var selectedReaderText;
-var llData, nowList;
+let llData, nowList; //llData is all learninglist data. nowlist is the subset that is available at this date.
 var naverPopup;
 var howlSpriteObj;
 var howl;
@@ -660,6 +660,19 @@ function getLLData() {
     }
 }
 
+function makeNowList() {
+    nowList = [];
+    llData.list.forEach(function (el, idx) {
+        let arr = el.datenext.split(/[- :]/);
+        let incomingSQLDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); // constructor to make javascript date from mysql date
+        const nowWithTimezone = getCurrentTimezoneDate(new Date());
+        if (incomingSQLDate < nowWithTimezone) {
+            nowList.push(el);
+        }
+    });
+    console.log("size of nowList is " + nowList.length);
+}
+
 function studyVocab() {
     console.log("In study vocab, makeVocaTest is next");
     console.log(llData);
@@ -680,16 +693,7 @@ function studyVocab() {
             success: function (data) {
                 console.log('in success function of studyVocab function line 633');
                 llData = data;
-                nowList = [];
-                llData.list.forEach(function (el, idx) {
-                    let arr = el.datenext.split(/[- :]/);
-                    let incomingSQLDate = new Date(arr[0], arr[1] - 1, arr[2], arr[3], arr[4], arr[5]); // constructor to make javascript date from mysql date
-                    const nowWithTimezone = getCurrentTimezoneDate(new Date());
-                    if (incomingSQLDate < nowWithTimezone) {
-                        nowList.push(el);
-                    }
-                });
-                console.log("size of nowList is " + nowList.length);
+                makeNowList();
                 makeVocaTest();
             }
         }).done(function () {
@@ -698,11 +702,11 @@ function studyVocab() {
             console.log('error');
         }).always(function () {
             console.log('complete');
-        });
+        });w
     } else {
         console.log("There was llData");
         // reusing nowList. LLData is untouched
-        console.log("size of nowList is " + nowList.length);
+        makeNowList();
         makeVocaTest();
     }
 }
@@ -725,7 +729,7 @@ function makeVocaTest() {
         console.log("push state page 3 vocab History object size is " + History.length);
         $("section").hide();
         $("#vocaTest").show();
-        test(nowList); //why am I passing nowList? It is a global variable.
+        test(nowList);
     });
 }
 
