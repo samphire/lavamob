@@ -256,7 +256,7 @@ function editReader(textid) {
 
 function deleteReader(node, textid) {
     swal({
-        title: 'Are you sure you want to remove Reader id ' + textid + '?',
+        title: 'Are you sure you want to remove Reader id ' + textid + ', ' + node.name + '?',
         text: "You won't be able to revert this!",
         type: 'warning',
         showCancelButton: true,

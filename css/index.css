@@ -169,7 +169,8 @@
     color: var(--bgText);
     display: inline-block;
     margin-bottom: 20px;
-    font-size: 1.2rem;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 #learned {
@@ -722,11 +723,11 @@ input#llWord.llWord, input#tranny.tranny {
         min-height: 100%;
     }
 
-    .swal2-modal button.styled {
-        padding: 5px 16px;
-        font-size: 12px;
-        margin-right: 20%;
-    }
+    /*.swal2-modal button.styled {*/
+    /*    padding: 5px 16px;*/
+    /*    font-size: 12px;*/
+    /*    margin-right: 20%;*/
+    /*}*/
 
     .llWord, .tranny {
         display: block;
@@ -893,11 +894,11 @@ input#llWord.llWord, input#tranny.tranny {
     }
 
 
-    .swal2-modal button.styled {
-        padding: 5px 16px;
-        font-size: 12px;
-        margin-right: 20%;
-    }
+    /*.swal2-modal button.styled {*/
+    /*    padding: 5px 16px;*/
+    /*    font-size: 12px;*/
+    /*    margin-right: 20%;*/
+    /*}*/
 
     .llWord, .tranny {
         display: block;
@@ -957,9 +958,9 @@ input#llWord.llWord, input#tranny.tranny {
         font-size: small;
     }
 
-    .swal2-modal button.styled {
-        margin: 15px auto 5px 30px;
-    }
+    /*.swal2-modal button.styled {*/
+    /*    margin: 15px auto 5px 30px;*/
+    /*}*/
 
     button {
         transform: scale(1);

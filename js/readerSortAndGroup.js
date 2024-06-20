@@ -4,9 +4,12 @@ let isDraggingStarted = false;
 let isTargetTime = false;
 let placeholder;
 let mousePositionInEl;
+let draggingEleWidth;
 
-const mouseDownHandler = function (e) {
+const mouseDownHandler = function (e) {  // captures whatever is clicked, whether reordering or not
     draggingEle = e.currentTarget;
+    draggingEleWidth = e.currentTarget.style.width;
+    console.log(e.currentTarget.innerText + " is captured with width " + draggingEleWidth);
 
     // Calculate the mouse position
     const rect = draggingEle.getBoundingClientRect();
@@ -30,6 +33,7 @@ const mouseMoveHandler = function (e) {
     // Set position for dragging element
     draggingEle.style.position = 'absolute';
     draggingEle.style.width = '' + draggingRect.width + 'px';
+    console.log( "draggingEle.style.width: " + draggingRect.width);
 
     // sets position of element
     draggingEle.style.top = `${Math.round(e.pageY - mousePositionInEl)}px`;
@@ -45,10 +49,6 @@ const mouseMoveHandler = function (e) {
     // going down
     if (window.innerHeight - (e.pageY - window.scrollY) < 100) {
         const scrollby = heightOfParent - e.pageY < 20 ? heightOfParent - e.pageY : 20; // eventually is zero
-        // console.log("scrollby: " + scrollby);
-        // console.log("window.scrollY, heightOfParent, window.innerHeight, outerHeight, mousePositionInEl, e.pageY: " + window.scrollY + ", " + heightOfParent + ", " + window.innerHeight + ", " + window.outerHeight + ", " + mousePositionInEl + ", " + e.pageY);
-        // console.log("e.pageY - mousePositionInEl - heightOfParent + elHeight: " + (e.pageY - mousePositionInEl - heightOfParent + elHeight));
-        // if (window.scrollY + window.outerHeight < heightOfParent) {
         window.scrollBy(0, scrollby);
         // }
     }
@@ -91,6 +91,8 @@ const mouseMoveHandler = function (e) {
 };
 
 const mouseUpHandler = function () {
+    console.log("In mouseUpHandler");
+    document.removeEventListener('mousemove', mouseMoveHandler);
     placeholder && placeholder.parentNode.removeChild(placeholder);
     isDraggingStarted = false;
 
@@ -101,6 +103,7 @@ const mouseUpHandler = function () {
     }
 
     // Remove the position styles
+    console.warn("removing top, left and position properties. Affects width?");
     draggingEle.style.removeProperty('top');
     draggingEle.style.removeProperty('left');
     draggingEle.style.removeProperty('position');
@@ -157,7 +160,10 @@ function enumerateItems() {
 }
 
 const resetTarget = () => {
+    console.log('resetting target');
     targetEle?.style.removeProperty('background');
-    targetEle = null;
+    // document.removeEventListener('mousemove', mouseMoveHandler);
+    // document.removeEventListener('mouseup', mouseUpHandler);
+    // targetEle = null;
     isTargetTime = false;
 }
