@@ -268,12 +268,14 @@ function deleteReader(node, textid) {
         cancelButtonClass: 'btn btn-danger',
         buttonsStyling: true
     }).then(function () {
+        console.log('chose to add words to learned list');
         node.parentNode.removeChild(node);
         removeReader(textid, true);
     }, function (dismiss) {
         // dismiss can be 'cancel', 'overlay',
         // 'close', and 'timer'
         if (dismiss === 'cancel') {
+            console.log('chose to just delete reader');
             node.parentNode.removeChild(node);
             removeReader(textid, false);
         }
@@ -856,6 +858,7 @@ function showDic(word) {
 }
 
 function removeReader(textid, addWords) {
+
     $.ajax({
         // type: "DELETE",
         type: "GET",
