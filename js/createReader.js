@@ -44,20 +44,19 @@ function uploadFiles(event) {
         processData: false,
         contentType: false,
         success: function (data, textStatus, jqXHR) {
-            console.log("success");
-            if (typeof data.error === 'undefined') { //i.e. there is no variable 'error' in the array... therefore success
-                alert('success uploading file');
-                console.log('should be data');
-                console.log(data.success);
-            } else {
-                console.log('ERRORS: ' + data.error);
-                alert('fail');
-            }
+            console.log(data.message);
+            swal({
+                timer:2500,
+                title: "성공!",
+                text: data.message,
+                icon: "success",
+                showConfirmButton: false
+            })
         },
         error: function (jqXHR, textStatus, errorThrows) {
             console.log('ERRORS: ' + textStatus);
-            alert('Console will show CORS error, but file is correctly uploaded!');
-            // stop loading spinner
+            console.log(jqXHR)
+            alert(JSON.parse(jqXHR.responseText).message);
         }
     });
 }
