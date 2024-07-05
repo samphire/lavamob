@@ -20,6 +20,10 @@ let finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound
 let lastPos = 0;
 let files;
 
+const realWordRegex = /^[a-zA-Z]+$/;
+const hyphenWordRegex = /-/;
+const hyphenUsedAsEmDash = /\s-\s/;
+
 function prepareUpload(event) {
     files = event.target.files;
 }
@@ -32,7 +36,7 @@ function uploadFiles(event) {
 
     let data = new FormData();
     $.each(files, function (key, value) {
-        if(value instanceof Blob){
+        if (value instanceof Blob) {
             data.append(String(key), value);
         }
     });
@@ -99,7 +103,7 @@ function parseText() {
             let tmpString = "";
             const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
             const endPuncRegex = /[!?,.:;)}"'\]\u2026\u201d]/g;
-            const startPunc = (myStr) =>{
+            const startPunc = (myStr) => {
                 if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
                     finalArr[w].push(myStr.slice(0, 1)); // one by one, the starting punctuation is added as an element to finalArr[w] (i.e. second dimension)
                     return startPunc(myStr.slice(1));
@@ -108,7 +112,7 @@ function parseText() {
                 }
             };
 
-            const endPunc = (myStr) =>{
+            const endPunc = (myStr) => {
                 if (myStr.slice(-1).search(endPuncRegex) > -1) {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
@@ -119,7 +123,16 @@ function parseText() {
 
             tmpString = startPunc(textArr[i]);
             tmpString = endPunc(tmpString);
-            wordArr.push(tmpString);
+
+            if (tmpString.search(realWordRegex) > -1) {
+                wordArr.push(tmpString);
+            }
+            const hyphenpos = tmpString.search(hyphenWordRegex);
+
+            if ( hyphenpos > -1 && tmpString.search(/^-$/) === -1) {
+                wordArr.push(tmpString.slice(0, hyphenpos));
+                wordArr.push(tmpString.slice(hyphenpos+1));
+            }
 
             finalArr[w].push(tmpString);
             let crab = 0;
@@ -270,6 +283,7 @@ function uploadText() {
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.uniqueWordArray = uniqueWordArr;
     uploadData.wordCount = wordCount;
+
     if (typeof sndArr != 'undefined' && sndArr[0] != null) {
         const bob = sndArr[0].split("/");
         uploadData.audioFilename = bob[bob.length - 1];
@@ -344,3 +358,5 @@ function pastey(e) { // says it is unused, but it is...
     // alert(pastedData);
     document.getElementById("createReaderTextPanel").setAttribute("pasted", pastedData);
 }
+
+

@@ -43,7 +43,7 @@ foreach ($data['uniqueWordArray'] as $word) {
             $percs[7] += 7;  // $row[3] values above 6 are all the same level of frequency
         }
     } else {
-        print "\nno query result. There must be a korean word.";
+        print "\no query result. There must be a korean word or a hyphenated word or a punctuation.";
         $xWordid = 0;
 
         $charArr = mbStringToArray($word);
