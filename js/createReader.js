@@ -14,7 +14,8 @@
  *
  * */
 
-let finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, sndArr, wordArr, textToEdit;
+let finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound, spriteObj, spriteNum, sndArr, wordArr,
+    textToEdit;
 
 let lastPos = 0;
 let files;
@@ -31,7 +32,9 @@ function uploadFiles(event) {
 
     let data = new FormData();
     $.each(files, function (key, value) {
-        data.append(key, value);
+        if(value instanceof Blob){
+            data.append(String(key), value);
+        }
     });
 
     $.ajax({
@@ -43,17 +46,17 @@ function uploadFiles(event) {
         dataType: 'json',
         processData: false,
         contentType: false,
-        success: function (data, textStatus, jqXHR) {
+        success: function (data) {
             console.log(data.message);
             swal({
-                timer:2500,
+                timer: 2500,
                 title: "성공!",
                 text: data.message,
                 icon: "success",
                 showConfirmButton: false
             })
         },
-        error: function (jqXHR, textStatus, errorThrows) {
+        error: function (jqXHR, textStatus) {
             console.log('ERRORS: ' + textStatus);
             console.log(jqXHR)
             alert(JSON.parse(jqXHR.responseText).message);
@@ -61,48 +64,52 @@ function uploadFiles(event) {
     });
 }
 
-function parseText() { let i;
+function parseText() {
+    let i;
 // creates a version of the text with play buttons in between every single word, ready to create sprites.
     lastPos = 0;
-    finalArr = new Array(); // array containing words and punctuation, in order
-    makeSpriteArr = new Array();
-    singleDimensionalFinalArr = new Array(); // just a single dimensional version of finalArr
-    finalArrWithAudio = new Array();
-    wordArr = new Array(); // array containing ONLY words, without any punctuation
-    var w = 0;
-    var text = document.getElementById('createReaderTextPanel').value;
+    finalArr = []; // array containing words and punctuation, in order
+    makeSpriteArr = [];
+    singleDimensionalFinalArr = []; // just a single dimensional version of finalArr
+    finalArrWithAudio = [];
+    wordArr = []; // array containing ONLY words, without any punctuation
 
-    text = text.replaceAll(/(?<=\S)—(?=\S)/g, ' — '); // deal with the annoying character in Shiloh.pdf
+    let w = 0;
+    let text = document.getElementById('createReaderTextPanel').value;
 
-    var paragraphArr = text.split(/[\r\n]/g);
-    var tmpArr = paragraphArr;
-    for (var q = tmpArr.length; q > 0; q--) {
+    const ShilohCharacterRegex = /(?<=\S)\u2014(?=\S)/g;
+    text = text.replaceAll(ShilohCharacterRegex, ' \u2014 '); // deal with the annoying character in Shiloh.pdf
+
+    const paragraphRegex = /\r\n|\r|\n/g
+    let paragraphArr = text.split(paragraphRegex);
+
+    let tmpArr = paragraphArr;
+    for (let q = tmpArr.length; q > 0; q--) {
         if (tmpArr[q - 1].length < 1) {
             paragraphArr.splice(q - 1, 1); // remove paragraph item if it has no content
         }
     }
 
-    var textArr;
-    var endPuncArr;
-    for (w = 0; w < paragraphArr.length; w++) {
-        finalArr[w] = new Array();
-        textArr = paragraphArr[w].split(" ");
+    let textArr;
+    let endPuncArr = [];
+    for (w = 0; w < paragraphArr.length; w++) { // iterates through each paragraph
+        finalArr[w] = []; // creates an empty array element for every paragraph
+        textArr = paragraphArr[w].split(" "); // leaving only words and punctuation
         for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
-            var tmpString = "";
-            endPuncArr = new Array();
-
-            var startPunc = function recursiveStartPunc(myStr) {
-                if (myStr.slice(0, 1).search(/[\`\~\#\(\{\[\"\'\<\u2026\u201c]/g) > -1) { // u2026 is horizontal elipsis. u201c is left double quote
-                    finalArr[w].push(myStr.slice(0, 1));
+            let tmpString = "";
+            const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
+            const endPuncRegex = /[!?,.:;)}"'\]\u2026\u201d]/g;
+            const startPunc = (myStr) =>{
+                if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
+                    finalArr[w].push(myStr.slice(0, 1)); // one by one, the starting punctuation is added as an element to finalArr[w] (i.e. second dimension)
                     return startPunc(myStr.slice(1));
-                }
-                else {
+                } else {
                     return myStr; // The actual word, stripped of start punctuation, but still end punctuation there
                 }
             };
 
-            var endPunc = function recursiveEndPunc(myStr) {
-                if (myStr.slice(-1).search(/[\!\?\,\.\:\;\)\}\"\'\]\u2026\u201d]/g) > -1) {
+            const endPunc = (myStr) =>{
+                if (myStr.slice(-1).search(endPuncRegex) > -1) {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
                 } else {
@@ -111,38 +118,39 @@ function parseText() { let i;
             };
 
             tmpString = startPunc(textArr[i]);
-            tmpString = endPunc(tmpString); // so tmpString is now ... THE WORD (without punctuation)
+            tmpString = endPunc(tmpString);
             wordArr.push(tmpString);
-            // tmpString = "<span>" + tmpString + "</span>";
 
             finalArr[w].push(tmpString);
-            for (let n = endPuncArr.length; n > 0; n--) {
-                finalArr[w].push(endPuncArr[n - 1]);
-            }
+            let crab = 0;
 
+            for (let n = endPuncArr.length; n > 0; n--) {
+                crab++;
+                finalArr[w].push(endPuncArr[n - 1]); // push is adding onto the 2nd dimension array the punctuation held in endPunc
+            }
+            endPuncArr.length = 0;
+            crab = 0;
             if (i < (textArr.length - 1)) {
                 finalArr[w].push(" ");
-                console.log("Pushing [SPACE]")
             }
         }
         if (w < (paragraphArr.length - 1)) {
             finalArr[w].push("<br><br>");
-            console.log("Pushing [LINEFEED]");
         }
     }
 
     for (i = 0; i < finalArr.length; i++) {
         for (let x = 0; x < finalArr[i].length; x++) {
-            singleDimensionalFinalArr.push(finalArr[i][x]);
+            singleDimensionalFinalArr.push(finalArr[i][x]); // so, in other words, the first dimension, paragraphs, is subsumed.
         }
     }
 
     let checkString = "";
+    const regex4audioSpriteSelectPanel = /[\s`~#({\["'<\u2026!?,.:;)}\]]/g;
 
     for (let m = 0; m < singleDimensionalFinalArr.length; m++) {
-        console.log(singleDimensionalFinalArr[m]);
-        if (!singleDimensionalFinalArr[m].charAt(0).match(/[\s\`\~\#\(\{\[\"\'\<\u2026\!\?\,\.\:\;\)\}\"\'\]]/g)) {
-            checkString += "<img src='play_hover.png' class='audioIcon' onclick='makeSprite(this, " + m + ")'>";
+        if (!singleDimensionalFinalArr[m].charAt(0).match(regex4audioSpriteSelectPanel)) {
+            checkString += "<img alt='' src='play_hover.png' class='audioIcon' onclick='makeSprite(this, " + m + ")'>";
         }
         checkString += singleDimensionalFinalArr[m];
     }
@@ -158,8 +166,8 @@ function parseText() { let i;
 
 function loadAndPlay() { // Does what it says on the tin
 
-    sndArr = new Array();
-    var fileStrArr, fileStr;
+    sndArr = [];
+    let fileStrArr, fileStr;
     if (document.getElementById("fileinput")) {
         fileStrArr = document.getElementById("fileinput").value.split("\\");
         fileStr = audiourl + "/" + fileStrArr[fileStrArr.length - 1];
@@ -180,7 +188,7 @@ function loadAndPlay() { // Does what it says on the tin
     sound.play();
 }
 
-var perf, testSprite, mySprite;
+let perf, testSprite, mySprite;
 
 function playSound(sprite) {
     alert("hey");
@@ -201,8 +209,8 @@ function playSound(sprite) {
 function makeSprite(obj, pos) {
     obj.style.backgroundColor = "#000";
     spriteNum++;
-    var start = Math.floor(sound.seek() * 1000 - 300);
-    var bob = "";
+    let start = Math.floor(sound.seek() * 1000 - 300);
+    let bob = "";
     if (spriteNum > 1) {
         bob += spriteNum - 1;
         spriteObj[bob][1] = start - spriteObj[bob][0];
@@ -212,27 +220,27 @@ function makeSprite(obj, pos) {
     }
     console.log(JSON.stringify(spriteObj));
 
-    for (var y = lastPos; y < pos; y++) {
+    for (let y = lastPos; y < pos; y++) {
         makeSpriteArr.push(singleDimensionalFinalArr[y]);
         finalArrWithAudio.push(singleDimensionalFinalArr[y]);
     }
     lastPos = pos;
 
-    makeSpriteArr.push("<img src='play_hover.png' class='audioIcon' onclick='playSound(" + spriteNum + ")'>");
+    makeSpriteArr.push("<img alt='' src='play_hover.png' class='audioIcon' onclick='playSound(" + spriteNum + ")'>");
     finalArrWithAudio.push("^&" + spriteNum);
-    for (var nm = 0; nm < makeSpriteArr.length; nm++) {
+    for (let nm = 0; nm < makeSpriteArr.length; nm++) {
         // console.log("makeSpriteArr:  " + makeSpriteArr[nm]);
     }
 }
 
 function finish() {
     sound.stop();
-    for (var y = lastPos; y < singleDimensionalFinalArr.length; y++) { // complete makeSpriteArr to the end of the words in singleDimensionalFinalArr
+    for (let y = lastPos; y < singleDimensionalFinalArr.length; y++) { // complete makeSpriteArr to the end of the words in singleDimensionalFinalArr
         makeSpriteArr.push(singleDimensionalFinalArr[y]);
         finalArrWithAudio.push(singleDimensionalFinalArr[y]);
     }
-    var frog = "";
-    for (var u = 0; u < makeSpriteArr.length; u++) {
+    let frog = "";
+    for (let u = 0; u < makeSpriteArr.length; u++) {
         frog += makeSpriteArr[u];
     }
     $("#audioSpriteSelectPanel").hide();
@@ -245,14 +253,11 @@ function finish() {
 function uploadText() {
     let plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
     plainText = document.getElementById("createReaderTextPanel").value;
-    // console.log("plainText is: " + plainText);
     puncParsedJsonArray = singleDimensionalFinalArr;
     printObject("finalArrWithAudio", finalArrWithAudio);
     puncParsedAudioJsonArray = finalArrWithAudio;
     let uniqueWordArr = Array.from(new Set(wordArr));
     let wordCount = uniqueWordArr.length;
-    // console.info("\nsize of wordArr: " + wordArr.length);
-    // console.info("size of uniqueWordArr: " + wordCount);
     if (!textToEdit) textToEdit = 0;
     let uploadData = {};
     uploadData.userid = userid;
@@ -265,20 +270,13 @@ function uploadText() {
     uploadData.puncParsedAudioJsonArray = puncParsedAudioJsonArray;
     uploadData.uniqueWordArray = uniqueWordArr;
     uploadData.wordCount = wordCount;
-    // uploadData.uniqueInfoArray = new Array();
     if (typeof sndArr != 'undefined' && sndArr[0] != null) {
         const bob = sndArr[0].split("/");
         uploadData.audioFilename = bob[bob.length - 1];
-        // uploadData.audioFilename = sndArr[0];
     }
     printObject("data object uploaded by uploadText()", uploadData);
-    // console.warn("upload data before JSON stringify: " + uploadData);
     uploadData = JSON.stringify(uploadData);
-    // console.warn("upload data after JSON stringify: " + uploadData);
-    // console.log(uploadData);
     const myUrl = url2 + "/php/uploadText.php";
-    // console.log("Editing text number: " + textToEdit);
-    // console.log("upload url is: " + myUrl);
     $.ajax({
         url: myUrl,
         //headers: {"userid": userid}, // header must be enabled in cors filter on server
@@ -287,7 +285,7 @@ function uploadText() {
         contentType: "application/json; charset=UTF-8",
         data: uploadData,
         crossDomain: true,
-        success: function (data) {
+        success: function () {
             console.log("Uploaded Text Successfully");
             // make entry in the activity log table
             jaxy(
@@ -308,14 +306,14 @@ function uploadText() {
         },
         error: function () {
             alert("Problem Uploading the Text:");
-            console.warn(textToEdit + ", "+ userid + ", \n" + myUrl);
+            console.warn(textToEdit + ", " + userid + ", \n" + myUrl);
         }
     });
     // cleanup
     cleanupCreateReader();
 }
 
-function cleanupCreateReader(){
+function cleanupCreateReader() {
     document.getElementById("readerName").value = "";
     document.getElementById("readerDescription").value = "";
     textToEdit = 0;
@@ -323,26 +321,26 @@ function cleanupCreateReader(){
     $("#superResult").empty();
     document.getElementById("createReaderTextPanel").value = "";
     $("#createReaderTextPanel").show();
-    if(document.getElementById("audioOpt")){
+    if (document.getElementById("audioOpt")) {
         cleanupAudioOptAndDiv();
     }
     $('#btnUploadText').show()
 }
 
-// This is the only usage, so why is it in it's own method???
-function cleanupAudioOptAndDiv(){
+// This is the only usage, so why is it in its own method???
+function cleanupAudioOptAndDiv() {
     document.getElementById("audioCheck").checked = false;
     $("#audiodiv").hide();
 }
 
 function pastey(e) { // says it is unused, but it is...
     console.log("in pastey");
-    var clipboardData;
+    let clipboardData;
     // e.preventDefault();
     // e.stopPropagation();
     clipboardData = e.clipboardData || window.clipboardData;
     printObject("clipboard data on paste", clipboardData);
-    var pastedData = clipboardData.getData("text/plain");
+    let pastedData = clipboardData.getData("text/plain");
     // alert(pastedData);
     document.getElementById("createReaderTextPanel").setAttribute("pasted", pastedData);
 }
