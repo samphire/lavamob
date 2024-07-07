@@ -33,7 +33,7 @@ const mouseMoveHandler = function (e) {
     // Set position for dragging element
     draggingEle.style.position = 'absolute';
     draggingEle.style.width = '' + draggingRect.width + 'px';
-    console.log( "draggingEle.style.width: " + draggingRect.width);
+    console.log("draggingEle.style.width: " + draggingRect.width);
 
     // sets position of element
     draggingEle.style.top = `${Math.round(e.pageY - mousePositionInEl)}px`;
@@ -93,7 +93,10 @@ const mouseMoveHandler = function (e) {
 const mouseUpHandler = function () {
     console.log("In mouseUpHandler");
     document.removeEventListener('mousemove', mouseMoveHandler);
-    placeholder && placeholder.parentNode.removeChild(placeholder);
+    try {
+        placeholder && placeholder.parentNode.removeChild(placeholder);
+    } catch {
+    }
     isDraggingStarted = false;
 
     enumerateItems();

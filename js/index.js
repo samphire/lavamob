@@ -21,6 +21,11 @@ var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 var readerYScroll = 0;
 const openaiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Replace with the appropriate API endpoint
+
+let reconstHyphenWord;
+const realWordRegex1 = /^[a-zA-Z]+$/;
+const hyphenWordRegex1 = /-/;
+
 function login() {
     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
     console.log("In login()");
@@ -303,100 +308,155 @@ function downloadReader() {
         // url: url + "/text/dBOnly?textid=" + selectedTextid
     }).done(function (resultjson) {
 
-        // *** using php ***
-        selectedReaderObj = JSON.parse(resultjson);
-        // selectedReaderObj.serial = selectedReaderObj.serial.toString();
-        var shit = new Array();
-        shit = eval(selectedReaderObj.puncParsedJsonArray);
-        selectedReaderObj.puncParsedJsonArray = shit;
-        shit = eval(selectedReaderObj.puncParsedAudioJsonArray);
-        selectedReaderObj.puncParsedAudioJsonArray = shit;
-        shit = eval(selectedReaderObj.uniqueInfoArray);
-        selectedReaderObj.uniqueInfoArray = shit;
+            // *** using php ***
+            selectedReaderObj = JSON.parse(resultjson);
+            // selectedReaderObj.serial = selectedReaderObj.serial.toString();
+            var shit = new Array();
+            shit = eval(selectedReaderObj.puncParsedJsonArray);
+            selectedReaderObj.puncParsedJsonArray = shit;
+            shit = eval(selectedReaderObj.puncParsedAudioJsonArray);
+            selectedReaderObj.puncParsedAudioJsonArray = shit;
+            shit = eval(selectedReaderObj.uniqueInfoArray);
+            selectedReaderObj.uniqueInfoArray = shit;
 
-        //Initialize sound
-        howl = null;
-        howlSpriteObj = null;
+            //Initialize sound
+            howl = null;
+            howlSpriteObj = null;
 
-        var finalTextArr;
+            var finalTextArr;
 
-        console.warn(selectedReaderObj.audio);
-        console.warn(selectedReaderObj.audioSpriteJson);
+            console.warn(selectedReaderObj.audio);
+            console.warn(selectedReaderObj.audioSpriteJson);
 
 
-        if (selectedReaderObj.audio) { // If there is audio, set up Howl and the sprite object
-            console.log('there is audio');
-            finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
-            var sndArr = new Array();
-            sndArr.push(audiourl + "/" + selectedReaderObj.audio); // simplify this for goodness sake, insert on instantiation
-            howlSpriteObj = JSON.parse(selectedReaderObj.audioSpriteJson);
-            howl = new Howl({
-                src: sndArr,
-                sprite: howlSpriteObj
-            });
-        } else {
-            finalTextArr = selectedReaderObj.puncParsedJsonArray;
-            // printObject(finalTextArr);
-        }
-
-        // make selected reader text !!!!!!!!!!
-        //recursively use indexof to alter the value of
-
-        var constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
-            var infoArr = myStr.split("^/");
-            var inList = false;
-            var foundidx = finalTextArr.indexOf(infoArr[0], start); // don't I need to use 'start' here?
-            if (foundidx > -1) {
-                llData.list.forEach(function (el) {
-                    if (parseInt(el.wordid) === parseInt(infoArr[1])) {
-                        inList = true;
-                    }
+            if (selectedReaderObj.audio) { // If there is audio, set up Howl and the sprite object
+                console.log('there is audio');
+                finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
+                var sndArr = new Array();
+                sndArr.push(audiourl + "/" + selectedReaderObj.audio); // simplify this for goodness sake, insert on instantiation
+                howlSpriteObj = JSON.parse(selectedReaderObj.audioSpriteJson);
+                howl = new Howl({
+                    src: sndArr,
+                    sprite: howlSpriteObj
                 });
-                if (inList) {
-                    finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
-                } else {
-                    finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
-                }
-                try {
-                    constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
-                } catch (a) {
-                    console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
-                }
-            }
-        };
-
-        for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
-            constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
-        }
-        selectedReaderText = "";
-        finalTextArr.forEach(function (el, idx) {
-            if (el.indexOf("^&") > -1) {
-                finalTextArr[idx] = "<img src=\"play_hover.png\" class=\"audioIcon\" onclick=\"playSound(" + el.slice(2) + ")\">";
-                selectedReaderText += finalTextArr[idx];
             } else {
-                selectedReaderText += el;
+                finalTextArr = selectedReaderObj.puncParsedJsonArray;
+                // printObject(finalTextArr);
             }
-        });
-        console.log(selectedReaderObj.audio);
-        $('#selectReader').hide();
-        $('#reader').empty();
-        $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
-        if (selectedReaderObj.audio) {
-            $('#reader').append("<a href='" + audiourl + "/" + selectedReaderObj.audio + "'><svg id='downloadIcon' viewBox='0 0 30 30'><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"></path></svg></a>");
+
+            // make selected reader text !!!!!!!!!!
+            //recursively use indexof to alter the value of
+
+            var constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
+                var infoArr = myStr.split("^/");
+                // console.log(infoArr);
+                var inList = false;
+
+
+                const customIndexOf = (arr, searchTerm, start) => {
+                    for (let i = start; i < arr.length; i++) {
+                        // Split the array element by hyphen
+                        if (arr[i].match(hyphenWordRegex1)) {
+                            // console.log(arr[i] + " is a hyphen word");
+                            let parts = arr[i].split('-'); // maybe too expensive. Just look for hyphen and return after it
+                            // console.log(parts[0] + ", " + parts[1] + ", searchTerm: " + searchTerm);
+                            reconstHyphenWord = parts[0] + "-" + parts[1]; // reconstitute hyphenated word!!!
+                            if (parts[1] === searchTerm) {
+                                return i;
+                            }
+                        } else {
+                            if (arr[i] === searchTerm) { // non hyphen words
+                                return i;
+                            }
+                        }
+                    }
+                    return -1; // Return -1 if no match is found
+                }
+
+
+                var foundidx = customIndexOf(finalTextArr, infoArr[0], start);
+
+                // console.log("infoArr[0]: " + infoArr[0] + ", foundidx: " + foundidx + ", start: " + start);
+                // console.log([...finalTextArr]);
+
+                if (foundidx > -1) {
+                    llData.list.forEach(function (el) {
+                        if (parseInt(el.wordid) === parseInt(infoArr[1])) {
+                            inList = true;
+                        }
+                    });
+
+                    if (finalTextArr[foundidx].match(hyphenWordRegex1)) {
+
+                        if (inList) {
+                            finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + reconstHyphenWord + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + reconstHyphenWord + "</span>";
+                        } else {
+                            finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + reconstHyphenWord + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + reconstHyphenWord + "</span>";
+                        }
+                        try {
+                            constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
+                        } catch (a) {
+                            console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
+                        }
+                    } else {
+                        if (inList) {
+                            finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
+                        } else {
+                            finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
+                        }
+                        try {
+                            constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
+                        } catch (a) {
+                            console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
+                        }
+                    }
+                }
+            };
+
+            for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
+                // console.log("sending to constituteText: " + selectedReaderObj.uniqueInfoArray[x]);
+                constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
+            }
+
+
+            // for (let x = 0; x < finalTextArr; x++) {
+            //     if (finalTextArr[x].match(realWordRegex1) || finalTextArr[x].match(hyphenWordRegex1)) {
+            //         console.log("sending to constituteText: " + finalTextArr[x]);
+            //         constituteText(finalTextArr[x], 0);
+            //     }
+            // }
+
+
+            selectedReaderText = "";
+            finalTextArr.forEach(function (el, idx) {
+                if (el.indexOf("^&") > -1) {
+                    finalTextArr[idx] = "<img src=\"play_hover.png\" class=\"audioIcon\" onclick=\"playSound(" + el.slice(2) + ")\">";
+                    selectedReaderText += finalTextArr[idx];
+                } else {
+                    selectedReaderText += el;
+                }
+            });
+            console.log(selectedReaderObj.audio);
+            $('#selectReader').hide();
+            $('#reader').empty();
+            $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
+            if (selectedReaderObj.audio) {
+                $('#reader').append("<a href='" + audiourl + "/" + selectedReaderObj.audio + "'><svg id='downloadIcon' viewBox='0 0 30 30'><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"></path></svg></a>");
+            }
+            $('#reader').append("<img id='printerIcon' src='assets/img/icons/printer.png' onclick='window.print()'>");
+            $('#reader').append("<div class='readerDesc'>" + selectedReaderObj.description + "</div>");
+            $('#reader').append("<div class='readerPanel'></div>");
+            if (selectedReaderObj.audio) {
+                $('#reader .readerPanel').append("<div class='audioOptions' onclick='howl.stop()'>" +
+                    "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;<img src='assets/img/icons/continue.png'>" +
+                    "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;<img src='assets/img/icons/loop.png'>" +
+                    "<input type='radio' name='audioOptions'>&nbsp;&nbsp;Stop!</div><br>");
+            }
+            $('#reader .readerPanel').append(selectedReaderText);
+            $('#reader .readerPanel').append("<br><br><br><br><br>");
+            document.documentElement.scrollTop = readerYScroll;
         }
-        $('#reader').append("<img id='printerIcon' src='assets/img/icons/printer.png' onclick='window.print()'>");
-        $('#reader').append("<div class='readerDesc'>" + selectedReaderObj.description + "</div>");
-        $('#reader').append("<div class='readerPanel'></div>");
-        if (selectedReaderObj.audio) {
-            $('#reader .readerPanel').append("<div class='audioOptions' onclick='howl.stop()'>" +
-                "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;<img src='assets/img/icons/continue.png'>" +
-                "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;<img src='assets/img/icons/loop.png'>" +
-                "<input type='radio' name='audioOptions'>&nbsp;&nbsp;Stop!</div><br>");
-        }
-        $('#reader .readerPanel').append(selectedReaderText);
-        $('#reader .readerPanel').append("<br><br><br><br><br>");
-        document.documentElement.scrollTop = readerYScroll;
-    }).fail(function (jqXHR, status, err) {
+    ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call in getReader");
     });
 }
@@ -704,7 +764,8 @@ function studyVocab() {
             console.log('error');
         }).always(function () {
             console.log('complete');
-        });w
+        });
+        w
     } else {
         console.log("There was llData");
         // reusing nowList. LLData is untouched
