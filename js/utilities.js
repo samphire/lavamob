@@ -7,6 +7,15 @@ function convertDateToNumber(date) {
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
+function treatImagesInCreateReader(arr){
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === '<img') {
+            arr[i] = arr[i] + '\u0020' + arr[i + 1];
+            arr[i + 1] = 'deleteMePlease';
+        }
+    }
+    return arr.filter(el => el !== 'deleteMePlease');
+}
 function printObject(msg, obj) {
     let myStr = "";
     for (let prop in obj) {

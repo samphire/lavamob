@@ -349,7 +349,6 @@ function downloadReader() {
 
             var constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
                 var infoArr = myStr.split("^/");
-                // console.log(infoArr);
                 var inList = false;
 
 
@@ -357,9 +356,7 @@ function downloadReader() {
                     for (let i = start; i < arr.length; i++) {
                         // Split the array element by hyphen
                         if (arr[i].match(hyphenWordRegex1)) {
-                            // console.log(arr[i] + " is a hyphen word");
                             let parts = arr[i].split('-'); // maybe too expensive. Just look for hyphen and return after it
-                            // console.log(parts[0] + ", " + parts[1] + ", searchTerm: " + searchTerm);
                             reconstHyphenWord = parts[0] + "-" + parts[1]; // reconstitute hyphenated word!!!
                             if (parts[1] === searchTerm) {
                                 return i;
@@ -375,9 +372,6 @@ function downloadReader() {
 
 
                 var foundidx = customIndexOf(finalTextArr, infoArr[0], start);
-
-                // console.log("infoArr[0]: " + infoArr[0] + ", foundidx: " + foundidx + ", start: " + start);
-                // console.log([...finalTextArr]);
 
                 if (foundidx > -1) {
                     llData.list.forEach(function (el) {
@@ -417,15 +411,6 @@ function downloadReader() {
                 // console.log("sending to constituteText: " + selectedReaderObj.uniqueInfoArray[x]);
                 constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
             }
-
-
-            // for (let x = 0; x < finalTextArr; x++) {
-            //     if (finalTextArr[x].match(realWordRegex1) || finalTextArr[x].match(hyphenWordRegex1)) {
-            //         console.log("sending to constituteText: " + finalTextArr[x]);
-            //         constituteText(finalTextArr[x], 0);
-            //     }
-            // }
-
 
             selectedReaderText = "";
             finalTextArr.forEach(function (el, idx) {

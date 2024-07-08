@@ -99,10 +99,23 @@ function parseText() {
     for (w = 0; w < paragraphArr.length; w++) { // iterates through each paragraph
         finalArr[w] = []; // creates an empty array element for every paragraph
         textArr = paragraphArr[w].split(" "); // leaving only words and punctuation
+
+        textArr = treatImagesInCreateReader(textArr);
+
+
+        // for (let i = 0; i < textArr.length; i++) {
+        //     if (textArr[i] === '<img') {
+        //         textArr[i] = textArr[i] + '\u0020' + textArr[i + 1];
+        //         textArr[i + 1] = 'deleteMePlease';
+        //     }
+        // }
+
+        printObject("textArr", textArr);
+
         for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
             let tmpString = "";
             const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
-            const endPuncRegex = /[!?,.:;)}"'\]\u2026\u201d]/g;
+            const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
             const startPunc = (myStr) => {
                 if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
                     finalArr[w].push(myStr.slice(0, 1)); // one by one, the starting punctuation is added as an element to finalArr[w] (i.e. second dimension)
@@ -129,9 +142,9 @@ function parseText() {
             }
             const hyphenpos = tmpString.search(hyphenWordRegex);
 
-            if ( hyphenpos > -1 && tmpString.search(/^-$/) === -1) {
+            if (hyphenpos > -1 && tmpString.search(/^-$/) === -1) {
                 wordArr.push(tmpString.slice(0, hyphenpos));
-                wordArr.push(tmpString.slice(hyphenpos+1));
+                wordArr.push(tmpString.slice(hyphenpos + 1));
             }
 
             finalArr[w].push(tmpString);
