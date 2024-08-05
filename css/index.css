@@ -98,7 +98,7 @@
 .info {
     background: white;
     grid-row: span 3;
-    animation: pulsy 0.7s linear 1s 6, wiggle 7s linear 5.2s infinite;
+    animation: pulsy 0.7s linear 1s 3, wiggle 7s linear 5.2s infinite;
     color: var(--primary);
 }
 
@@ -558,20 +558,21 @@ input#llWord.llWord, input#tranny.tranny {
     /*background-color: rgba(12, 12, 12, 0.5);*/
     /*color: white;*/
     color: var(--bgText);
-    margin: 8% 0;
+    /*margin: 8% 0;*/
+    margin: 0 0;
 }
 
 #learning {
     background-color: rgba(0,0,0,0);
     padding-top: 100px;
-    font-size: 4rem;
+    /*font-size: 4rem;*/
     color: var(--accent2);
     grid-column: 3;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Sansita Swashed', cursive;
-    z-index: -1;
+    /*z-index: -1;*/
 }
 
 .goalName {
@@ -930,9 +931,9 @@ input#llWord.llWord, input#tranny.tranny {
         padding-bottom: 0;
     }
 
-    #learning {
-        margin-bottom: 0;
-    }
+    /*#learning {*/
+    /*    margin-bottom: 0;*/
+    /*}*/
 
     .goalContainer {
         margin-top: 30px;
@@ -980,10 +981,11 @@ input#llWord.llWord, input#tranny.tranny {
     #welcomeRow {
         display: grid;
         grid-template-columns: repeat(3, 32%);
-        grid-template-rows: repeat(2, 30%);
+        /*grid-template-rows: repeat(2, 16%);*/
+        grid-template-rows: 3fr 1fr;
         justify-content: center;
         align-content: center;
-        margin: 0;
+        margin: 0 0 10% 0;
     }
 
     .btnActivity {
@@ -1012,8 +1014,9 @@ input#llWord.llWord, input#tranny.tranny {
     #learning {
         grid-column: 2;
         padding-top: 0;
-        font-size: 6rem;
-        margin-bottom: 50%;
+        /*font-size: 6rem;*/
+        /*margin-bottom: 50%;*/
+        /*margin-bottom: 10%;*/
     }
 
     .item {
@@ -1113,9 +1116,9 @@ input#llWord.llWord, input#tranny.tranny {
         margin-top: 50px;
     }
 
-    #learning {
-        font-size: 6rem;
-    }
+    /*#learning {*/
+    /*    font-size: 6rem;*/
+    /*}*/
 }
 
 /*   full HD Desktops   */

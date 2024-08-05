@@ -1,13 +1,14 @@
 /**
  * Created by matthew on 8/3/2016.
  */
+
 function convertDateToNumber(date) {
     let t = date.split(/[- :]/);
     let datestr = t[0] + " " + t[1] + " " + t[2] + " " + t[7] + " " + t[3] + ":" + t[4] + ":" + t[5];
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
-function treatImagesInCreateReader(arr){
+function treatImagesInCreateReader(arr) {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i] === '<img') {
             arr[i] = arr[i] + '\u0020' + arr[i + 1];
@@ -16,6 +17,7 @@ function treatImagesInCreateReader(arr){
     }
     return arr.filter(el => el !== 'deleteMePlease');
 }
+
 function printObject(msg, obj) {
     let myStr = "";
     for (let prop in obj) {
@@ -174,13 +176,60 @@ async function getExampleSentence(promptWord) {
         {
             method: 'GET',
             headers: {
-                'Content-Type' : 'application/json'
+                'Content-Type': 'application/json'
             }
         }
     );
-
     const responseData = await response.text();
     const myResponse = JSON.parse(responseData);
-return myResponse.choices[0].message.content;
+    return myResponse.choices[0].message.content;
+}
 
+function makeWelcomeInfo(wordscore, _1k, _2k, _3k) {
+
+    const needle1 = document.querySelector("svg._1k");
+    const needle2 = document.querySelector("svg._2k");
+    const needle3 = document.querySelector("svg._3k");
+
+    const nums =  document.querySelectorAll(".text .number");
+    const percs = document.querySelectorAll(".text .percsign");
+
+
+    const needle1Num = nums[0];
+    const needle1Perc = percs[0];
+    const needle2Num = nums[1];
+    const needle2Perc = percs[1];
+    const needle3Num = nums[2];
+    const needle3Perc = percs[2];
+
+    const info = document.querySelector(".info");
+
+    document.getElementById('wordscore').innerText = wordscore;
+
+    needle1.style.rotate = '-180deg';
+    needle2.style.rotate = '-180deg';
+    needle3.style.rotate = '-180deg';
+    document.getElementById('_1kNumber').innerText = _1k;
+    document.getElementById('_2kNumber').innerText = _2k;
+    document.getElementById('_3kNumber').innerText = _3k;
+    info.style.animationDelay = "2s";
+
+    const makeRot = () => {
+        needle1.style.rotate = _1k * 1.8 -180 + 'deg';
+        needle2.style.rotate = ((_2k * 1.8) - 180) + 'deg';
+        needle3.style.rotate = ((_3k * 1.8) - 180) + 'deg';
+        needle1Num.style.animation = "fadeIn 3s";
+        needle1Perc.style.animation = "fadeIn 3s";
+        needle1Num.style.opacity = '100%';
+        needle1Perc.style.opacity = '100%';
+        needle2Num.style.animation = "fadeIn 3s";
+        needle2Perc.style.animation = "fadeIn 3s";
+        needle2Num.style.opacity = '100%';
+        needle2Perc.style.opacity = '100%';
+        needle3Num.style.animation = "fadeIn 3s";
+        needle3Perc.style.animation = "fadeIn 3s";
+        needle3Num.style.opacity = '100%';
+        needle3Perc.style.opacity = '100%';
+    };
+      setTimeout(makeRot, 1000);
 }

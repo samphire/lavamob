@@ -17,11 +17,10 @@
     <script src="js/spacedRep.js"></script>
     <script src="js/utilities.js"></script>
 
-
     <script src="js/sweetalert2.min.js"></script>
 
 
-<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
 
 
     <script src="js/readerSortAndGroup.js"></script>
@@ -34,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="css/test.css">
     <link rel="stylesheet" type="text/css" href="css/nav.css">
     <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="css/gauges.css">
     <link rel="shortcut icon" type="image/png" href="https://notborder.org/lavamob/icon-192x192.png">
     <link rel="shortcut icon" sizes="192x192" href="https://notborder.org/lavamob/icon-192x192.png">
     <link rel="apple-touch-icon" href="https://notborder.org/lavamob/icon-192x192.png">
@@ -80,44 +80,7 @@
             }
         };
 
-        window.onload = function () {
 
-            console.info(localStorage);
-
-            history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
-            $('#fileinput').on('change', prepareUpload);
-            $('#audioform').on('submit', uploadFiles);
-
-            document.getElementById('showusername').innerText = localStorage.getItem('username');
-//            localStorage.clear();
-            $('section').hide();
-            $('#menu').hide();
-            if (localStorage.getItem("userid")) { //all user info is there and can be reused
-                userid = parseInt(localStorage.getItem("userid"), 10);
-                if (localStorage.getItem("group") === "USER" && document.querySelector("#audioOpt")) {
-                    const myEl = document.querySelector("#audioOpt");
-                    myEl.parentNode.removeChild(myEl);
-                    const aud = document.querySelector("#audiodiv > fieldset");
-                    aud.parentNode.removeChild(aud);
-                }
-
-                $(".login").hide();
-                $("#welcome").show();
-                // $("#menu").show();
-                getGoalsInfo();
-                getReaderInfo();
-                return;
-            } else {
-
-                console.info(localStorage);
-
-                if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
-                    document.getElementById("userEmail").value = localStorage.getItem("userEmail");
-                    $('.login').show();
-                }
-            }
-            $('.login').show();
-        }
 
     </script>
 </head>
@@ -230,7 +193,55 @@
     <!--    <h1>Choose Your Activity</h1>-->
     <div id="welcomeRow">
         <!--        <div class="info welcomeRowItem" id="learned"></div>-->
-        <div class="info welcomeRowItem" id="learning"></div>
+        <div class="info welcomeRowItem" id="learning">
+
+
+            <div id='welcomeInfoContainer'>
+                <span id="wordscore">1874</span>
+                <div id='gaugesContainer'>
+
+                    <div class='gauge'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <svg class="_1k" viewBox="0 0 100 100">
+                            <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
+                                  style="fill: black;stroke:blue;stroke-width:0"/>
+                            <circle r="40" cx="-160" cy="50"/>
+                        </svg>
+                        <div class='text'>
+                            <span id='_1kNumber' class='number'>0</span><span class='percsign'>%</span>
+                        </div>
+                    </div>
+
+                    <div class='gauge'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <svg class="_2k" viewBox="0 0 100 100">
+                            <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
+                                  style="fill: black;stroke:blue;stroke-width:0"/>
+                            <circle r="40" cx="-160" cy="50"/>
+                        </svg>
+                        <div class='text'>
+                            <span id='_2kNumber' class='number'>0</span><span class='percsign'>%</span>
+                        </div>
+                    </div>
+
+                    <div class='gauge'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <svg class="_3k" viewBox="0 0 100 100">
+                            <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
+                                  style="fill: black;stroke:blue;stroke-width:0"/>
+                            <circle r="40" cx="-160" cy="50"/>
+                        </svg>
+                        <div class='text'>
+                            <span id='_3kNumber' class='number'>0</span><span class='percsign'>%</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
         <!--        <div class="btnContainer">-->
         <div class="btnActivity welcomeRowItem" onclick="createReader(0)"><i
                 class="fa-solid mainIcon fa-pen-to-square"></i><span>Create Reader</span></div>

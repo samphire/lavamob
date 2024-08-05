@@ -1,0 +1,77 @@
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+img{
+    width: 100px;
+}
+
+.gauge{
+    width: 100px;
+    /*height: 330px;*/
+    position: relative;
+    text-align: center;
+         transform: scale(0.6);
+}
+
+
+svg{
+    position: absolute;
+    left: 39px;
+    top: 42px;
+    transform-origin: 19%;
+    width: 68px;
+    height: 11px;
+    transition: rotate 1s ease-in;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.text{
+    z-index: 50;
+    text-align: center;
+    margin-top: 8px;
+    margin-left: 20px
+}
+
+.text .number{
+    font-size: 1.8rem;
+    font-weight: bolder;
+    font-family: sans-serif;
+    color: #555;
+    opacity: 0;
+    /*animation: fadeIn 1s;*/
+}
+.text .percsign{
+    font-size: 1rem;
+    /*animation: fadeIn 1s;*/
+    opacity: 0;
+}
+
+#gaugesContainer{
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+    font-size: 1rem;
+}
+#welcomeInfoContainer{
+    width: 500px;
+    font-size: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/*svg._1k{*/
+/*    transform: rotate(-180deg);*/
+/*}*/
+/*svg._2k{*/
+/*    transform: rotate(-180deg);*/
+/*}*/
+/*svg._3k{*/
+/*    transform: rotate(-180deg);*/
+/*}*/

@@ -1,12 +1,13 @@
 /**
  * Created by matthew on 7/28/2016.
  */
-
+let fuck;
 var readers;
 var userid = 0;
 let group = 0;
 let username;
 let wordScore;
+let welcomeInfo = {};
 var language;
 var dicurl;
 var goals;
@@ -25,6 +26,47 @@ const openaiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Replace 
 let reconstHyphenWord;
 const realWordRegex1 = /^[a-zA-Z]+$/;
 const hyphenWordRegex1 = /-/;
+
+
+window.onload = function () {
+
+    console.info(localStorage);
+
+    history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
+    $('#fileinput').on('change', prepareUpload);
+    $('#audioform').on('submit', uploadFiles);
+
+    document.getElementById('showusername').innerText = localStorage.getItem('username');
+//            localStorage.clear();
+    $('section').hide();
+    $('#menu').hide();
+    if (localStorage.getItem("userid")) { //all user info is there and can be reused
+        userid = parseInt(localStorage.getItem("userid"), 10);
+        if (localStorage.getItem("group") === "USER" && document.querySelector("#audioOpt")) {
+            const myEl = document.querySelector("#audioOpt");
+            myEl.parentNode.removeChild(myEl);
+            const aud = document.querySelector("#audiodiv > fieldset");
+            aud.parentNode.removeChild(aud);
+        }
+
+        $(".login").hide();
+        $("#welcome").show();
+        // $("#menu").show();
+        getGoalsInfo();
+        getReaderInfo();
+        return;
+    } else {
+
+        console.info(localStorage);
+
+        if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
+            document.getElementById("userEmail").value = localStorage.getItem("userEmail");
+            $('.login').show();
+        }
+    }
+    $('.login').show();
+}
+
 
 function login() {
     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
@@ -86,22 +128,34 @@ function progress(percent, $element, boolAnimColor, col) {
 }
 
 function getGoalsInfo() { // the returned object contains avg repnum and learned and learning count
+    const infoDiv = document.getElementById("learning");
+
     $.ajax({
         type: "GET",
         crossDomain: true,
         url: url2 + "/php/goals.php?userid=" + userid
     }).done(function (resultjson) {
             goals = JSON.parse(resultjson);
+
+            welcomeInfo.wordscore = goals[0].wordscore;
+            welcomeInfo._1k = goals[0]._1k;
+            welcomeInfo._2k = goals[0]._2k;
+            welcomeInfo._3k = goals[0]._3k;
+
             console.log("resultjson from goals.php" + resultjson);
             let wordScore = 0;
 
             if (goals[0].goal_name !== 'blank') {
-
                 const goalPlate = document.querySelector('#goalTemplate');
                 for (let i = 0; i < goals.length; i++) {
+
+                    console.log(goals);
                     let goalData = goals[i];
                     // Value of learned and learning combined
+                    console.log('info from goalData');
+                    console.log(goalData);
                     wordScore = calcValForGoal(goalData.learned, goalData.learning, goalData.avgRepnum);
+                    // alert(wordScore);
                     let clone = goalPlate.content.cloneNode(true);
                     clone.querySelector('.goalName').textContent = goalData.goal_name;
                     clone.querySelector('.goalDescription').textContent = goalData.goal_description;
@@ -134,14 +188,17 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
                     goalPlate.parentNode.appendChild(clone);
                     progress(valProg, $(prog1), true, col);
                     progress(timeProg, $(prog2), false);
+                    if (!isNaN(wordScore)) { // I have not the slightest clue why this is necessary here.
+                        // document.querySelector("#learning").innerHTML = wordScore.toString(10);
+                        // document.getElementById("learning").innerHTML = makeWelcomeInfo(wordScore.toString(10), goals[0]._1k, goals[0]._2k, goals[0]._3k);
+                    }
                 }
             } else {
                 // Value of learned and learning combined
                 wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
+
             }
-            if (!isNaN(wordScore)) {
-                document.querySelector("#learning").innerHTML = wordScore.toString(10);
-            }
+            makeWelcomeInfo(welcomeInfo.wordscore, welcomeInfo._1k, welcomeInfo._2k, welcomeInfo._3k);
         }
     ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call to get goals data");
@@ -542,6 +599,9 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
         case '6':
             dicurl = "https://translate.google.com/?hl=fr&sl=en&tl=fr&text=" + word;
             break;
+        case '7':
+            dicurl = "https://translate.google.com/?hl=ur&sl=en&tl=ur&text=" + word;
+            break;
         default:
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
     }
@@ -914,6 +974,7 @@ function removeReader(textid, addWords) {
         success: function (result) {
             msg = addWords ? "Reader has been removed.\nWords have been added to learned list." : "Reader has been removed.";
             swal(msg);
+            getGoalsInfo();
         },
         error: (function (jqXHR, status, err) {
             swal("some problem");
