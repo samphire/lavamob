@@ -4,7 +4,7 @@ body{
     box-sizing: border-box;
 }
 
-img{
+.gauge img{
     width: 100px;
 }
 

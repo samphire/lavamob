@@ -290,6 +290,7 @@ function uploadText() {
     uploadData.textName = $("#readerName").val();
     uploadData.textDesc = $("#readerDescription").val();
     uploadData.textToEdit = textToEdit;
+    const sammy = textToEdit; // because textToEdit gets reset to zero!!! somewhere!!!
     uploadData.plainText = plainText;
     uploadData.puncParsedJsonArray = puncParsedJsonArray;
     uploadData.audioSpriteObjString = JSON.stringify(spriteObj);
@@ -314,18 +315,20 @@ function uploadText() {
         crossDomain: true,
         success: function () {
             console.log("Uploaded Text Successfully");
-            // make entry in the activity log table
-            jaxy(
-                "php/activityLog.php", "POST",
-                {
-                    userid: userid,
-                    activityType: 1,
-                    extraInfo: 1
-                },
-                "Updated activity log for voca test",
-                "Problem updating activity log for voca test"
-            );
-
+            // make entry in the activity log table if first creation
+            if (sammy === 0) {
+                jaxy(
+                    "php/activityLog.php", "POST",
+                    {
+                        userid: userid,
+                        activityType: 1,
+                        extraInfo: wordCount,
+                        textToEdit: sammy
+                    },
+                    "Updated activity log for voca test",
+                    "Problem updating activity log for voca test"
+                );
+            }
             swal("Text Uploaded Successfully").then(function () {
                 getReaderInfo();
                 studyReader();

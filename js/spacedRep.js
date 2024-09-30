@@ -13,6 +13,9 @@ let currentVocabIndex = 0;  //global variable to be used by functions in vocab t
 function test(list) {
     testList = list;// all the elements for this date
 
+    console.log("testList, all the elements for this date: ");
+    console.log(...testList);
+
     let testListtmp = testList.slice(0);
 
     testListtmp.forEach(function (val, idx) {
@@ -32,6 +35,10 @@ function test(list) {
     const flashCardList = testListtmp.filter((val) => val.repnum === 0);
     const nonFlashCardList = testListtmp.filter((val) => val.repnum !== 0);
 
+    console.log("flashCardList: ");
+    console.log(...flashCardList);
+    console.log("flashcardsToInclue: " + flashCardsToInclude + ", flashCardList.length: " + flashCardList.length);
+
     const flashCardLimit = flashCardList.length < flashCardsToInclude ? flashCardList.length : flashCardsToInclude;
     console.log("Limit of flash cards is " + flashCardLimit);
 
@@ -49,7 +56,7 @@ function test(list) {
 
     console.log("Size of sessionList is now " + sessionList.length);
     console.log("start to print sessionList");
-    console.log(sessionList);
+    console.log(...sessionList);
     console.log("end of sessionList");
 
     sessionList.forEach(function (val, idx) {
@@ -224,8 +231,8 @@ async function manageLL(type) {
                                 activityType: 7,
                                 extraInfo: 1
                             },
-                            "Updated activity log for voca test",
-                            "Problem updating activity log for voca test"
+                            "Updated activity log for AI sentence generation",
+                            "Problem updating activity log for AI sentence generation"
                         );
             swal(aiResponse);
             break;

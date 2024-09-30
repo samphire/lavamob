@@ -211,11 +211,11 @@ function updateWordscore() {
         crossDomain: true,
         url: url2 + "/php/goals.php?userid=" + userid
     }).done(function (resultjson) {
-            goals = JSON.parse(resultjson);
-            const wordScore = calcValForGoal(goals[0].learned, goals[0].learning, goals[0].avgRepnum);
-            if (!isNaN(wordScore)) {
-                document.querySelector("#learning").innerHTML = (wordScore);
-            }
+            let bob = document.querySelectorAll(".goalContainer");
+            bob.forEach((value, key, parent)=>{
+                value.remove();
+            });
+            getGoalsInfo();
         }
     ).fail(function (jqXHR, status, err) {
         console.log("failed ajax call to get goals data");
@@ -810,7 +810,6 @@ function studyVocab() {
         }).always(function () {
             console.log('complete');
         });
-        w
     } else {
         console.log("There was llData");
         // reusing nowList. LLData is untouched
