@@ -25,8 +25,6 @@ const openaiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Replace 
 
 let reconstHyphenWord;
 const realWordRegex1 = /^[a-zA-Z]+$/;
-const hyphenWordRegex1 = /-/;
-
 
 window.onload = function () {
 
@@ -212,7 +210,7 @@ function updateWordscore() {
         url: url2 + "/php/goals.php?userid=" + userid
     }).done(function (resultjson) {
             let bob = document.querySelectorAll(".goalContainer");
-            bob.forEach((value, key, parent)=>{
+            bob.forEach((value, key, parent) => {
                 value.remove();
             });
             getGoalsInfo();
@@ -408,13 +406,25 @@ function downloadReader() {
                 var infoArr = myStr.split("^/");
                 var inList = false;
 
+                console.log("In constituteText function. myStr and 'start' are as follows :\n" + myStr + "\n" + start);
 
                 const customIndexOf = (arr, searchTerm, start) => {
+                    console.log("array, array length, search term, start... in customeIndexOf function");
+                    console.log(...arr);
+                    console.log(arr.length);
+                    console.log(searchTerm);
+                    console.log(start);
+
                     for (let i = start; i < arr.length; i++) {
                         // Split the array element by hyphen
-                        if (arr[i].match(hyphenWordRegex1)) {
-                            let parts = arr[i].split('-'); // maybe too expensive. Just look for hyphen and return after it
-                            reconstHyphenWord = parts[0] + "-" + parts[1]; // reconstitute hyphenated word!!!
+                        console.log("in for loop, array element is: " + arr[i]);
+                        if (arr[i].match(/-/)) {
+                            let parts = arr[i].split('-');
+                            reconstHyphenWord = parts[0];
+                            for (j = 1; j < parts.length; j++) {
+                                reconstHyphenWord += "-" + parts[j];
+                                console.log(reconstHyphenWord)
+                            }
                             if (parts[1] === searchTerm) {
                                 return i;
                             }
@@ -427,7 +437,6 @@ function downloadReader() {
                     return -1; // Return -1 if no match is found
                 }
 
-
                 var foundidx = customIndexOf(finalTextArr, infoArr[0], start);
 
                 if (foundidx > -1) {
@@ -437,35 +446,19 @@ function downloadReader() {
                         }
                     });
 
-                    if (finalTextArr[foundidx].match(hyphenWordRegex1)) {
-
-                        if (inList) {
-                            finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + reconstHyphenWord + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + reconstHyphenWord + "</span>";
-                        } else {
-                            finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + reconstHyphenWord + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + reconstHyphenWord + "</span>";
-                        }
-                        try {
-                            constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
-                        } catch (a) {
-                            console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
-                        }
-                    } else {
-                        if (inList) {
-                            finalTextArr[foundidx] = "<span class=\"word clicked\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
-                        } else {
-                            finalTextArr[foundidx] = "<span class=\"word\" onclick=\"customPop(this, \'" + infoArr[0] + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + infoArr[0] + "</span>";
-                        }
-                        try {
-                            constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
-                        } catch (a) {
-                            console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
-                        }
+                    const wordClass = inList ? "\"word clicked\"" : "\"word\"";
+                    console.log(reconstHyphenWord);
+                    const wordEl = finalTextArr[foundidx].match(/-/) ? reconstHyphenWord : infoArr[0];
+                    finalTextArr[foundidx] = "<span class=" + wordClass + " onclick=\"customPop(this, \'" + wordEl + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + wordEl + "</span>";
+                    try {
+                        constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
+                    } catch (a) {
+                        console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
                     }
                 }
             };
 
-            for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) {
-                // console.log("sending to constituteText: " + selectedReaderObj.uniqueInfoArray[x]);
+            for (var x = 0; x < selectedReaderObj.uniqueInfoArray.length; x++) { // The main routine lol????
                 constituteText(selectedReaderObj.uniqueInfoArray[x], 0);
             }
 

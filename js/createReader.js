@@ -102,21 +102,14 @@ function parseText() {
 
         textArr = treatImagesInCreateReader(textArr);
 
-
-        // for (let i = 0; i < textArr.length; i++) {
-        //     if (textArr[i] === '<img') {
-        //         textArr[i] = textArr[i] + '\u0020' + textArr[i + 1];
-        //         textArr[i + 1] = 'deleteMePlease';
-        //     }
-        // }
-
         printObject("textArr", textArr);
 
         for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
             let tmpString = "";
             const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
             const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
-            const startPunc = (myStr) => {
+            const startPunc = (myStr) => {// RECURSIVE FUNCTION
+                console.log('in startPunc recursive function: ' + myStr);
                 if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
                     finalArr[w].push(myStr.slice(0, 1)); // one by one, the starting punctuation is added as an element to finalArr[w] (i.e. second dimension)
                     return startPunc(myStr.slice(1));
@@ -126,6 +119,7 @@ function parseText() {
             };
 
             const endPunc = (myStr) => {
+                console.log('in endPunc recursive function: ' + myStr);
                 if (myStr.slice(-1).search(endPuncRegex) > -1) {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
@@ -140,12 +134,20 @@ function parseText() {
             if (tmpString.search(realWordRegex) > -1) {
                 wordArr.push(tmpString);
             }
-            const hyphenpos = tmpString.search(hyphenWordRegex);
+            // const hyphenpos = tmpString.search(hyphenWordRegex);
 
-            if (hyphenpos > -1 && tmpString.search(/^-$/) === -1) {
-                wordArr.push(tmpString.slice(0, hyphenpos));
-                wordArr.push(tmpString.slice(hyphenpos + 1));
-            }
+            // if (hyphenpos > -1 && tmpString.search(/^-$/) === -1) { // This is a word that contains at least one hyphen
+
+                if(tmpString.search(hyphenWordRegex) > -1 && tmpString.search(/^-$/) === -1) { // This is a word that contains at least one hyphen
+                    let parts = tmpString.split("-");
+                    wordArr.push(...parts);
+                }
+
+
+
+                // wordArr.push(tmpString.slice(0, hyphenpos));
+                // wordArr.push(tmpString.slice(hyphenpos + 1));
+            // }
 
             finalArr[w].push(tmpString);
             let crab = 0;
