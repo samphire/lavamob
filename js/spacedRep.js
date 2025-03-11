@@ -234,7 +234,7 @@ async function manageLL(type) {
                             "Updated activity log for AI sentence generation",
                             "Problem updating activity log for AI sentence generation"
                         );
-            swal(aiResponse);
+            swal("", aiResponse);
             break;
     }
     $(".slidey.slidey-active").toggleClass("slidey-active");

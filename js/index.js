@@ -28,7 +28,7 @@ const realWordRegex1 = /^[a-zA-Z]+$/;
 
 window.onload = function () {
 
-    console.info(localStorage);
+    // console.info(localStorage);
 
     history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
     $('#fileinput').on('change', prepareUpload);
@@ -55,7 +55,7 @@ window.onload = function () {
         return;
     } else {
 
-        console.info(localStorage);
+        // console.info(localStorage);
 
         if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
             document.getElementById("userEmail").value = localStorage.getItem("userEmail");
@@ -68,9 +68,9 @@ window.onload = function () {
 
 function login() {
     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
-    console.log("In login()");
+    // console.log("In login()");
     var urly = url2 + "/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
-    console.log(urly);
+    // console.log(urly);
     //alert(urly);
     $.ajax({
         type: "GET",
@@ -78,7 +78,7 @@ function login() {
         url: urly,
         async: false,
         success: function (data) {
-            console.log("LOGIN: " + data);
+            // console.log("LOGIN: " + data);
             //alert("success");
             if (data == "fail login") {
                 alert("username or password is incorrect");
@@ -96,21 +96,21 @@ function login() {
             localStorage.setItem("group", group);
             localStorage.setItem("username", username);
 
-            console.log(localStorage);
+            // console.log(localStorage);
 
             $(".login").hide();
             // document.getElementById('showusername').innerText = localStorage.getItem('username');
             document.getElementById('showusername').innerText = "user: " + username;
-            console.log("username is " + username);
+            // console.log("username is " + username);
             $("#welcome").show();
             $("#menu").show();
             getReaderInfo();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.log("some problem with ajax login");
+            // console.log("some problem with ajax login");
             //alert("fail");
-            console.log(urly);
-            console.log(textStatus + "\n" + errorThrown);
+            // console.log(urly);
+            // console.log(textStatus + "\n" + errorThrown);
             alert(textStatus + "\n" + errorThrown);
         }
     });
@@ -140,18 +140,18 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
             welcomeInfo._2k = goals[0]._2k;
             welcomeInfo._3k = goals[0]._3k;
 
-            console.log("resultjson from goals.php" + resultjson);
+            // console.log("resultjson from goals.php" + resultjson);
             let wordScore = 0;
 
             if (goals[0].goal_name !== 'blank') {
                 const goalPlate = document.querySelector('#goalTemplate');
                 for (let i = 0; i < goals.length; i++) {
 
-                    console.log(goals);
+                    // console.log(goals);
                     let goalData = goals[i];
                     // Value of learned and learning combined
-                    console.log('info from goalData');
-                    console.log(goalData);
+                    // console.log('info from goalData');
+                    // console.log(goalData);
                     wordScore = calcValForGoal(goalData.learned, goalData.learning, goalData.avgRepnum);
                     // alert(wordScore);
                     let clone = goalPlate.content.cloneNode(true);
@@ -199,7 +199,7 @@ function getGoalsInfo() { // the returned object contains avg repnum and learned
             makeWelcomeInfo(welcomeInfo.wordscore, welcomeInfo._1k, welcomeInfo._2k, welcomeInfo._3k);
         }
     ).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call to get goals data");
+        // console.log("failed ajax call to get goals data");
     });
 }
 
@@ -216,7 +216,7 @@ function updateWordscore() {
             getGoalsInfo();
         }
     ).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call to get goals data");
+        // console.log("failed ajax call to get goals data");
     });
 }
 
@@ -240,9 +240,9 @@ function getReaderInfo() {
         url: url2 + "/php/getTextInfo.php",
         data: {"userid": userid}
     }).done(function (resultjson) {
-        console.log("\n\nresultjson: " + JSON.stringify(resultjson) + "\n\n");
+        // console.log("\n\nresultjson: " + JSON.stringify(resultjson) + "\n\n");
         if (!resultjson) {
-            console.log("resultjson evaluates to false. Probably there are no readers");
+            // console.log("resultjson evaluates to false. Probably there are no readers");
             return;
         }
 
@@ -258,7 +258,7 @@ function getReaderInfo() {
             $('#selectReader').append(createReaderItem(val));
         });
     }).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call in getReaderInfo" + status + err);
+        // console.log("failed ajax call in getReaderInfo" + status + err);
     });
 }
 
@@ -285,7 +285,7 @@ function createGroupItem(data) {
 }
 
 function editReader(textid) {
-    console.info("in edit reader");
+    // console.info("in edit reader");
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -296,21 +296,21 @@ function editReader(textid) {
         // url: url + "/text/forEdit?textid=" + textid
         url: url2 + "/php/getTextForEdit.php?textid=" + textid
     }).done(function (resultjson) {
-        console.info(`text ${textid} fetched successfully`);
+        // console.info(`text ${textid} fetched successfully`);
         selectedReaderObj = JSON.parse(resultjson);
         // printObject("Text For Edit", selectedReaderObj);
         document.getElementById("createReaderTextPanel").value = selectedReaderObj.plainText;
 
 
         // .innerText = resultjson.plainText;
-        console.log("value set for 'text' div");
+        // console.log("value set for 'text' div");
         document.getElementById("readerName").value = selectedReaderObj.name;
         document.getElementById("readerDescription").value = selectedReaderObj.description;
 
         createReader(textid);
 
     }).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call in getReader");
+        // console.log("failed ajax call in getReader");
     });
 }
 
@@ -328,14 +328,14 @@ function deleteReader(node, textid) {
         cancelButtonClass: 'btn btn-danger',
         buttonsStyling: true
     }).then(function () {
-        console.log('chose to add words to learned list');
+        // console.log('chose to add words to learned list');
         node.parentNode.removeChild(node);
         removeReader(textid, true);
     }, function (dismiss) {
         // dismiss can be 'cancel', 'overlay',
         // 'close', and 'timer'
         if (dismiss === 'cancel') {
-            console.log('chose to just delete reader');
+            // console.log('chose to just delete reader');
             node.parentNode.removeChild(node);
             removeReader(textid, false);
         }
@@ -344,14 +344,14 @@ function deleteReader(node, textid) {
 
 function getReader(textid) {
     history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/studyText");
-    console.log("push state page 5 studyText. History object size is " + History.length);
+    // console.log("push state page 5 studyText. History object size is " + History.length);
     selectedTextid = textid;
     getLL(textid);
     $("#reader").show();
 }
 
 function downloadReader() {
-    console.log("in downloadReader()");
+    // console.log("in downloadReader()");
     $.ajax({
         type: "GET",
         crossDomain: true,
@@ -380,12 +380,12 @@ function downloadReader() {
 
             var finalTextArr;
 
-            console.warn(selectedReaderObj.audio);
-            console.warn(selectedReaderObj.audioSpriteJson);
+            // console.warn(selectedReaderObj.audio);
+            // console.warn(selectedReaderObj.audioSpriteJson);
 
 
             if (selectedReaderObj.audio) { // If there is audio, set up Howl and the sprite object
-                console.log('there is audio');
+                // console.log('there is audio');
                 finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
                 var sndArr = new Array();
                 sndArr.push(audiourl + "/" + selectedReaderObj.audio); // simplify this for goodness sake, insert on instantiation
@@ -406,24 +406,24 @@ function downloadReader() {
                 var infoArr = myStr.split("^/");
                 var inList = false;
 
-                console.log("In constituteText function. myStr and 'start' are as follows :\n" + myStr + "\n" + start);
+                // console.log("In constituteText function. myStr and 'start' are as follows :\n" + myStr + "\n" + start);
 
                 const customIndexOf = (arr, searchTerm, start) => {
-                    console.log("array, array length, search term, start... in customeIndexOf function");
-                    console.log(...arr);
-                    console.log(arr.length);
-                    console.log(searchTerm);
-                    console.log(start);
+                    // console.log("array, array length, search term, start... in customeIndexOf function");
+                    // console.log(...arr);
+                    // console.log(arr.length);
+                    // console.log(searchTerm);
+                    // console.log(start);
 
                     for (let i = start; i < arr.length; i++) {
                         // Split the array element by hyphen
-                        console.log("in for loop, array element is: " + arr[i]);
+                        // console.log("in for loop, array element is: " + arr[i]);
                         if (arr[i].match(/-/)) {
                             let parts = arr[i].split('-');
                             reconstHyphenWord = parts[0];
                             for (j = 1; j < parts.length; j++) {
                                 reconstHyphenWord += "-" + parts[j];
-                                console.log(reconstHyphenWord)
+                                // console.log(reconstHyphenWord)
                             }
                             if (parts[1] === searchTerm) {
                                 return i;
@@ -447,13 +447,13 @@ function downloadReader() {
                     });
 
                     const wordClass = inList ? "\"word clicked\"" : "\"word\"";
-                    console.log(reconstHyphenWord);
+                    // console.log(reconstHyphenWord);
                     const wordEl = finalTextArr[foundidx].match(/-/) ? reconstHyphenWord : infoArr[0];
                     finalTextArr[foundidx] = "<span class=" + wordClass + " onclick=\"customPop(this, \'" + wordEl + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + wordEl + "</span>";
                     try {
                         constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
                     } catch (a) {
-                        console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
+                        // console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
                     }
                 }
             };
@@ -471,7 +471,7 @@ function downloadReader() {
                     selectedReaderText += el;
                 }
             });
-            console.log(selectedReaderObj.audio);
+            // console.log(selectedReaderObj.audio);
             $('#selectReader').hide();
             $('#reader').empty();
             $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
@@ -492,12 +492,12 @@ function downloadReader() {
             document.documentElement.scrollTop = readerYScroll;
         }
     ).fail(function (jqXHR, status, err) {
-        console.log("failed ajax call in getReader");
+        // console.log("failed ajax call in getReader");
     });
 }
 
 function getLL(textid) {
-    console.log("In getLL with textid " + textid);
+    // console.log("In getLL with textid " + textid);
     $.ajax({
         url: url2 + "/php/getLL.php",
         type: "GET",
@@ -510,7 +510,7 @@ function getLL(textid) {
         },
         success: function (data) {
             llData = data;
-            console.log("Set llData. Type of list: " + typeof llData.list);
+            // console.log("Set llData. Type of list: " + typeof llData.list);
             downloadReader();
         },
         error: function () {
@@ -638,24 +638,24 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 getLL(selectedTextid);
             },
             error: (function (jqXHR, status, err) {
-                console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log\n" + err);
+                // console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log\n" + err);
             })
         });
     }, function () {
-        console.log("cancelled");
+        // console.log("cancelled");
     });
 }
 
 function studyReader() {
     history.pushState({page_id: 2, page: "readers"}, null, "/lavamob/studyReader");
-    console.log("push state page 2 readers History object size is " + History.length);
+    // console.log("push state page 2 readers History object size is " + History.length);
     $("section").hide();
     $("#reader").empty();
     $("#selectReader").show();
 
     const section = document.getElementById('selectReader');
     section.querySelectorAll('.item').forEach((item) => {
-        console.log('adding event listeners');
+        // console.log('adding event listeners');
         item.addEventListener('mousedown', mouseDownHandler);
     });
 }
@@ -671,7 +671,7 @@ function createReader(textid) {
 }
 
 function getVocab(textid) {
-    console.log("In getVocab");
+    // console.log("In getVocab");
     // make entry in the activity log table
     jaxy(
         "php/activityLog.php", "POST",
@@ -696,7 +696,7 @@ function getVocab(textid) {
             xhr.setRequestHeader("Accept", "application/json");
         },
         success: function (data) {
-            console.log("successfully retrieved ll data");
+            // console.log("successfully retrieved ll data");
             llData = data;
             let thisTextLL = [];
             llData.list.forEach(function (el) {
@@ -720,7 +720,7 @@ function getVocab(textid) {
                 $("#vocab").append(htmlstr);
                 $("#selectReader").hide();
                 history.pushState({page_id: 6, page: "readVocab"}, null, "/lavamob/readVocab");
-                console.log("History object size is " + History.length);
+                // console.log("History object size is " + History.length);
                 $("#vocab").show();
             } else {
                 swal("이 텍스트에 대한 어휘 항목이 없습니다");
@@ -770,15 +770,15 @@ function makeNowList() {
             nowList.push(el);
         }
     });
-    console.log("size of nowList is " + nowList.length);
+    // console.log("size of nowList is " + nowList.length);
 }
 
 function studyVocab() {
-    console.log("In study vocab, makeVocaTest is next");
-    console.log(llData);
+    // console.log("In study vocab, makeVocaTest is next");
+    // console.log(llData);
     $("#vocaTest").empty();
     if (!llData) {
-        console.log("There was no llData. Downloading now...");
+        // console.log("There was no llData. Downloading now...");
         $.ajax({
             url: url2 + "/php/getLL.php",
             type: "GET",
@@ -788,23 +788,23 @@ function studyVocab() {
             accepts: "application/json",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
-                console.log('ajax request header set');
+                // console.log('ajax request header set');
             },
             success: function (data) {
-                console.log('in success function of studyVocab function line 633');
+                // console.log('in success function of studyVocab function line 633');
                 llData = data;
                 makeNowList();
                 makeVocaTest();
             }
         }).done(function () {
-            console.log('success');
+            // console.log('success');
         }).fail(function () {
-            console.log('error');
+            // console.log('error');
         }).always(function () {
-            console.log('complete');
+            // console.log('complete');
         });
     } else {
-        console.log("There was llData");
+        // console.log("There was llData");
         // reusing nowList. LLData is untouched
         makeNowList();
         makeVocaTest();
@@ -812,7 +812,7 @@ function studyVocab() {
 }
 
 function makeVocaTest() {
-    console.log("In makeVocaTest. then promise is next");
+    // console.log("In makeVocaTest. then promise is next");
 
     swal({
         text: "You have " + nowList.length + " items to review"
@@ -826,7 +826,7 @@ function makeVocaTest() {
         }
 
         history.pushState({page_id: 3, page: "vocab"}, null, "/lavamob/testVocab");
-        console.log("push state page 3 vocab History object size is " + History.length);
+        // console.log("push state page 3 vocab History object size is " + History.length);
         $("section").hide();
         $("#vocaTest").show();
         test(nowList);
@@ -836,13 +836,13 @@ function makeVocaTest() {
 function playSound(sprite) {
     howl.stop();
     if (document.getElementById("loopAudio").checked) {
-        console.log("loop is checked");
+        // console.log("loop is checked");
         howl._sprite.myNewSprite = [howl._sprite[sprite][0], howl._sprite[sprite][1], true];
         howl.play('myNewSprite');
         return;
     }
     if (document.getElementById("continousAudioCheck").checked) {
-        console.log("continuousAudio is checked");
+        // console.log("continuousAudio is checked");
         howl._sprite.myNewSprite = [howl._sprite[sprite][0], 1000000];
         howl.play('myNewSprite');
         return;

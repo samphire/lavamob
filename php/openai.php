@@ -8,12 +8,12 @@ $headers = array(
 );
 
 $data = array(
-    'model' => 'gpt-3.5-turbo-1106',
+    'model' => 'gpt-4-turbo',
     'max_tokens' => 100,
     'messages' => array(
             array(
                 'role' => 'user',
-                'content' => 'give me an example sentence containing the word '.$_GET['word']
+                'content' => "Generate a natural English sentence using the word " . $_GET['word'] . ". Provide a Korean translation and a brief explanation, in Korean, of the word’s meaning in this context."
             )
     )
 );
