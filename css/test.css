@@ -148,7 +148,7 @@
     font-size: xx-large;
     font-weight: bolder;
     text-align: center;
-    color: var(--primary);
+    /*color: var(--primary);*/
 }
 
 .gridItem {
