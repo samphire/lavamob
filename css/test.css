@@ -9,6 +9,7 @@
 
 [data-tooltip] {
     position: relative;
+    cursor: pointer;
 }
 
 [data-tooltip]:after {
@@ -20,7 +21,8 @@
     left: 50%;
     transform: translate(-50%);
     color: var(--secondary);
-    background: var(--bgDark);
+    /*background: var(--bgDark);*/
+    background-color: rgba(0,0,0,0.8);
     padding: 3px;
     border-radius: 5px;
     z-index: 99;

@@ -183,11 +183,11 @@ function test(list) {
 
     $('#vocaTest').append("<div id='testItemActions' data-curIdx='0'><img id='redbutton' src='assets/img/icons/redbutton.png' onclick='$(\".slidey\").toggleClass(\"slidey-active\");document.querySelector(\"#testItemActions\").dataset.curIdx=currentVocabIndex'>" +
         "<div class='slidey'>" +
-        "<span data-tooltip='mark as `difficult` item'><img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'></span>" +
-        "<span data-tooltip='mark as `easy` item'><img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'></span>" +
-        "<span data-tooltip='remove from test list and add to learned list'><img src='assets/img/icons/emoticons/learned.png' onclick='manageLL(3)'></span>" +
-        "<span data-tooltip='just remove from test list'><img src='assets/img/icons/emoticons/getlost.png' onclick='manageLL(4)'></span>" +
-        "<span data-tooltip='I want to study this word'><img src='assets/img/icons/emoticons/visittext.png' onclick='manageLL(5)'></span>" +
+        "<span data-tooltip='어려운 것으로 표시하다'><img src='assets/img/icons/emoticons/hard.png' onclick='manageLL(1)'></span>" +
+        "<span data-tooltip='쉬운 항목으로 표시'><img src='assets/img/icons/emoticons/easy.png' onclick='manageLL(2)'></span>" +
+        "<span data-tooltip='제거하고 학습한 것으로 표시'><img src='assets/img/icons/emoticons/learned.png' onclick='manageLL(3)'></span>" +
+        "<span data-tooltip='그냥 제거해'><img src='assets/img/icons/emoticons/getlost.png' onclick='manageLL(4)'></span>" +
+        "<span data-tooltip='AI 예시'><img src='assets/img/icons/emoticons/visittext.png' onclick='manageLL(5)'></span>" +
         "</div></div>");
     $("#vocaTest").show();
     $(".testItem:first-of-type").toggleClass("visible").find(".inputAnswer input").focus();
