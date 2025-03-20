@@ -206,7 +206,7 @@
     cursor: pointer;
     grid-column: 1 / 6;
     /*box-shadow: #212121 0px 1px 4px;*/
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 4px, rgba(0, 0, 0, 0.3) 0 7px 13px -3px, rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
 .btnActivity:hover{
@@ -358,13 +358,13 @@ body {
 
 .audioOptions {
     position: fixed;
-    background-color: #888c9edd;
+    background-color: #888c9e44;
     display: inline-block;
     border-radius: 10px;
-    padding: 7px;
+    padding: 5px;
     color: black;
-    left: 9px;
-    top: 34%;
+    bottom: 0;
+    margin: 0 20%;
 }
 
 .audioOptions input {
@@ -1039,7 +1039,7 @@ input#llWord.llWord, input#tranny.tranny {
         color: var(--buttonText);
         cursor: pointer;
         margin: 1rem;
-        box-shadow: rgba(0, 0, 0, 0.38) 0px 2px 4px;
+        box-shadow: rgba(0, 0, 0, 0.38) 0 2px 4px;
     }
 
     .item > i {

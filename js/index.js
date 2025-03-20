@@ -18,6 +18,8 @@ let llData, nowList; //llData is all learninglist data. nowlist is the subset th
 var naverPopup;
 var howlSpriteObj;
 var howl;
+let isPlaying = false;
+let soundId = null;
 var naverPre = "http://m.endic.naver.com/search.nhn?query=";
 var naverPost = "&searchOption=mean";
 var readerYScroll = 0;
@@ -27,6 +29,25 @@ let reconstHyphenWord;
 const realWordRegex1 = /^[a-zA-Z]+$/;
 
 window.onload = function () {
+
+    document.addEventListener("keydown", function (event) {
+        console.log("adding spacebar howl event listener. isPlaying is " + isPlaying);
+        switch (event.code) {
+            case "Space":
+                event.preventDefault()
+                if (isPlaying) {
+                    isPlaying = false;
+                    howl.pause();
+                } else {
+                    isPlaying = true;
+                    howl.play();
+                }
+                break;
+            case "ArrowLeft":
+                howl.seek(Math.max(0, howl.seek() - 2));
+                break;
+        }
+    });
 
     // console.info(localStorage);
 
@@ -63,6 +84,8 @@ window.onload = function () {
         }
     }
     $('.login').show();
+
+
 }
 
 
@@ -834,6 +857,8 @@ function makeVocaTest() {
 }
 
 function playSound(sprite) {
+
+
     howl.stop();
     if (document.getElementById("loopAudio").checked) {
         // console.log("loop is checked");
@@ -848,6 +873,7 @@ function playSound(sprite) {
         return;
     }
     sprite = sprite.toString();
+    isPlaying = true;
     howl.play(sprite);
 }
 
