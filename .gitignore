@@ -1,0 +1,9 @@
+.idea/deployment.xml
+.idea/webServers.xml
+.idea/workspace.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/lavamob.iml
+php/api.inc
+.idea/dataSources.local.xml
+node_modules
+.idea/
