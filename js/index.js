@@ -31,10 +31,18 @@ const realWordRegex1 = /^[a-zA-Z]+$/;
 window.onload = function () {
 
     document.addEventListener("keydown", function (event) {
-        console.log("adding spacebar howl event listener. isPlaying is " + isPlaying);
-        switch (event.code) {
-            case "Space":
-                event.preventDefault()
+        // Check if the active element is an input or textarea (or if you want to add other exceptions)
+        const activeEl = document.activeElement;
+        if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA")) {
+            // Allow default behavior so users can enter spaces normally
+            return;
+        }
+
+        // Check for space key
+        if (event.code === "Space") {
+            // Only prevent default and toggle audio if there's an active audio object
+            if (typeof howl !== "undefined" && howl) {
+                event.preventDefault();
                 if (isPlaying) {
                     isPlaying = false;
                     howl.pause();
@@ -42,10 +50,12 @@ window.onload = function () {
                     isPlaying = true;
                     howl.play();
                 }
-                break;
-            case "ArrowLeft":
-                howl.seek(Math.max(0, howl.seek() - 2));
-                break;
+            }
+        }
+
+        // Other key handling remains the same
+        if (event.code === "ArrowLeft" && typeof howl !== "undefined" && howl) {
+            howl.seek(Math.max(0, howl.seek() - 2));
         }
     });
 
