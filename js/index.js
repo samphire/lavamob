@@ -442,11 +442,6 @@ function downloadReader() {
                 // console.log("In constituteText function. myStr and 'start' are as follows :\n" + myStr + "\n" + start);
 
                 const customIndexOf = (arr, searchTerm, start) => {
-                    // console.log("array, array length, search term, start... in customeIndexOf function");
-                    // console.log(...arr);
-                    // console.log(arr.length);
-                    // console.log(searchTerm);
-                    // console.log(start);
 
                     for (let i = start; i < arr.length; i++) {
                         // Split the array element by hyphen
@@ -462,14 +457,19 @@ function downloadReader() {
                                 return i;
                             }
                         } else {
-                            if (arr[i] === searchTerm) { // non hyphen words
+
+                            let temp = searchTerm;
+                            let tempo = searchTerm.replace(/u0027/, "'");
+
+                            // console.log("arr[i]: ", arr[i]);
+
+                            if (arr[i] === tempo) { // non hyphen words
                                 return i;
                             }
                         }
                     }
                     return -1; // Return -1 if no match is found
                 }
-
                 var foundidx = customIndexOf(finalTextArr, infoArr[0], start);
 
                 if (foundidx > -1) {
@@ -481,8 +481,16 @@ function downloadReader() {
 
                     const wordClass = inList ? "\"word clicked\"" : "\"word\"";
                     // console.log(reconstHyphenWord);
-                    const wordEl = finalTextArr[foundidx].match(/-/) ? reconstHyphenWord : infoArr[0];
-                    finalTextArr[foundidx] = "<span class=" + wordClass + " onclick=\"customPop(this, \'" + wordEl + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + wordEl + "</span>";
+                    let wordEl = finalTextArr[foundidx].match(/-/) ? reconstHyphenWord : infoArr[0];
+
+                    wordEl = wordEl.replace(/u0027/, "'");
+
+                    tempEl = wordEl.replace(/^([a-zA-Z]+)'[a-zA-Z]$/, '$1');
+
+
+                    // console.log("word to decorate: " + tempEl + ", " + infoArr[0]+ ", " + infoArr[1]+ ", " + infoArr[2]+ ", " + infoArr[3]+ ", " + infoArr[4]);
+
+                    finalTextArr[foundidx] = "<span class=" + wordClass + " onclick=\"customPop(this, \'" + tempEl + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + wordEl + "</span>";
                     try {
                         constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
                     } catch (a) {

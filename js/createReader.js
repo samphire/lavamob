@@ -20,7 +20,9 @@ let finalArr, makeSpriteArr, finalArrWithAudio, singleDimensionalFinalArr, sound
 let lastPos = 0;
 let files;
 
-const realWordRegex = /^[a-zA-Z]+$/;
+// const realWordRegex = /^[a-zA-Z]+$/;
+const realWordRegex = /^[a-zA-Z]+(?:'[a-zA-Z]+)*'?$/
+;
 const hyphenWordRegex = /-/;
 const hyphenUsedAsEmDash = /\s-\s/;
 
@@ -81,8 +83,11 @@ function parseText() {
     let w = 0;
     let text = document.getElementById('createReaderTextPanel').value;
 
+    // deal with the annoying character in Shiloh.pdf
     const ShilohCharacterRegex = /(?<=\S)\u2014(?=\S)/g;
-    text = text.replaceAll(ShilohCharacterRegex, ' \u2014 '); // deal with the annoying character in Shiloh.pdf
+    text = text.replaceAll(ShilohCharacterRegex, ' \u2014 ');
+    // deal with annoying citations brackets in wikipedia
+    text = text.replace(/(\S)(\[)/g, "$1 $2");
 
     const paragraphRegex = /\r\n|\r|\n/g
     let paragraphArr = text.split(paragraphRegex);
@@ -131,23 +136,18 @@ function parseText() {
             tmpString = startPunc(textArr[i]);
             tmpString = endPunc(tmpString);
 
+            console.log("textArr[i]: " + textArr[i]);
+            console.log("tmpString: " + tmpString);
+            console.log("tmpString.search(realWordRegex): " + tmpString.search(realWordRegex));
+
             if (tmpString.search(realWordRegex) > -1) {
                 wordArr.push(tmpString);
             }
-            // const hyphenpos = tmpString.search(hyphenWordRegex);
 
-            // if (hyphenpos > -1 && tmpString.search(/^-$/) === -1) { // This is a word that contains at least one hyphen
-
-                if(tmpString.search(hyphenWordRegex) > -1 && tmpString.search(/^-$/) === -1) { // This is a word that contains at least one hyphen
-                    let parts = tmpString.split("-");
-                    wordArr.push(...parts);
-                }
-
-
-
-                // wordArr.push(tmpString.slice(0, hyphenpos));
-                // wordArr.push(tmpString.slice(hyphenpos + 1));
-            // }
+            if (tmpString.search(hyphenWordRegex) > -1 && tmpString.search(/^-$/) === -1) { // This is a word that contains at least one hyphen
+                let parts = tmpString.split("-");
+                wordArr.push(...parts);
+            }
 
             finalArr[w].push(tmpString);
             let crab = 0;
@@ -190,6 +190,11 @@ function parseText() {
     } else {
         uploadText();
     }
+
+    console.log(wordArr);
+    console.log(finalArr);
+    console.log(singleDimensionalFinalArr);
+
 }
 
 function loadAndPlay() { // Does what it says on the tin
