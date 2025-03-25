@@ -221,20 +221,28 @@ async function manageLL(type) {
             goToNext($el);
             break;
         case 5: // AI example sentences
-            const aiResponse = await getExampleSentence(myEl.word);
-            console.log("In manageLL number 5 openai " + aiResponse);
+            const spinner = document.getElementById("spinner");
+            spinner.style.display = "block";
+            let aiResponse = await getExampleSentence(myEl.word);
+            try {
+                console.log("In manageLL number 5 openai " + aiResponse);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                spinner.style.display = "none";
+                swal("", aiResponse);
+            }
             // make entry in the activity log table
-                        jaxy(
-                            "php/activityLog.php", "POST",
-                            {
-                                userid: userid,
-                                activityType: 7,
-                                extraInfo: 1
-                            },
-                            "Updated activity log for AI sentence generation",
-                            "Problem updating activity log for AI sentence generation"
-                        );
-            swal("", aiResponse);
+            jaxy(
+                "php/activityLog.php", "POST",
+                {
+                    userid: userid,
+                    activityType: 7,
+                    extraInfo: 1
+                },
+                "Updated activity log for AI sentence generation",
+                "Problem updating activity log for AI sentence generation"
+            );
             break;
     }
     $(".slidey.slidey-active").toggleClass("slidey-active");

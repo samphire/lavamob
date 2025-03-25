@@ -191,7 +191,7 @@ function makeWelcomeInfo(wordscore, _1k, _2k, _3k) {
     const needle2 = document.querySelector("svg._2k");
     const needle3 = document.querySelector("svg._3k");
 
-    const nums =  document.querySelectorAll(".text .number");
+    const nums = document.querySelectorAll(".text .number");
     const percs = document.querySelectorAll(".text .percsign");
 
 
@@ -215,7 +215,7 @@ function makeWelcomeInfo(wordscore, _1k, _2k, _3k) {
     info.style.animationDelay = "2s";
 
     const makeRot = () => {
-        needle1.style.rotate = _1k * 1.8 -180 + 'deg';
+        needle1.style.rotate = _1k * 1.8 - 180 + 'deg';
         needle2.style.rotate = ((_2k * 1.8) - 180) + 'deg';
         needle3.style.rotate = ((_3k * 1.8) - 180) + 'deg';
         needle1Num.style.animation = "fadeIn 3s";
@@ -231,5 +231,5 @@ function makeWelcomeInfo(wordscore, _1k, _2k, _3k) {
         needle3Num.style.opacity = '100%';
         needle3Perc.style.opacity = '100%';
     };
-      setTimeout(makeRot, 1000);
+    setTimeout(makeRot, 1000);
 }
