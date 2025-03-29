@@ -444,7 +444,7 @@ function downloadReader() {
                         // Split the array element by hyphen
                         if (arr[i].match(/-/)) {
                             let parts = arr[i].split('-');
-                            let reconstHyphenWord = parts[0];
+                            reconstHyphenWord = parts[0];
                             for (j = 1; j < parts.length; j++) {
                                 reconstHyphenWord += "-" + parts[j];
                             }
