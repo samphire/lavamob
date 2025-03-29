@@ -8,15 +8,48 @@ function convertDateToNumber(date) {
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
-function treatImagesInCreateReader(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] === '<img') {
-            arr[i] = arr[i] + '\u0020' + arr[i + 1];
-            arr[i + 1] = 'deleteMePlease';
+// function treatImagesInCreateReader(arr) {
+//     for (let i = 0; i < arr.length; i++) {
+//         if (arr[i] === '<img') {
+//             arr[i] = arr[i] + '\u0020' + arr[i + 1];
+//             arr[i + 1] = 'deleteMePlease';
+//         }
+//     }
+//     return arr.filter(el => el !== 'deleteMePlease');
+// }
+
+// New helper function to process image tags
+function treatImagesInCreateReader(textArr) {
+    let newArr = [];
+    let insideImg = false;
+    let imgToken = "";
+    for (let token of textArr) {
+        // If we're not already building an image tag and we detect one
+        if (!insideImg && token.startsWith("<img")) {
+            insideImg = true;
+            imgToken = token;
+            // If this token already completes the tag, push it immediately
+            if (token.endsWith(">")) {
+                newArr.push(imgToken);
+                insideImg = false;
+                imgToken = "";
+            }
+        } else if (insideImg) {
+            // Append token to the current image tag
+            imgToken += " " + token;
+            if (token.endsWith(">")) {
+                newArr.push(imgToken);
+                insideImg = false;
+                imgToken = "";
+            }
+        } else {
+            // Regular token; just push it
+            newArr.push(token);
         }
     }
-    return arr.filter(el => el !== 'deleteMePlease');
+    return newArr;
 }
+
 
 function printObject(msg, obj) {
     let myStr = "";

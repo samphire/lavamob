@@ -412,11 +412,8 @@ function downloadReader() {
             howlSpriteObj = null;
 
             var finalTextArr;
-
             // console.warn(selectedReaderObj.audio);
             // console.warn(selectedReaderObj.audioSpriteJson);
-
-
             if (selectedReaderObj.audio) { // If there is audio, set up Howl and the sprite object
                 // console.log('there is audio');
                 finalTextArr = selectedReaderObj.puncParsedAudioJsonArray;
@@ -435,29 +432,26 @@ function downloadReader() {
             // make selected reader text !!!!!!!!!!
             //recursively use indexof to alter the value of
 
-            var constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
+            const constituteText = function (myStr, start) { //Decorates each word with customPop, and sets css if word is in learning list
+                // console.log("\n\nmyStr: " + myStr);
                 var infoArr = myStr.split("^/");
+                // console.log("\n\n");
+                // console.log(...infoArr);
                 var inList = false;
-
                 // console.log("In constituteText function. myStr and 'start' are as follows :\n" + myStr + "\n" + start);
-
                 const customIndexOf = (arr, searchTerm, start) => {
-
                     for (let i = start; i < arr.length; i++) {
                         // Split the array element by hyphen
-                        // console.log("in for loop, array element is: " + arr[i]);
                         if (arr[i].match(/-/)) {
                             let parts = arr[i].split('-');
-                            reconstHyphenWord = parts[0];
+                            let reconstHyphenWord = parts[0];
                             for (j = 1; j < parts.length; j++) {
                                 reconstHyphenWord += "-" + parts[j];
-                                // console.log(reconstHyphenWord)
                             }
                             if (parts[1] === searchTerm) {
                                 return i;
                             }
                         } else {
-
                             let temp = searchTerm;
                             let tempo = searchTerm.replace(/u0027/, "'");
 
@@ -471,30 +465,22 @@ function downloadReader() {
                     return -1; // Return -1 if no match is found
                 }
                 var foundidx = customIndexOf(finalTextArr, infoArr[0], start);
-
                 if (foundidx > -1) {
                     llData.list.forEach(function (el) {
                         if (parseInt(el.wordid) === parseInt(infoArr[1])) {
                             inList = true;
                         }
                     });
-
                     const wordClass = inList ? "\"word clicked\"" : "\"word\"";
                     // console.log(reconstHyphenWord);
                     let wordEl = finalTextArr[foundidx].match(/-/) ? reconstHyphenWord : infoArr[0];
-
                     wordEl = wordEl.replace(/u0027/, "'");
-
-                    tempEl = wordEl.replace(/^([a-zA-Z]+)'[a-zA-Z]$/, '$1');
-
-
-                    // console.log("word to decorate: " + tempEl + ", " + infoArr[0]+ ", " + infoArr[1]+ ", " + infoArr[2]+ ", " + infoArr[3]+ ", " + infoArr[4]);
-
-                    finalTextArr[foundidx] = "<span class=" + wordClass + " onclick=\"customPop(this, \'" + tempEl + "\', \'" + infoArr[1] + "\', \'" + infoArr[2] + "\', \'" + infoArr[3] + "\', \'" + infoArr[4] + "\');\">" + wordEl + "</span>";
+                    let tempEl = wordEl.replace(/^([a-zA-Z]+)'[a-zA-Z]$/, '$1');
+                    finalTextArr[foundidx] = `<span class=${wordClass} onclick="customPop(this, '${tempEl}', '${infoArr[1]}', '${infoArr[2]}', '${infoArr[3]}', '${infoArr[4]}');">${wordEl}</span>`;
                     try {
                         constituteText(myStr, foundidx + 1); // recursive, because the word may occur more than once in the text, indexOf only returns the first occurrence
-                    } catch (a) {
-                        // console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array");
+                    } catch (error) {
+                        console.log("Error in constitute text. Maybe foundidx+1 is greater than the length of the array: " + error);
                     }
                 }
             };
