@@ -110,6 +110,16 @@ function parseText() {
         printObject("textArr", textArr);
 
         for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
+
+            // *** New check: if token is an image tag, push it as is and skip further processing ***
+            if (textArr[i].startsWith("<img") && textArr[i].endsWith(">")) {
+                finalArr[w].push(textArr[i]);
+                if (i < (textArr.length - 1)) {
+                    finalArr[w].push(" ");
+                }
+                continue;
+            }
+
             let tmpString = "";
             const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
             const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
