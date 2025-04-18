@@ -182,6 +182,44 @@
 </nav>
 
 <br>
+
+<span id="maximize">&#x26F6</span>
+
+<script>
+    const btn = document.getElementById('maximize');
+    btn.addEventListener('click', () => {
+        const docEl = document.documentElement;
+        if (!document.fullscreenElement &&    // Standard
+            !document.webkitFullscreenElement &&  // Safari/WebKit
+            !document.mozFullScreenElement &&     // Firefox
+            !document.msFullscreenElement) {      // IE/Edge
+            // Enter fullscreen
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.webkitRequestFullscreen) {
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.mozRequestFullScreen) {
+                docEl.mozRequestFullScreen();
+            } else if (docEl.msRequestFullscreen) {
+                docEl.msRequestFullscreen();
+            }
+            // btn.textContent = '🗗'; // optional: change icon
+        } else {
+            // Exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            // btn.textContent = '⛶'; // optional: revert icon
+        }
+    });
+</script>
+
 <section id="welcome">
     <i class="fa-solid fa-user"></i>
     <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->

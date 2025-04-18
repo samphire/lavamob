@@ -2,6 +2,13 @@
 @import 'reset.css';
 @import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap');
 
+#maximize{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+
 /*:root {*/
 /*    --bg: #bcaa99;*/
 /*    --textDark: #e0950d;*/
