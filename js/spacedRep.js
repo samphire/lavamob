@@ -251,7 +251,7 @@ async function manageLL(type) {
 
 function makeFlashCard(val) {
     let returnStr;
-    returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class = 'card'><div class = 'card__inner' onclick='classList.toggle(\"is-flipped\")'><div class = 'card__face card__face--front'><h2>"
+    returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class = 'card'><div class = 'card__inner' onclick='classList.toggle(\"is-flipped\"); speakWord(\"" + val.word + "\");'><div class = 'card__face card__face--front'><h2>"
         + val.word + "</h2></div><div class='card__face card__face--back'><h2>" + val.tranny + "</h2></div></div></div>";
 
     returnStr += "<div class='buttonDiv'><button class='btn btn-know' onclick='flashy(true, " + val.idxInTestList + ")'>I know it!</button><button class='btn btn-dunno' onclick='flashy(false, " + val.idxInTestList + ")'>I don't know...</button></div></div>";
@@ -280,7 +280,7 @@ function makeQ(type, val) {
     switch (type) {
 
         case 1: // Korean word shown, choose from 4 tranny
-            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.word + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest audioWord' onclick='speakWord(\"" + val.word + "\")'>" + val.word + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";
@@ -304,7 +304,7 @@ function makeQ(type, val) {
             return returnStr;
             break;
         case 3: // Korean word shown, choose from 6 tranny
-            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest'>" + val.word + "</div>";
+            returnStr = "<div class = 'testItem' data-idxintestlist='" + val.idxInTestList + "'><div class='wordToTest audioWord' onclick='speakWord(\"" + val.word + "\")'>" + val.word + "</div>";
             randItems.forEach(function (rndVal) {
                 if (rndVal.word === val.word) {
                     returnStr += "<div class='gridItem' onclick='checkResult(event, true, " + val.idxInTestList + ")'>" + rndVal.tranny + "</div>";

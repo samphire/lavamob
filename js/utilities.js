@@ -8,6 +8,12 @@ function convertDateToNumber(date) {
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
+const speakWord = (theWord) => {
+    const utter = new SpeechSynthesisUtterance(theWord);
+    utter.lang = "en-GB";
+    speechSynthesis.speak(utter);
+}
+
 // function treatImagesInCreateReader(arr) {
 //     for (let i = 0; i < arr.length; i++) {
 //         if (arr[i] === '<img') {
