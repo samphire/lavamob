@@ -272,3 +272,55 @@ function makeWelcomeInfo(wordscore, _1k, _2k, _3k) {
     };
     setTimeout(makeRot, 1000);
 }
+
+function deepClean(obj) {
+    const seen = new WeakSet();
+
+    const replacer = value => {
+        if (typeof value === 'string') {
+            return value
+                .replace(/[\u202f\u00a0\u200b\u200e\u200f]/g, ' ') // replace narrow space, nbsp, zero-width space, LRM, RLM with normal space
+                .normalize('NFC'); // normalize to prevent split emoji/codepoints
+        }
+        return value;
+    };
+
+    const traverse = input => {
+        if (input && typeof input === 'object') {
+            if (seen.has(input)) return; // avoid circular reference
+            seen.add(input);
+
+            if (Array.isArray(input)) {
+                for (let i = 0; i < input.length; i++) {
+                    input[i] = traverse(input[i]);
+                }
+            } else {
+                for (const key in input) {
+                    if (input.hasOwnProperty(key)) {
+                        input[key] = traverse(input[key]);
+                    }
+                }
+            }
+        } else {
+            return replacer(input);
+        }
+        return input;
+    };
+    return traverse(structuredClone(obj)); // use structuredClone to avoid mutating original
+}
+
+function sanitizeForJSON(obj) {
+    const replacer = (key, value) => {
+        if (typeof value === 'string') {
+            // Normalize Unicode, escape dangerous chars, trim invisible junk
+            return value
+                .normalize('NFC')
+                .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')   // Remove control chars
+                .replace(/[\uD800-\uDFFF]/g, '')               // Strip unpaired surrogates
+                .replace(/\\/g, '\\\\')                        // Escape backslashes
+                .replace(/"/g, '\\"');                         // Escape double quotes
+        }
+        return value;
+    };
+    return JSON.stringify(obj, replacer);
+}

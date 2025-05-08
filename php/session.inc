@@ -9,5 +9,4 @@ header('Access-Control-Allow-Headers: *');
 date_default_timezone_set('Asia/Seoul');
 global $conn;
 $conn = mysqli_connect("localhost", "samphire", "Fk!i=a0@:K", "reader3") or die('Error connecting to mysql');
-mysqli_query($conn, "SET NAMES utf8");
-mysqli_query($conn, "SET CHARACTER SET utf8");
+$conn->set_charset("utf8mb4");

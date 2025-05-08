@@ -1,6 +1,10 @@
 <?php
 include("session.inc");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 function mbStringToArray($word)
 {
     $strl = mb_strlen($word);
@@ -12,9 +16,16 @@ function mbStringToArray($word)
     return $array;
 }
 
+$raw = file_get_contents('php://input');
+file_put_contents('debug_raw_input.json', $raw);
 
 $data = json_decode(file_get_contents('php://input'), true);
-//print_r($data);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    die("JSON decode error: " . json_last_error_msg());
+}
+
+print_r($data);
 
 $percs = array(0, 0, 0, 0, 0, 0, 0, 0);
 $uniqueInfoArray = array();
@@ -89,7 +100,7 @@ $sql = "INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`per
     . $data['audioSpriteObjString'] . "', '" . $ppAja . "', '" . $uia . "')";
 
 echo "\n\n$sql";
-mysqli_query($conn, $sql) or die("\n\nERROR IN INSERT QUERY\n\n" . mysqli_error($conn));
+mysqli_query($conn, $sql) or (http_response_code(500) && die("\n\nERROR IN INSERT QUERY\n\n" . mysqli_error($conn)));
 
 echo "\nnew text item added";
 

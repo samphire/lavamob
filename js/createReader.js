@@ -21,7 +21,11 @@ let lastPos = 0;
 let files;
 
 // const realWordRegex = /^[a-zA-Z]+$/;
-const realWordRegex = /^[a-zA-Z]+(?:'[a-zA-Z]+)*'?$/
+// const realWordRegex = /^[a-zA-Z]+(?:'[a-zA-Z]+)*'?$/
+
+const realWordRegex = /^\p{L}+(?:'\p{L}+)*'?$/u;
+
+
 ;
 const hyphenWordRegex = /-/;
 const hyphenUsedAsEmDash = /\s-\s/;
@@ -321,6 +325,12 @@ function uploadText() {
     }
     printObject("data object uploaded by uploadText()", uploadData);
     uploadData = JSON.stringify(uploadData);
+
+
+    // const cleanedData = deepClean(uploadData); // cleans the structure of the json
+    // uploadData = sanitizeForJSON(cleanedData); // removes problem characters for php upload
+
+    console.warn("uploadData AGAIN", uploadData);
     const myUrl = url2 + "/php/uploadText.php";
     $.ajax({
         url: myUrl,
@@ -351,9 +361,13 @@ function uploadText() {
                 studyReader();
             });
         },
-        error: function () {
-            alert("Problem Uploading the Text:");
-            console.warn(textToEdit + ", " + userid + ", \n" + myUrl);
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Upload failed");
+            console.error("Status code:", jqXHR.status);
+            console.error("Response text:", jqXHR.responseText);
+            console.error("Text status:", textStatus);
+            console.error("Error thrown:", errorThrown);
+            alert("Problem Uploading the Text:\n" + jqXHR.status + " - " + errorThrown);
         }
     });
     // cleanup
