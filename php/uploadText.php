@@ -25,7 +25,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     die("JSON decode error: " . json_last_error_msg());
 }
 
-print_r($data);
+//print_r($data);
 
 $percs = array(0, 0, 0, 0, 0, 0, 0, 0);
 $uniqueInfoArray = array();
@@ -36,15 +36,15 @@ foreach ($data['uniqueWordArray'] as $word) {
             ON words.headword_id=headwords.id
             WHERE word=\"{$word}\"";
 
-    print "\n\n sql is " . $sql;
+//    print "\n\n sql is " . $sql;
 
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_row($result);
     $numRows = mysqli_num_rows($result);
-    print "\n\nthere are " . $numRows . " rows.\n\n";
+//    print "\n\nthere are " . $numRows . " rows.\n\n";
 
     if ($numRows > 0) {                 //TODO Fix the percentage stuff
-        print "query returned a single result";
+//        print "query returned a single result";
         $uniqueInfoArray[] = $word . "^/" . $row[0] . "^/" . $row[1] . "^/" . $row[2] . "^/" . $row[3];
         if ($row[3] < 7) { // one of the top 6000 words
             $percs[$row[3] - 1]++;  // add 1 to the relevant frequency field (perc1 etc...)
@@ -54,7 +54,7 @@ foreach ($data['uniqueWordArray'] as $word) {
             $percs[7] += 7;  // $row[3] values above 6 are all the same level of frequency
         }
     } else {
-        print "\no query result. There must be a korean word or a hyphenated word or a punctuation.";
+//        print "\no query result. There must be a korean word or a hyphenated word or a punctuation.";
         $xWordid = 0;
 
         $charArr = mbStringToArray($word);
@@ -82,13 +82,13 @@ $uia = json_encode($uniqueInfoArray, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUO
 $plainText = mysqli_real_escape_string($conn, $data['plainText']);
 $ppja = mysqli_real_escape_string($conn, $ppxa); //  json encode with no flags...
 $ppAja = mysqli_real_escape_string($conn, $ppAxa);
-echo "\n\n\nplainText:  " . $data['plainText'];
-echo "after real escape string:  " . $bob;
-print "\n\n uniqueInfoArray: {$uia}";
+//echo "\n\n\nplainText:  " . $data['plainText'];
+//echo "after real escape string:  " . $bob;
+//print "\n\n uniqueInfoArray: {$uia}";
 
-echo "\n\nname and desc are: " . $name . ", " . $desc;
+//echo "\n\nname and desc are: " . $name . ", " . $desc;
 
-echo "\n\nvalue of percs[7] is " . $percs[7];
+//echo "\n\nvalue of percs[7] is " . $percs[7];
 
 $sql = "INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`perc3`,`perc4`,`perc5`,`perc6`,`percREST`,
                    `rarityQuot`,`audio`,`video`,`plainText`,`puncParsedJsonArray`,`audioSpriteJson`,
@@ -99,23 +99,23 @@ $sql = "INSERT INTO `text`(`name`,`description`,`wordcount`,`perc1`,`perc2`,`per
     . ", '" . $data['audioFilename'] . "', '" . $data['videoFilename'] . "', \"" . $plainText . "\", '" . $ppja . "', '"
     . $data['audioSpriteObjString'] . "', '" . $ppAja . "', '" . $uia . "')";
 
-echo "\n\n$sql";
+//echo "\n\n$sql";
 mysqli_query($conn, $sql) or (http_response_code(500) && die("\n\nERROR IN INSERT QUERY\n\n" . mysqli_error($conn)));
 
-echo "\nnew text item added";
+//echo "\nnew text item added";
 
 $ed = $data['textToEdit'];
 $newid = $conn->insert_id;
 
-echo "\nOld id is {$ed} and new id is {$newid}";
+//echo "\nOld id is {$ed} and new id is {$newid}";
 
 if ($ed > 0) {
-    echo "\nold id is greater than zero, so deleting old text";
+//    echo "\nold id is greater than zero, so deleting old text";
     $sql = "delete from `text` where `id`={$ed}";
     mysqli_query($conn, $sql) or die("\n" . mysqli_error($conn));
     $sql = "update `text` set `id`={$ed} where `id` = {$newid}";
     mysqli_query($conn, $sql) or die . ("\n" . mysqli_error($conn));
-    echo "\nupdated id";
+//    echo "\nupdated id";
 } else {
     $sql = "INSERT INTO `usertext`(`userid`,`textid`) VALUES (" . $data['userid'] . ", " . $newid . ")";
     mysqli_query($conn, $sql) or die("\n" . mysqli_error($conn));

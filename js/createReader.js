@@ -26,7 +26,7 @@ let files;
 const realWordRegex = /^\p{L}+(?:'\p{L}+)*'?$/u;
 
 
-;
+
 const hyphenWordRegex = /-/;
 const hyphenUsedAsEmDash = /\s-\s/;
 
@@ -111,7 +111,7 @@ function parseText() {
 
         textArr = treatImagesInCreateReader(textArr);
 
-        printObject("textArr", textArr);
+        // printObject("textArr", textArr);
 
         for (i = 0; i < textArr.length; i++) { //iterating through the words of one paragraph, not yet stripped of punctuation
 
@@ -128,7 +128,7 @@ function parseText() {
             const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
             const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
             const startPunc = (myStr) => {// RECURSIVE FUNCTION
-                console.log('in startPunc recursive function: ' + myStr);
+                // console.log('in startPunc recursive function: ' + myStr);
                 if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
                     finalArr[w].push(myStr.slice(0, 1)); // one by one, the starting punctuation is added as an element to finalArr[w] (i.e. second dimension)
                     return startPunc(myStr.slice(1));
@@ -138,7 +138,7 @@ function parseText() {
             };
 
             const endPunc = (myStr) => {
-                console.log('in endPunc recursive function: ' + myStr);
+                // console.log('in endPunc recursive function: ' + myStr);
                 if (myStr.slice(-1).search(endPuncRegex) > -1) {
                     endPuncArr.push(myStr.slice(-1));
                     return endPunc(myStr.slice(0, myStr.length - 1));
@@ -150,9 +150,9 @@ function parseText() {
             tmpString = startPunc(textArr[i]);
             tmpString = endPunc(tmpString);
 
-            console.log("textArr[i]: " + textArr[i]);
-            console.log("tmpString: " + tmpString);
-            console.log("tmpString.search(realWordRegex): " + tmpString.search(realWordRegex));
+            // console.log("textArr[i]: " + textArr[i]);
+            // console.log("tmpString: " + tmpString);
+            // console.log("tmpString.search(realWordRegex): " + tmpString.search(realWordRegex));
 
             if (tmpString.search(realWordRegex) > -1) {
                 wordArr.push(tmpString);
@@ -205,9 +205,9 @@ function parseText() {
         uploadText();
     }
 
-    console.log(wordArr);
-    console.log(finalArr);
-    console.log(singleDimensionalFinalArr);
+    // console.log(wordArr);
+    // console.log(finalArr);
+    // console.log(singleDimensionalFinalArr);
 
 }
 
@@ -222,8 +222,8 @@ function loadAndPlay() { // Does what it says on the tin
         fileStr = audiourl + "/" + selectedReaderObj.audio;
     }
 
-    console.log(fileStr)
-    sndArr.push(fileStr);
+    // console.log(fileStr)
+    // sndArr.push(fileStr);
 
     sound = new Howl({
         src: sndArr,
@@ -246,10 +246,10 @@ function playSound(sprite) {
     });
     testSprite = spriteObj;
 
-    console.log("testing the Sprite: " + testSprite);
-    console.log(testSprite['1']);
-    console.log(testSprite['1'][0]);
-    console.log(testSprite['1'][1]);
+    // console.log("testing the Sprite: " + testSprite);
+    // console.log(testSprite['1']);
+    // console.log(testSprite['1'][0]);
+    // console.log(testSprite['1'][1]);
     perf.play(mySprite);
 }
 
@@ -265,7 +265,7 @@ function makeSprite(obj, pos) {
     } else {
         spriteObj[spriteNum] = [start, 10000000];
     }
-    console.log(JSON.stringify(spriteObj));
+    // console.log(JSON.stringify(spriteObj));
 
     for (let y = lastPos; y < pos; y++) {
         makeSpriteArr.push(singleDimensionalFinalArr[y]);
@@ -292,7 +292,7 @@ function finish() {
     }
     $("#audioSpriteSelectPanel").hide();
     document.getElementById("superResult").innerHTML = frog;
-    printObject("finalArrWithAudio", finalArrWithAudio);
+    // printObject("finalArrWithAudio", finalArrWithAudio);
     uploadText();
 }
 
@@ -301,7 +301,7 @@ function uploadText() {
     let plainText, puncParsedJsonArray, puncParsedAudioJsonArray;
     plainText = document.getElementById("createReaderTextPanel").value;
     puncParsedJsonArray = singleDimensionalFinalArr;
-    printObject("finalArrWithAudio", finalArrWithAudio);
+    // printObject("finalArrWithAudio", finalArrWithAudio);
     puncParsedAudioJsonArray = finalArrWithAudio;
     let uniqueWordArr = Array.from(new Set(wordArr));
     let wordCount = uniqueWordArr.length;
@@ -323,14 +323,14 @@ function uploadText() {
         const bob = sndArr[0].split("/");
         uploadData.audioFilename = bob[bob.length - 1];
     }
-    printObject("data object uploaded by uploadText()", uploadData);
+    // printObject("data object uploaded by uploadText()", uploadData);
     uploadData = JSON.stringify(uploadData);
 
 
     // const cleanedData = deepClean(uploadData); // cleans the structure of the json
     // uploadData = sanitizeForJSON(cleanedData); // removes problem characters for php upload
 
-    console.warn("uploadData AGAIN", uploadData);
+    // console.warn("uploadData AGAIN", uploadData);
     const myUrl = url2 + "/php/uploadText.php";
     $.ajax({
         url: myUrl,
@@ -362,11 +362,19 @@ function uploadText() {
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Upload failed");
-            console.error("Status code:", jqXHR.status);
-            console.error("Response text:", jqXHR.responseText);
-            console.error("Text status:", textStatus);
-            console.error("Error thrown:", errorThrown);
+
+            alert(uploadData);
+
+            // console.error("Upload failed");
+            // console.error("Status code:", jqXHR.status);
+            // console.error("Response text:", jqXHR.responseText);
+            // console.error("Text status:", textStatus);
+            // console.error("Error thrown:", errorThrown);
+            alert("Upload failed");
+            alert("Status code:", jqXHR.status);
+            alert("Response text:", jqXHR.responseText);
+            alert("Text status:", textStatus);
+            alert("Error thrown:", errorThrown);
             alert("Problem Uploading the Text:\n" + jqXHR.status + " - " + errorThrown);
         }
     });
