@@ -260,6 +260,7 @@ body {
     min-height: 300px;
     margin-top: 3rem;
     resize: vertical;
+    padding: 3rem 1rem;
 }
 
 #audioSpriteSelectPanel {
@@ -500,7 +501,7 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 #createReaderBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
-    width: 50%;
+    /*width: 50%;*/
     border: 2px solid gray;
     background: none;
     position: relative;

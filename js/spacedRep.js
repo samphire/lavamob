@@ -58,6 +58,11 @@ function test(list) {
     console.log("start to print sessionList");
     console.log(...sessionList);
     console.log("end of sessionList");
+    console.log(typeof llData);
+    printObject('llData', llData);
+    console.log(typeof nowList);
+    printObject('nowList', nowList);
+
 
     sessionList.forEach(function (val, idx) {
             console.log("in sessionList.foreach...");
@@ -209,13 +214,13 @@ async function manageLL(type) {
             myEl.repnum += 2;
             break;
         case 3:
-            swal(myEl.word + " has been deleted from the test system and added to the 'learned' list");
+            swal(myEl.word + " 암기되었다");
             removeFromDOM(currentVocabIndex);
             deleteAndAdd(myEl);
             goToNext($el);
             break;
         case 4:
-            swal(myEl.word + " has been removed from the test list");
+            swal(myEl.word + " 목록에서 제거되었습니다");
             removeFromDOM(currentVocabIndex);
             deleteLLItem(myEl);
             goToNext($el);
@@ -566,6 +571,7 @@ function deleteLLItem(myLLItem) {
         "Learning List Item successfully deleted",
         "Problem deleting learning list item"
     );
+    llItemRemoveFromList(myLLItem);
 }
 
 function deleteAndAdd(myLLItem) {
@@ -579,7 +585,13 @@ function deleteAndAdd(myLLItem) {
         "learning list item successfully deleted and added to learned list",
         "problem deleting and adding learning list item"
     );
+    llItemRemoveFromList(myLLItem);
 }
+
+    function llItemRemoveFromList(myLLItem) {
+        llData.list = llData.list.filter(item => item !== myLLItem);
+        nowList = nowList.filter(item => item !== myLLItem);
+    }
 
 // function delLLItem(myLLItem, type) { // This appears to require web service, which is no longer operational!!!
 //

@@ -119,6 +119,7 @@ function login() {
                 return;
             }
             const myData = JSON.parse(data);
+            console.info(myData);
             userid = myData[0];
             language = myData[1];
             group = myData[2];
@@ -300,8 +301,8 @@ function createReaderItem(data) {
     let mystr = `<div class='item' data-textid='${data.id}'>&nbsp;<div class='readerlistitem' onclick='getReader(${data.id})'>${data.name}</div>`;
     mystr += `<div class='itemStats'>${data.wordcount} words<br><span class='rarity'>${data.rarityQuot} rarity</span></div>`;
     mystr += `<i class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + data.id + `)'></i>`;
-    mystr += `<i ` + (group === "USER" ? `style='visibility: hidden'` : ``) + ` class='fa fa-pencil-square-o' onclick='editReader(` + data.id + `)'></i>`;
-    mystr += `<i class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + data.id + `);'></i>`;
+    mystr += `<i ` + (group === "USER" | group === "BABYUSER" ? `style='visibility: hidden'` : ``) + ` class='fa fa-pencil-square-o' onclick='editReader(` + data.id + `)'></i>`;
+    mystr += `<i ` + (group === "BABYUSER" ? `style='visibility: hidden'` : ``) + ` class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + data.id + `);'></i>`;
     mystr += `</div>`;
     return mystr;
 }
@@ -537,6 +538,7 @@ function getLL(textid) {
         },
         success: function (data) {
             llData = data;
+            console.log(typeof llData);
             // console.log("Set llData. Type of list: " + typeof llData.list);
             downloadReader();
         },
