@@ -6,16 +6,18 @@ body{
 
 .gauge img{
     width: 100px;
+    text-shadow:
+            0 0 8px rgba(255,255,255,0.8),
+            0 0 16px rgba(255,255,255,0.6);
 }
 
 .gauge{
     width: 100px;
-    /*height: 330px;*/
     position: relative;
     text-align: center;
-         transform: scale(0.6);
+    transform: scale(0.6);
+    border-radius: 50%;
 }
-
 
 svg{
     position: absolute;
@@ -34,23 +36,32 @@ svg{
 
 .text{
     z-index: 50;
-    text-align: center;
-    margin-top: 8px;
-    margin-left: 20px
+    text-shadow:
+            0 0 8px rgba(255,255,255,0.8),
+            0 0 16px rgba(255,255,255,0.6),
+            0 0 24px rgba(255,255,255,0.5);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    align-items: baseline;
 }
 
 .text .number{
     font-size: 1.8rem;
     font-weight: bolder;
     font-family: sans-serif;
-    color: #555;
+    color: black;
     opacity: 0;
-    /*animation: fadeIn 1s;*/
 }
 .text .percsign{
     font-size: 1rem;
-    /*animation: fadeIn 1s;*/
+    color: black;
     opacity: 0;
+    text-shadow:
+            0 0 4px rgba(255,255,255,0.9),
+            0 0 8px rgba(255,255,255,0.7);
 }
 
 #gaugesContainer{
@@ -66,12 +77,4 @@ svg{
     flex-direction: column;
     align-items: center;
 }
-/*svg._1k{*/
-/*    transform: rotate(-180deg);*/
-/*}*/
-/*svg._2k{*/
-/*    transform: rotate(-180deg);*/
-/*}*/
-/*svg._3k{*/
-/*    transform: rotate(-180deg);*/
-/*}*/
+

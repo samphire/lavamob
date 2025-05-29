@@ -314,13 +314,22 @@
             <!--<button onclick="finish()" id="finishBtn">finish</button>-->
             <form method="post" action="#"><br>
                 Audacity Labels File<br><br>
-                <input type="file" id="audacityFileChooser" onchange="replaceSpriteData(event)">
+                <input type="file" id="audacityFileChooser">
+                <script>
+                    document.getElementById('audacityFileChooser').addEventListener('change', function(event) {
+                        replaceSpriteData(event);
+                    });
+                </script>
             </form>
         </fieldset>
     </div>
 
     <div>
-        <textarea id="createReaderTextPanel" contenteditable="true" onpaste="pastey(event)" required></textarea>
+        <textarea id="createReaderTextPanel" contenteditable="true" required></textarea>
+        <script>
+            document.getElementById('createReaderTextPanel').addEventListener('paste', function(e) {
+                pastey(e);
+            });
         <label for="createReaderTextPanel">Paste or Type here</label>
     </div>
     <div id="audioSpriteSelectPanel" class="textPanel"></div>

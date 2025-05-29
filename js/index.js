@@ -69,6 +69,13 @@ window.onload = function () {
 //            localStorage.clear();
     $('section').hide();
     $('#menu').hide();
+
+    // localStorage.removeItem("userid");
+    // localStorage.removeItem("group");
+    // localStorage.removeItem("userEmail");
+    // localStorage.removeItem("language");
+    // localStorage.removeItem("username");
+
     if (localStorage.getItem("userid")) { //all user info is there and can be reused
         userid = parseInt(localStorage.getItem("userid"), 10);
         if (localStorage.getItem("group") === "USER" && document.querySelector("#audioOpt")) {
@@ -85,17 +92,12 @@ window.onload = function () {
         getReaderInfo();
         return;
     } else {
-
-        // console.info(localStorage);
-
         if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
             document.getElementById("userEmail").value = localStorage.getItem("userEmail");
             $('.login').show();
         }
     }
     $('.login').show();
-
-
 }
 
 

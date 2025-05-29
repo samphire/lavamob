@@ -71,11 +71,15 @@
     font-size: medium;
 }
 
+#createReaderTextPanel{
+    font-family: "Times New Roman", Georgia, Times, serif;
+}
+
 .readerPanel {
     background-color: var(--bg);
     text-align: left;
     line-height: 160%;
-    color: var(--bgText);
+    color: var(--paperText);
     padding: 0 2%;
 }
 
@@ -130,11 +134,12 @@
 }
 
 #printerIcon {
-    position: absolute;
-    top: 27px;
-    right: 30px;
-    height: 90px;
-    width: 110px;
+    /*position: absolute;*/
+    /*top: 27px;*/
+    /*right: 30px;*/
+    /*height: 90px;*/
+    /*width: 110px;*/
+    display: none;
 }
 
 #downloadIcon {
@@ -508,8 +513,9 @@ input#llWord.llWord, input#tranny.tranny {
     top: 0;
     left: 0;
     z-index: 1;
-    padding: 16px 12px;
+    padding: 4px 4px;
     outline: 0;
+    font-size: 2rem;
 }
 
 #createReaderBlurb div input:valid, #audiodiv + div textarea:valid {
@@ -546,7 +552,7 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 #createReaderBlurb div label {
-    top: 0;
+    top: 10px;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -565,7 +571,7 @@ input#llWord.llWord, input#tranny.tranny {
 
 #createReaderBlurb div input:focus + label {
     top: 26%;
-    margin-top: 16px;
+    margin-top: 24px;
 }
 
 #audiodiv + div textarea:focus + label {
@@ -600,6 +606,9 @@ input#llWord.llWord, input#tranny.tranny {
     align-items: center;
     justify-content: center;
     font-family: 'Sansita Swashed', cursive;
+    text-shadow:
+    0 0 2px rgba(0,0,0,1),
+    0 0 32px rgba(255,255,255,1);
     /*z-index: -1;*/
 }
 
