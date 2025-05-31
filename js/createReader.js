@@ -222,8 +222,8 @@ function loadAndPlay() { // Does what it says on the tin
         fileStr = audiourl + "/" + selectedReaderObj.audio;
     }
 
-    // console.log(fileStr)
-    // sndArr.push(fileStr);
+    console.log(fileStr)
+    sndArr.push(fileStr);
 
     sound = new Howl({
         src: sndArr,

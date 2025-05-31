@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <title>Mobile Reader</title>
     <script src="js/globalVars.js?version=1"></script>
     <script src="js/jquery-3.0.0.min.js"></script>
@@ -48,33 +46,29 @@
 
                 console.log("HISTORY\nPage id is " + event.state.page_id + ", size of history stack is " + history.length);
                 console.log(history.length)
-                console.log("history state object data: " + event.state.page + ", " + history.state.hre);
-                console.log(history.state);
+                console.log("history state object data: " + event.state?.page);
+                console.log("full event.state object:", event.state);
+
+                $('section').hide();
                 switch (event.state.page_id) {
                     case 1:
-                        $('section').hide();
                         $('#createReader').show();
                         break;
                     case 2:
                         if (howl) howl.stop();
-                        $('section').hide();
                         $('#selectReader').show();
                         break;
                     case 3:
-                        $('section').hide();
                         $('#vocaTest').show();
                         break
                     case 4:
-                        $('section').hide();
                         $('#welcome').show();
                         break;
                     case 5:
-                        $('section').hide();
                         // getReader(event.state.textid);
                         $('#reader').show();
                         break;
                     case 6:
-                        $('section').hide();
                         $('#vocab').show();
                 }
             }
@@ -86,7 +80,7 @@
 <body>
 
 <div class="login" style="display: none">
-       <div class="login-card">
+    <div class="login-card">
         <div class="login-card-logo">
             <img src="assets/img/logos/logo.png" alt="logo">
         </div>
@@ -97,10 +91,12 @@
         <form class="login-card-form">
             <div class="form-item">
                 <span class="form-item-icon material-symbols-rounded">mail</span>
+                <label for="userEmail"></label>
                 <input id="userEmail" type="text" placeholder="Enter Email or Username" required autofocus>
             </div>
             <div class="form-item">
                 <span class="form-item-icon material-symbols-rounded">lock</span>
+                <label for="pass"></label>
                 <input id="pass" type="password" placeholder="Enter Password" required>
             </div>
             <div class="form-item-other">
@@ -168,39 +164,23 @@
 <span id="maximize">&#x26F6</span>
 
 <script>
-    const btn = document.getElementById('maximize');
-    btn.addEventListener('click', () => {
-        const docEl = document.documentElement;
-        if (!document.fullscreenElement &&    // Standard
-            !document.webkitFullscreenElement &&  // Safari/WebKit
-            !document.mozFullScreenElement &&     // Firefox
-            !document.msFullscreenElement) {      // IE/Edge
-            // Enter fullscreen
-            if (docEl.requestFullscreen) {
+    window.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('maximize');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+            const docEl = document.documentElement;
+            const isFullscreen = document.fullscreenElement;
+            if (!isFullscreen) {
                 docEl.requestFullscreen();
-            } else if (docEl.webkitRequestFullscreen) {
-                docEl.webkitRequestFullscreen();
-            } else if (docEl.mozRequestFullScreen) {
-                docEl.mozRequestFullScreen();
-            } else if (docEl.msRequestFullscreen) {
-                docEl.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
             }
-            // btn.textContent = '🗗'; // optional: change icon
-        } else {
-            // Exit fullscreen
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-            // btn.textContent = '⛶'; // optional: revert icon
-        }
+        });
     });
 </script>
+
 
 <section id="welcome">
     <i class="fa-solid fa-user"></i>
@@ -220,7 +200,7 @@
                 <div id='gaugesContainer'>
 
                     <div class='gauge'>
-                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png' alt="1k gauge">
                         <svg class="_1k" viewBox="0 0 100 100">
                             <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
                                   style="fill: black;stroke:blue;stroke-width:0"/>
@@ -232,7 +212,7 @@
                     </div>
 
                     <div class='gauge'>
-                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png' alt="2k gauge">
                         <svg class="_2k" viewBox="0 0 100 100">
                             <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
                                   style="fill: black;stroke:blue;stroke-width:0"/>
@@ -244,7 +224,7 @@
                     </div>
 
                     <div class='gauge'>
-                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png'>
+                        <img src='https://notborder.org/lavamob/assets/img/gaugeSmall.png' alt="3k gauge">
                         <svg class="_3k" viewBox="0 0 100 100">
                             <path d="M-180 26 L290 47 L290 53 L-180 74 Z"
                                   style="fill: black;stroke:blue;stroke-width:0"/>
@@ -286,13 +266,14 @@
 </section>
 <section id="createReader" class="hideo">
     <div id="createReaderBlurb">
-        <div id="audioOpt">Audio?&nbsp;<input type="checkbox" id="audioCheck"
-                                              onClick="
-                                       if(!$('#audiodiv').is(':visible'))
+        <div id="audioOpt">Audio?&nbsp;<label for="audioCheck"></label><input type="checkbox" id="audioCheck"
+                                                                              onClick="
+                                       $audioDiv = $('#audiodiv');
+                                       if(!$audioDiv.is(':visible'))
                                        {
-                                           $('#audiodiv').show();$('#btnUploadText').hide();console.info('showing audio')
+                                           $audioDiv.show();$('#btnUploadText').hide();console.info('showing audio')
                                        }else{
-                                        $('#audiodiv').hide();$('#btnUploadText').show();
+                                        $audioDiv.hide();$('#btnUploadText').show();
                                        }
 "></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
@@ -302,7 +283,6 @@
     <div id="audiodiv">
         <fieldset>
             <legend>. audio .</legend>
-            <!--http://notborder.org/readeraudio/upload.php-->
             <div style="font-size: small;">supports .mp3 and .wav files only and must be latin alphabet filename</div>
             <form method="post" action="#" enctype="multipart/form-data"
                   id="audioform">
@@ -316,21 +296,23 @@
                 Audacity Labels File<br><br>
                 <input type="file" id="audacityFileChooser">
                 <script>
-                    document.getElementById('audacityFileChooser').addEventListener('change', function(event) {
+                    document.getElementById("audacityFileChooser").addEventListener('change', function(event) {
                         replaceSpriteData(event);
                     });
                 </script>
             </form>
         </fieldset>
     </div>
-
     <div>
         <textarea id="createReaderTextPanel" contenteditable="true" required></textarea>
-        <script>
-            document.getElementById('createReaderTextPanel').addEventListener('paste', function(e) {
-                pastey(e);
-            });
         <label for="createReaderTextPanel">Paste or Type here</label>
+        <script>
+            document.getElementById("createReaderTextPanel").addEventListener('paste', function (event) {
+                pastey(event);
+            });
+        </script>
+
+
     </div>
     <div id="audioSpriteSelectPanel" class="textPanel"></div>
     <div id="superResult"></div>
@@ -339,7 +321,6 @@
 </section>
 <section id="reader" class="hideo"></section>
 <section id="vocab" class="hideo">
-    <!--    <div id="dicFrame" src="http://www.naver.com"></div>-->
 </section>
 <section id="vocaTest" class="hideo"></section>
 <div id="preload">
