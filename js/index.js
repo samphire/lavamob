@@ -505,20 +505,20 @@ function downloadReader() {
             $('#selectReader').hide();
             $('#reader').empty();
             $('#reader').append("<div class='readerTitle'>" + selectedReaderObj.name + "</div>");
-            if (selectedReaderObj.audio) {
-                $('#reader').append("<a href='" + audiourl + "/" + selectedReaderObj.audio + "'><svg id='downloadIcon' viewBox='0 0 30 30'><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"></path></svg></a>");
-            }
+            // if (selectedReaderObj.audio) {
+            //     $('#reader').append("<a href='" + audiourl + "/" + selectedReaderObj.audio + "'><svg id='downloadIcon' viewBox='0 0 30 30'><path d=\"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z\"></path></svg></a>");
+            // }
             $('#reader').append("<img id='printerIcon' src='assets/img/icons/printer.png' onclick='window.print()'>");
             $('#reader').append("<div class='readerDesc'>" + selectedReaderObj.description + "</div>");
             $('#reader').append("<div class='readerPanel'></div>");
             if (selectedReaderObj.audio) {
                 $('#reader .readerPanel').append("<div class='audioOptions' onclick='howl.stop()'>" +
-                    "<input type='radio' name='audioOptions' id='continousAudioCheck'>&nbsp;&nbsp;<img src='assets/img/icons/continue.png'>" +
+                    "<input type='radio' name='audioOptions' id='continousAudioCheck' checked>&nbsp;&nbsp;<img src='assets/img/icons/continue.png'>" +
                     "<input type='radio' name='audioOptions' id='loopAudio'>&nbsp;&nbsp;<img src='assets/img/icons/loop.png'>" +
                     "<input type='radio' name='audioOptions'>&nbsp;&nbsp;Stop!</div><br>");
             }
             $('#reader .readerPanel').append(selectedReaderText);
-            $('#reader .readerPanel').append("<br><br><br><br><br>");
+            $('#reader .readerPanel').append("<br><br><br><br><br>&nbsp;<br><br><br><br>[end]");
             document.documentElement.scrollTop = readerYScroll;
         }
     ).fail(function (jqXHR, status, err) {

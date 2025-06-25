@@ -239,11 +239,11 @@
         </div>
         <!--        <div class="btnContainer">-->
         <div class="btnActivity welcomeRowItem" onclick="createReader(0)"><i
-                class="fa-solid mainIcon fa-pen-to-square"></i><span>Create Reader</span></div>
+                class="fa-solid mainIcon fa-pen-to-square"></i><span>Create</span></div>
         <div class="btnActivity welcomeRowItem" onclick="studyReader()"><i
-                class="fa-solid mainIcon fa-book-open-reader"></i><span>Study Reader</span></div>
+                class="fa-solid mainIcon fa-book-open-reader"></i><span>Study</span></div>
         <div class="btnActivity welcomeRowItem" onclick="studyVocab()"><i
-                class="fa-solid mainIcon fa-graduation-cap"></i><span>Test Vocabulary</span></div>
+                class="fa-solid mainIcon fa-graduation-cap"></i><span>Test</span></div>
         <!--        </div>-->
     </div>
     <template id="goalTemplate">
@@ -278,7 +278,7 @@
 "></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
-
+        <div><button onclick="imageCode()">Image</button></div>
     </div>
     <div id="audiodiv">
         <fieldset>
@@ -312,11 +312,11 @@
             });
         </script>
 
-
     </div>
     <div id="audioSpriteSelectPanel" class="textPanel"></div>
     <div id="superResult"></div>
     <i class="fa fa-cloud-upload fa-2x" aria-hidden="true" onclick="parseText()" id="btnUploadText"></i>
+    &nbsp;<br><br><br><br><br><br><br>&nbsp;
 
 </section>
 <section id="reader" class="hideo"></section>
