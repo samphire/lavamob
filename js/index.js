@@ -1,7 +1,6 @@
 /**
  * Created by matthew on 7/28/2016.
  */
-let fuck;
 var readers;
 var userid = 0;
 let group = 0;
@@ -132,7 +131,7 @@ function login() {
             localStorage.setItem("group", group);
             localStorage.setItem("username", username);
 
-            // console.log(localStorage);
+            console.log(localStorage);
 
             $(".login").hide();
             // document.getElementById('showusername').innerText = localStorage.getItem('username');
@@ -303,6 +302,7 @@ function createReaderItem(data) {
     let mystr = `<div class='item' data-textid='${data.id}'>&nbsp;<div class='readerlistitem' onclick='getReader(${data.id})'>${data.name}</div>`;
     mystr += `<div class='itemStats'>${data.wordcount} words<br><span class='rarity'>${data.rarityQuot} rarity</span></div>`;
     mystr += `<i class="fa-solid fa-graduation-cap readerlistitemvocab" onclick='getVocab(` + data.id + `)'></i>`;
+    mystr += `<i class='fa fa-plus-square readerlistitemvocab' onclick='addWordsToLearned(` + data.id + `)'></i>`;
     mystr += `<i ` + (group === "USER" | group === "BABYUSER" ? `style='visibility: hidden'` : ``) + ` class='fa fa-pencil-square-o' onclick='editReader(` + data.id + `)'></i>`;
     mystr += `<i ` + (group === "BABYUSER" ? `style='visibility: hidden'` : ``) + ` class="fa-regular fa-trash-can" onclick='deleteReader(this.parentNode,` + data.id + `);'></i>`;
     mystr += `</div>`;
@@ -1006,5 +1006,20 @@ function removeReader(textid, addWords) {
             swal("some problem");
         })
     });
+}
 
+function addWordsToLearned(textid) {
+    $.ajax({
+        type: "POST",
+        url: url2 + "/php/addWordsToLearned.php?userid=" + userid + "&textid=" + textid,
+        crossDomain: true,
+        dataType: "text",
+        success: function (result) {
+            msg = "단어가 학습 목록에 추가되었습니다";
+            swal(msg);
+        },
+        error: (function (jqXHR, status, err) {
+            swal("some problem" + status + err);
+        })
+    });
 }

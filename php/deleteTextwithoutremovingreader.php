@@ -7,17 +7,23 @@ $isAddToLearned = $_GET['isAddToLearned'];
 
 $isAddToLearned = filter_var($isAddToLearned, FILTER_VALIDATE_BOOLEAN);
 
+echo "isAddToLearned: " . $isAddToLearned;
+
 if ($isAddToLearned) {
     $sql = "SELECT `uniqueInfoArray` FROM `text` WHERE id={$textid}";
     $result = mysqli_query($conn, $sql) or die("query problem in deleteText.php\n\n{$sql}\n\n");
     $words = json_decode(mysqli_fetch_row($result)[0]);
+    print("\n\n");
+    print_r(sizeof($words));
 
     foreach ($words as $item) {
+        print_r($item);
         $word = explode("^/", $item);
         $headwordid = $word[2];
         $sql = "INSERT INTO learned (userid, headwordid) VALUES ({$userid}, {$headwordid})";
         mysqli_query($conn, $sql);
-//        echo(mysqli_error($conn));
+        print("\n");
+        echo(mysqli_error($conn));
     }
 }
 

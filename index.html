@@ -278,7 +278,11 @@
 "></div>
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
-        <div><button onclick="imageCode()">Image</button></div>
+        <div id="imageBtnContainer"></div>
+        <script>if(localStorage.getItem('group') === 'AUTHOR') {
+            document.getElementById('imageBtnContainer').innerHTML = '<button onclick="imageCode()">IMAGE</button>';
+        }
+        </script>
     </div>
     <div id="audiodiv">
         <fieldset>

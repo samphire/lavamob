@@ -125,8 +125,19 @@ function parseText() {
             }
 
             let tmpString = "";
-            const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
-            const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
+            // const startPuncRegex = /[`~#({\["'<\u2026\u201c]/g;
+            // const endPuncRegex = /[!?,.:;)}"'>\]\u2026\u201d]/g;
+
+
+            // chatGPT version:
+            // Needs the 'u' flag
+            // const startPuncRegex = /[\p{Ps}\p{Pi}<`~#\u2026]/gu;         // Ps = open brackets, Pi = initial quotes
+            // const endPuncRegex   = /[\p{Pe}\p{Pf}>!?,.:;\u2026\u2019\u0027]/gu;      // Pe = close brackets, Pf = final quotes
+//
+
+            const startPuncRegex = /[\p{Ps}\p{Pi}\p{Quotation_Mark}<`~#\u2026]/gu;
+            const endPuncRegex   = /[\p{Pe}\p{Pf}\p{Quotation_Mark}>!?,.:;\u2026]/gu;
+
             const startPunc = (myStr) => {// RECURSIVE FUNCTION
                 // console.log('in startPunc recursive function: ' + myStr);
                 if (myStr.slice(0, 1).search(startPuncRegex) > -1) { // u2026 is horizontal elipsis (...). u201c is left double quote. -1 is returned if the search does not find anything.
