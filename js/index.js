@@ -704,6 +704,7 @@ function createReader(textid) {
 function getVocab(textid) {
     // console.log("In getVocab");
     // make entry in the activity log table
+    // this appears to be called to populate the scholastic hat page! No clear workflow... nobody uses it.
     jaxy(
         "php/activityLog.php", "POST",
         {

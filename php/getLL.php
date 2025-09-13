@@ -1,7 +1,8 @@
 <?php
 include ("session.inc");
 $userid = $_GET['userid'];
-$sql = "SELECT userid, textid, word, tranny, repnum, headwordid, headword, EF, datenext, wordid FROM learninglist WHERE userid=".$userid." order by datenext";
+// $sql = "SELECT userid, textid, word, tranny, repnum, headwordid, headword, EF, datenext, wordid FROM learninglist WHERE userid=".$userid." order by datenext";
+$sql = "SELECT * FROM learninglist WHERE userid=".$userid." order by datenext";
 $result = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");
 $LL = array();
 header('Access-Control-Allow-Origin: *');

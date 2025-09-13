@@ -439,108 +439,119 @@ function updateItem(right, idx) {
     // console.log("updateItem: " + printObject("before updating", testList[idx]));
     console.log("in updateItem. word is " + myEl.word + "\nrepnum is " + myEl.repnum + ", which will be incremented IF right");
 
-    if (right) {
-        myEl.repnum += 1;
-
-        switch (myEl.repnum) {
-            case 1:
-                myEl.EF *= 1.1;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 2:
-                myEl.EF *= 1.1;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 3:
-                myEl.EF *= 1.1;
-                myEl.datenext = calcDateNext(1); //I assume that the list was learned to perfection today!
-                break;
-            case 4:
-                myEl.datenext = calcDateNext(myEl.EF); //I assume that the list was learned to perfection today!
-                myEl.EF *= 1.1;
-                break;
-            case 5:
-                myEl.EF *= 1.1;
-                myEl.datenext = calcDateNext(myEl.EF + 1); //I assume that the list was learned to perfection today!
-                break;
-            case 6:
-                myEl.EF *= 1.1;
-                myEl.datenext = calcDateNext(myEl.EF * 2); //I assume that the list was lwarned to perfection today!
-                break;
-            case 7:
-                myEl.datenext = calcDateNext(myEl.EF * 3); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.1;
-                break;
-            case 8:
-                myEl.datenext = calcDateNext(myEl.EF * 4.5); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.1;
-                break;
-            case 9:
-                myEl.datenext = calcDateNext(myEl.EF * 7); //I assume that the list was lwarned to perfection today!
-                myEl.EF *= 1.1;
-                break;
-            default:
-                myEl.datenext = calcDateNext(myEl.EF * myEl.repnum);
-                myEl.EF *= 1.1;
-        }
-
-    } else {
-        switch (myEl.repnum) {
-
-            default:
-                myEl.repnum /= 2;
-                myEl.EF /= 2;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                myEl.repnum = 0;
-                myEl.EF = 2;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 4:
-            case 5:
-                myEl.repnum = 3;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 6:
-                myEl.repnum = 4;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 7:
-                myEl.repnum = 4;
-                myEl.datenext = calcDateNext(0);
-                break;
-
-            case 8:
-                myEl.EF *= .9;
-                myEl.repnum = 4;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 9:
-                myEl.EF *= .8;
-                myEl.repnum = 5;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 10:
-                myEl.EF *= .7;
-                myEl.repnum = 6;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 11:
-                myEl.EF *= .6;
-                myEl.repnum = 7;
-                myEl.datenext = calcDateNext(0);
-                break;
-            case 12:
-                myEl.EF *= .5;
-                myEl.repnum = 8;
-                myEl.datenext = calcDateNext(0);
-                break;
-        }
+    const {nextIntervalDays, retire, suspend} = updateSRS(myEl, right);
+    if (retire) {
+        deleteAndAdd(myEl);
+        return;
     }
+    if (suspend) {
+        //TODO separate remedial flow... have to iimplement this somewhere and somehow!!!
+        return;
+    }
+    myEl.datenext = calcDateNext(nextIntervalDays);
+
+    // if (right) {
+    //     myEl.repnum += 1;
+    //
+    //     switch (myEl.repnum) {
+    //         case 1:
+    //             myEl.EF *= 1.1;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 2:
+    //             myEl.EF *= 1.1;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 3:
+    //             myEl.EF *= 1.1;
+    //             myEl.datenext = calcDateNext(1); //I assume that the list was learned to perfection today!
+    //             break;
+    //         case 4:
+    //             myEl.datenext = calcDateNext(myEl.EF); //I assume that the list was learned to perfection today!
+    //             myEl.EF *= 1.1;
+    //             break;
+    //         case 5:
+    //             myEl.EF *= 1.1;
+    //             myEl.datenext = calcDateNext(myEl.EF + 1); //I assume that the list was learned to perfection today!
+    //             break;
+    //         case 6:
+    //             myEl.EF *= 1.1;
+    //             myEl.datenext = calcDateNext(myEl.EF * 2); //I assume that the list was lwarned to perfection today!
+    //             break;
+    //         case 7:
+    //             myEl.datenext = calcDateNext(myEl.EF * 3); //I assume that the list was lwarned to perfection today!
+    //             myEl.EF *= 1.1;
+    //             break;
+    //         case 8:
+    //             myEl.datenext = calcDateNext(myEl.EF * 4.5); //I assume that the list was lwarned to perfection today!
+    //             myEl.EF *= 1.1;
+    //             break;
+    //         case 9:
+    //             myEl.datenext = calcDateNext(myEl.EF * 7); //I assume that the list was lwarned to perfection today!
+    //             myEl.EF *= 1.1;
+    //             break;
+    //         default:
+    //             myEl.datenext = calcDateNext(myEl.EF * myEl.repnum);
+    //             myEl.EF *= 1.1;
+    //     }
+    //
+    // } else {
+    //     switch (myEl.repnum) {
+    //
+    //         default:
+    //             myEl.repnum /= 2;
+    //             myEl.EF /= 2;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 0:
+    //         case 1:
+    //         case 2:
+    //         case 3:
+    //             myEl.repnum = 0;
+    //             myEl.EF = 2;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 4:
+    //         case 5:
+    //             myEl.repnum = 3;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 6:
+    //             myEl.repnum = 4;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 7:
+    //             myEl.repnum = 4;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //
+    //         case 8:
+    //             myEl.EF *= .9;
+    //             myEl.repnum = 4;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 9:
+    //             myEl.EF *= .8;
+    //             myEl.repnum = 5;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 10:
+    //             myEl.EF *= .7;
+    //             myEl.repnum = 6;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 11:
+    //             myEl.EF *= .6;
+    //             myEl.repnum = 7;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //         case 12:
+    //             myEl.EF *= .5;
+    //             myEl.repnum = 8;
+    //             myEl.datenext = calcDateNext(0);
+    //             break;
+    //     }
+    // }
     updateLLItem(myEl);
 }
 
@@ -555,7 +566,10 @@ function updateLLItem(myLLItem) {
             "wordid": myLLItem.wordid,
             "ef": myLLItem.EF,
             "datenext": myLLItem.datenext,
-            "repnum": myLLItem.repnum
+            "repnum": myLLItem.repnum,
+            "streak": myLLItem.streak,
+            "lastIntervalDays": myLLItem.lastIntervalDays,
+            "lapses": myLLItem.lapses
         },
         "Learning List Item successfully updated",
         "Problem updating Learning List Item"
@@ -588,10 +602,10 @@ function deleteAndAdd(myLLItem) {
     llItemRemoveFromList(myLLItem);
 }
 
-    function llItemRemoveFromList(myLLItem) {
-        llData.list = llData.list.filter(item => item !== myLLItem);
-        nowList = nowList.filter(item => item !== myLLItem);
-    }
+function llItemRemoveFromList(myLLItem) {
+    llData.list = llData.list.filter(item => item !== myLLItem);
+    nowList = nowList.filter(item => item !== myLLItem);
+}
 
 // function delLLItem(myLLItem, type) { // This appears to require web service, which is no longer operational!!!
 //
