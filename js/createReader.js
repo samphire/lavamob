@@ -429,7 +429,7 @@ function imageCode(){
     const myTextarea = document.getElementById("createReaderTextPanel");
     const imgName = myTextarea.value.substring(myTextarea.selectionStart, myTextarea.selectionEnd);
     console.log(imgName);
-    const newText = "<img src='readerimages/" + imgName + "' alt='an image' style='float: left; padding: 0 15px 15px 0'>";
+    const newText = "<img src='readerimages/" + imgName + "' alt='an image' style='float: left; padding: 0 15px 15px 0'> ";
     myTextarea.setRangeText(newText);
 }
 

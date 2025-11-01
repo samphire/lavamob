@@ -266,8 +266,10 @@ function makeFlashCard(val) {
 function flashy(result, index) {
     if (result) {
         doneList.push(testList[index]);
+        testList[index].lapses = 0; // reset lapses, because we do not record lapses for flashcards
     } else {
         wrongList.push(testList[index]);
+        testList[index].lapses = 0; // reset lapses, because we do not record lapses for flashcards
     }
 
     let $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();

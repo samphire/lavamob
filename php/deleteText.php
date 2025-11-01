@@ -15,7 +15,7 @@ if ($isAddToLearned) {
     foreach ($words as $item) {
         $word = explode("^/", $item);
         $headwordid = $word[2];
-        $sql = "INSERT INTO learned (userid, headwordid) VALUES ({$userid}, {$headwordid})";
+        $sql = "INSERT IGNORE INTO learned (userid, headwordid) VALUES ({$userid}, {$headwordid})";
         mysqli_query($conn, $sql);
 //        echo(mysqli_error($conn));
     }

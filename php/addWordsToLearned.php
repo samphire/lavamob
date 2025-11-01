@@ -1,5 +1,10 @@
 <?php
 include("session.inc");
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 header('Access-Control-Allow-Methods: INSERT');
 $userid = $_GET['userid'];
 $textid = $_GET['textid'];
@@ -17,7 +22,7 @@ $stmt->close();
 $words = json_decode($json, true);
 
 // Prepare insert statement once
-$sql = "INSERT INTO learned (userid, headwordid) VALUES (?, ?)";
+$sql = "INSERT IGNORE INTO learned (userid, headwordid) VALUES (?, ?)";
 $insertStmt = $conn->prepare($sql);
 
 foreach ($words as $item) {
