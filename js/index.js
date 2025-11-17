@@ -3,6 +3,7 @@
  */
 var readers;
 var userid = 0;
+let userEmail;
 let group = 0;
 let username;
 let wordScore;
@@ -28,6 +29,63 @@ let reconstHyphenWord;
 const realWordRegex1 = /^[a-zA-Z]+$/;
 
 window.onload = function () {
+
+    document.querySelector('.mySignout').addEventListener('click', async () => {
+        try {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userid');
+            localStorage.removeItem('username');
+            localStorage.removeItem('language');
+            localStorage.removeItem('group');
+            sessionStorage.clear();
+        } catch (_) {
+        }
+        // Go to the central logout (clears nb_sess and SLOs Optikon)
+        location.href = '/login/logout.php';
+    });
+
+    // --- central login gate ---
+    fetch('/login/whoami_lavamob.php', {credentials: 'include', cache: 'no-store'})
+        .then(r => r.json())
+        .then(d => {
+            if (!d || !d.ok) {
+                // Not logged in → go to central login
+                const next = location.pathname + location.search + location.hash;
+                location.href = '/login/?next=' + encodeURIComponent(next);
+                return;
+            }
+
+            // Logged in → set globals
+            window.userEmail = d.userEmail;
+            window.userid = d.userid;
+            userid = d.userid;
+            window.username = d.username;
+            window.language = d.language;
+            window.group = d.usertype ?? d.usertype ?? 'default';
+
+            console.log('Logged in as:', window.username);
+
+            localStorage.setItem("userEmail", d.userEmail);
+            localStorage.setItem("userid", d.userid);
+            localStorage.setItem("username", d.username);
+            localStorage.setItem("language", d.language);
+            localStorage.setItem("group", d.usertype);
+
+            $(".login").hide();
+            document.getElementById('showusername').innerText = "user: " + d.username;
+            $("#welcome").show();
+            $("#menu").show();
+
+            getGoalsInfo();
+            getReaderInfo();
+
+        })
+        .catch(err => {
+            console.error('Login gate error:', err);
+            const next = location.pathname + location.search + location.hash;
+            location.href = '/login/?next=' + encodeURIComponent(next);
+        });
+
 
     document.addEventListener("keydown", function (event) {
         // Check if the active element is an input or textarea (or if you want to add other exceptions)
@@ -59,7 +117,6 @@ window.onload = function () {
     });
 
     // console.info(localStorage);
-
     history.pushState({page_id: 4, page: "welcome"}, null, "/lavamob/welcome");
     $('#fileinput').on('change', prepareUpload);
     $('#audioform').on('submit', uploadFiles);
@@ -69,87 +126,90 @@ window.onload = function () {
     $('section').hide();
     $('#menu').hide();
 
-    // localStorage.removeItem("userid");
-    // localStorage.removeItem("group");
-    // localStorage.removeItem("userEmail");
-    // localStorage.removeItem("language");
-    // localStorage.removeItem("username");
+    // if (localStorage.getItem("userid")) { //all user info is there and can be reused
+    //     window.alert('i am at line 143');
+    //     userid = parseInt(localStorage.getItem("userid"), 10);
+    //     if (localStorage.getItem("group") === "USER" && document.querySelector("#audioOpt")) {
+    //         const myEl = document.querySelector("#audioOpt");
+    //         myEl.parentNode.removeChild(myEl);
+    //         const aud = document.querySelector("#audiodiv > fieldset");
+    //         aud.parentNode.removeChild(aud);
+    //     }
+    //
+    //     $(".login").hide();
+    //     $("#welcome").show();
+    //     // $("#menu").show();
+    //     alert('about to get goalsinfo');
+    //     getGoalsInfo();
+    //     getReaderInfo();
+    //     return;
+    // } else {
+    //     if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
+    //         document.getElementById("userEmail").value = localStorage.getItem("userEmail");
+    //         $('.login').show();
+    //     }
+    // }
+    // $('.login').show();
 
-    if (localStorage.getItem("userid")) { //all user info is there and can be reused
-        userid = parseInt(localStorage.getItem("userid"), 10);
-        if (localStorage.getItem("group") === "USER" && document.querySelector("#audioOpt")) {
-            const myEl = document.querySelector("#audioOpt");
-            myEl.parentNode.removeChild(myEl);
-            const aud = document.querySelector("#audiodiv > fieldset");
-            aud.parentNode.removeChild(aud);
-        }
 
-        $(".login").hide();
-        $("#welcome").show();
-        // $("#menu").show();
-        getGoalsInfo();
-        getReaderInfo();
-        return;
-    } else {
-        if (localStorage.getItem("userEmail")) { //only useremail is there, so login must show
-            document.getElementById("userEmail").value = localStorage.getItem("userEmail");
-            $('.login').show();
-        }
-    }
-    $('.login').show();
 }
 
 
-function login() {
-    history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
-    // console.log("In login()");
-    var urly = url2 + "/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
-    // console.log(urly);
-    //alert(urly);
-    $.ajax({
-        type: "GET",
-        crossDomain: true,
-        url: urly,
-        async: false,
-        success: function (data) {
-            // console.log("LOGIN: " + data);
-            //alert("success");
-            if (data == "fail login") {
-                alert("username or password is incorrect");
-                localStorage.clear();
-                return;
-            }
-            const myData = JSON.parse(data);
-            console.info(myData);
-            userid = myData[0];
-            language = myData[1];
-            group = myData[2];
-            username = myData[3];
-            localStorage.setItem("userEmail", document.getElementById("userEmail").value);
-            localStorage.setItem("userid", userid);
-            localStorage.setItem("language", language);
-            localStorage.setItem("group", group);
-            localStorage.setItem("username", username);
-
-            console.log(localStorage);
-
-            $(".login").hide();
-            // document.getElementById('showusername').innerText = localStorage.getItem('username');
-            document.getElementById('showusername').innerText = "user: " + username;
-            // console.log("username is " + username);
-            $("#welcome").show();
-            $("#menu").show();
-            getReaderInfo();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            // console.log("some problem with ajax login");
-            //alert("fail");
-            // console.log(urly);
-            // console.log(textStatus + "\n" + errorThrown);
-            alert(textStatus + "\n" + errorThrown);
-        }
-    });
-}
+// function login() {
+//     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
+//     // console.log("In login()");
+//     var urly = url2 + "/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
+//     // console.log(urly);
+//     //alert(urly);
+//     $.ajax({
+//         type: "GET",
+//         crossDomain: true,
+//         url: urly,
+//         async: false,
+//         success: function (data) {
+//             // console.log("LOGIN: " + data);
+//             //alert("success");
+//             if (data == "fail login") {
+//                 alert("username or password is incorrect");
+//                 localStorage.clear();
+//                 return;
+//             }
+//             const myData = JSON.parse(data);
+//             console.info(myData);
+//             userid = myData[0];
+//             language = myData[1];
+//             group = myData[2];
+//             username = myData[3];
+//             userEmail = document.getElementById("userEmail").value;
+//             localStorage.setItem("userEmail", userEmail);
+//             localStorage.setItem("userid", userid);
+//             localStorage.setItem("language", language);
+//             localStorage.setItem("group", group);
+//             localStorage.setItem("username", username);
+//
+//             console.log(localStorage.getItem("userEmail"));
+//             console.log(localStorage.getItem("userid"));
+//             console.log(localStorage.getItem("language"));
+//             console.log(localStorage.getItem("group"));
+//             console.log(localStorage.getItem("username"));
+//
+//             $(".login").hide();
+//             // document.getElementById('showusername').innerText = localStorage.getItem('username');
+//             document.getElementById('showusername').innerText = "user: " + window.username;
+//             // console.log("username is " + username);
+//             $("#welcome").show();
+//             $("#menu").show();
+//             getReaderInfo();
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) {
+//             // console.log("some problem with ajax login");
+//             //alert("fail");
+//             // console.log(urly);
+//             // console.log(textStatus + "\n" + errorThrown);
+//             alert(textStatus + "\n" + errorThrown);
+//         }
+//     });
+// }
 
 function progress(percent, $element, boolAnimColor, col) {
     percent = percent > 100 ? 100 : percent;

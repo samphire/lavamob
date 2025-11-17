@@ -39,7 +39,7 @@
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
     <script>
 
-        window.onpopstate = function (event) {
+    window.onpopstate = function (event) {
             history.go(-(history.length + 1));
             // var content = "";
             if (event.state) {
@@ -134,7 +134,6 @@
             </a>
         </div>
     </div>
-
 </div>
 
 <nav id="menu" style="display:none;">
@@ -186,8 +185,7 @@
 <section id="welcome">
     <i class="fa-solid fa-user"></i>
     <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->
-    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-right-from-bracket icon-large mySignout"
-                                                        onclick="$('#welcome').hide();localStorage.clear();$('.login').show()"></i>
+    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-right-from-bracket icon-large mySignout"></i>
 
 
     <!--    <h1>Choose Your Activity</h1>-->

@@ -8,16 +8,17 @@
 
 
 const KIDS_BOOTSTRAP = [1, 2, 4, 6, 10, 16];
-const KIDS_GROWTH = 1.6;
 const EF_MIN = 1.3, EF_MAX = 3.0;
 const FUZZ = 0.10;
 
-function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-function jitter(days) {
-    const f = 1 + (Math.random() * 2*FUZZ - FUZZ);
-    return Math.max(1, Math.round(days * f));
+function clamp(v, a, b) {
+    return Math.max(a, Math.min(b, v));
 }
 
+function jitter(days) {
+    const f = 1 + (Math.random() * 2 * FUZZ - FUZZ);
+    return Math.max(1, Math.round(days * f));
+}
 
 
 /**
@@ -29,17 +30,11 @@ function jitter(days) {
 function updateSRS(card, wasCorrect) {
 
 
-
-
-
-
-
-
     // defaults
-    let EF     = card.EF ?? 2.5;
-    let rep    = card.repnum ?? 0;
+    let EF = card.EF ?? 2.5;
+    let rep = card.repnum ?? 0;
     let streak = card.streak ?? 0;
-    let lastI  = card.lastIntervalDays ?? 0;
+    let lastI = card.lastIntervalDays ?? 0;
     let lapses = card.lapses ?? 0;
 
     // EF update (SM-2 style, binary mapped)
@@ -57,20 +52,33 @@ function updateSRS(card, wasCorrect) {
             interval = KIDS_BOOTSTRAP[rep - 1];
         } else {
             const base = lastI > 0 ? lastI : KIDS_BOOTSTRAP[KIDS_BOOTSTRAP.length - 1];
-            interval = Math.round(base * KIDS_GROWTH);
+            const growthFactor = 1 + 0.24 * EF;
+            interval = Math.round(base * growthFactor);
         }
     } else {
         // ---- WRONG ANSWER → record lapse and reschedule soon
         lapses += 1;         // <— record it
         streak = 0;
-        interval = 1;        // quick relearn tomorrow
-        // (If you prefer: rep = Math.max(0, rep - 1);)
+
+        if (rep <= 2 || lastI <= 4) {
+            interval = 1;
+        } else {
+            const base = lastI > 0
+                ? lastI
+                : (rep <= KIDS_BOOTSTRAP.length
+                    ? KIDS_BOOTSTRAP[rep - 1]
+                    : KIDS_BOOTSTRAP[KIDS_BOOTSTRAP.length - 1]);
+
+            const penaltyFactor = 3;
+            interval = Math.max(1, Math.round(base / penaltyFactor));
+        }
+
     }
 
     interval = jitter(interval);
 
     // retire at the 10th success (your target)
-    const retire = wasCorrect && rep >= 10;
+    const retire = wasCorrect && rep >= 9 && streak >= 4 && interval >= 60;
 
     // (Optional) “leech” suspend rule—tune to taste
     const leech = lapses >= 8 && rep >= 6;
@@ -82,14 +90,7 @@ function updateSRS(card, wasCorrect) {
     card.lastIntervalDays = interval;
     card.lapses = lapses;
 
-    return { nextIntervalDays: interval, retire, leech };
-
-
-
-
-
-
-
+    return {nextIntervalDays: interval, retire, leech};
 
 
 //     // Ensure defaults
@@ -149,7 +150,7 @@ function updateSRS(card, wasCorrect) {
  * Example wire-up with your existing calcDateNext(days)
  */
 function onAnswer(card, wasCorrect) {
-    const { nextIntervalDays, retire, suspend } = updateSRS(card, wasCorrect);
+    const {nextIntervalDays, retire, suspend} = updateSRS(card, wasCorrect);
 
     if (retire) {
         // remove from learning list (archive or mark retired)
