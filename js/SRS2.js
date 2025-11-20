@@ -29,7 +29,6 @@ function jitter(days) {
  */
 function updateSRS(card, wasCorrect) {
 
-
     // defaults
     let EF = card.EF ?? 2.5;
     let rep = card.repnum ?? 0;
@@ -56,9 +55,9 @@ function updateSRS(card, wasCorrect) {
             interval = Math.round(base * growthFactor);
         }
     } else {
-        // ---- WRONG ANSWER → record lapse and reschedule soon
-        lapses += 1;         // <— record it
+        lapses = card.isFlashCard ? 0 : lapses + 1;
         streak = 0;
+        // console.log("here is the wrongly answered card after mod in SRS2: ", card);
 
         if (rep <= 2 || lastI <= 4) {
             interval = 1;
@@ -91,59 +90,6 @@ function updateSRS(card, wasCorrect) {
     card.lapses = lapses;
 
     return {nextIntervalDays: interval, retire, leech};
-
-
-//     // Ensure defaults
-//     let EF = card.EF ?? 2.5;
-//     let repnum = card.repnum ?? 0;
-//     let streak = card.streak ?? 0;
-//     let lastI = card.lastIntervalDays ?? 0;
-//     let lapses = card.lapses ?? 0;
-//
-//     // --- 1) Easiness update (SM-2 style, binary mapped) ---
-//     const q = wasCorrect ? 5 : 2; // 5 = perfect, 2 = fail (still “attempted”)
-//     EF = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
-//     EF = clamp(EF, 1.3, 3.0);
-//
-//     // --- 2) Interval & counters ---
-//     let interval;
-//     if (wasCorrect) {
-//         streak += 1;
-//         repnum += 1;
-//
-//         if (repnum === 1) {
-//             interval = 1;            // I(1)
-//         } else if (repnum === 2) {
-//             interval = 2;            // I(2)
-//         } else if (repnum === 3){
-//             interval = 4;
-//         }
-//         else {
-//             interval = Math.round(Math.max(1, lastI * EF)); // I(n) = I(n-1) * EF
-//         }
-//     } else {
-//         // Lapse: reset streak, keep/decide on repnum policy
-//         streak = 0;
-//         lapses += 1;
-//         interval = 1;              // relearn tomorrow (daily system)
-//         // Optionally: repnum = Math.max(0, repnum - 1);
-//     }
-//
-//     // --- 3) Fuzz the interval ±15% to avoid clumping ---
-//     interval = Math.max(1, Math.round(interval * (1 + randomInRange(-0.15, 0.15))));
-//
-//     // --- 4) Retirement / Leech logic ---
-//     const retire = (interval >= 365) && (streak >= 8) && (EF >= 2.5);
-//     const suspend = (lapses >= 8) && (repnum >= 10); // optional “leech” rule
-//
-//     // --- 5) Persist updated fields back to your card ---
-//     card.EF = EF;
-//     card.repnum = repnum;
-//     card.streak = streak;
-//     card.lastIntervalDays = interval;
-//     card.lapses = lapses;
-//
-//     return { nextIntervalDays: interval, retire, suspend };
 }
 
 /**

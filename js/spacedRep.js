@@ -1,7 +1,5 @@
 let testList, doneList, wrongList;
-// const numPerSession = 7;
-const numPerSession = 5;
-// const flashCardsToInclude = 5;
+const numPerSession = 7;
 const flashCardsToInclude = 3;
 let randItems;// contains 4 or 6 items from which to choose for types 1 - 4
 
@@ -22,7 +20,7 @@ function test(list) {
         val.idxInTestList = idx; // add property to each object for when getting random 4 or 6 and need to retrieve the object being tested because random4 method uses splice and removes items from the array
     });
 
-    let sessionList = [];
+    // let sessionList = [];
     doneList = [];
     wrongList = [];
     let htmlStrArray = new Array(64);
@@ -35,17 +33,36 @@ function test(list) {
     const flashCardList = testListtmp.filter((val) => val.repnum === 0);
     const nonFlashCardList = testListtmp.filter((val) => val.repnum !== 0);
 
-    console.log("flashCardList: ");
-    console.log(...flashCardList);
-    console.log("flashcardsToInclue: " + flashCardsToInclude + ", flashCardList.length: " + flashCardList.length);
+    // console.log("flashCardList: ", ...flashCardList);
+    // console.log("nonFlashCardList: ", ...nonFlashCardList);
 
     const flashCardLimit = flashCardList.length < flashCardsToInclude ? flashCardList.length : flashCardsToInclude;
-    console.log("Limit of flash cards is " + flashCardLimit);
+    // console.log("Limit of flash cards is " + flashCardLimit);
 
-    for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
-        let rand = Math.floor(Math.random() * flashCardList.length);
-        sessionList.push(flashCardList.splice(rand, 1)[0]);
+    // for (let i = 0; i < flashCardLimit; i++) { // Add flashCardsToInclude flashcards chosen at random
+    //     let rand = Math.floor(Math.random() * flashCardList.length);
+    //     sessionList.push(flashCardList.splice(rand, 1)[0]);
+    // }
+    //
+    // sessionList.forEach(function (val, idx) {
+    //     val.isFlashCard = true;
+    // });
+
+
+    for (let i = flashCardList.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [flashCardList[i], flashCardList[j]] = [flashCardList[j], flashCardList[i]];
     }
+
+    const sessionList = flashCardList.slice(0, flashCardLimit).map(item => ({...item, isFlashCard: true}));
+
+    sessionList.forEach(item => {
+        testList[item.idxInTestList].isFlashCard = true;
+    })
+
+    // console.log("holy fuck... here is testList: ", testList);
+
+    // console.log("after chatgpt optimized code, this is sessionList (only flashcards): ", sessionList);
 
     for (let q = 0; q < numPerSession; q++) {
         let rand = Math.floor(Math.random() * nonFlashCardList.length);
@@ -54,23 +71,13 @@ function test(list) {
         }
     } //sessionList now contains flashCardsToInclude plus numPerSession words to test
 
-    console.log("Size of sessionList is now " + sessionList.length);
-    console.log("start to print sessionList");
-    console.log(...sessionList);
-    console.log("end of sessionList");
-    console.log(typeof llData);
-    printObject('llData', llData);
-    console.log(typeof nowList);
-    printObject('nowList', nowList);
-
-
     sessionList.forEach(function (val, idx) {
-            console.log("in sessionList.foreach...");
+            // console.log("in sessionList.foreach...");
             if (idx === 0) {
                 currentVocabIndex = val.idxInTestList;
             }
             let idxToPlace = 0;
-            console.log(val);
+            // console.log(val);
             switch (val.repnum) {
                 default:
                     console.log("This is default in the switch statement");
@@ -266,6 +273,7 @@ function makeFlashCard(val) {
 function flashy(result, index) {
     if (result) {
         doneList.push(testList[index]);
+        //TODO: Don't need to reset lapses if we never had a lapse in the first place as per my new code!!!
         testList[index].lapses = 0; // reset lapses, because we do not record lapses for flashcards
     } else {
         wrongList.push(testList[index]);
@@ -372,7 +380,7 @@ function checkResult(event, result, index) { // this is actually the main routin
 
 function endTest() {
     console.log("##### in endTest() #####")
-
+    soundFinished.play();
     // deduplicate lists
     doneList = [...new Set(doneList)];
     wrongList = [...new Set(wrongList)];
@@ -442,6 +450,9 @@ function updateItem(right, idx) {
     console.log("in updateItem. word is " + myEl.word + "\nrepnum is " + myEl.repnum + ", which will be incremented IF right");
 
     const {nextIntervalDays, retire, suspend} = updateSRS(myEl, right);
+
+    console.log(myEl);
+
     if (retire) {
         deleteAndAdd(myEl);
         return;
@@ -561,6 +572,7 @@ function updateLLItem(myLLItem) {
     console.log("in updateLLItem");
     printObject("printing LLItem before post", myLLItem);
     console.warn("datenext is " + myLLItem.datenext);
+
 
     jaxy(url2 + "/php/llEdit.php", "POST",
         {
