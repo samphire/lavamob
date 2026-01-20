@@ -8,21 +8,16 @@ function convertDateToNumber(date) {
     return Date.parse(datestr); // milliseconds from jan 1st 1970
 }
 
+let canSpeak = true;
 const speakWord = (theWord) => {
+    if(!canSpeak) return;
+    canSpeak = false;
+    setTimeout(()=> canSpeak = true, 1500);
+    speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(theWord);
     utter.lang = "en-GB";
     speechSynthesis.speak(utter);
 }
-
-// function treatImagesInCreateReader(arr) {
-//     for (let i = 0; i < arr.length; i++) {
-//         if (arr[i] === '<img') {
-//             arr[i] = arr[i] + '\u0020' + arr[i + 1];
-//             arr[i + 1] = 'deleteMePlease';
-//         }
-//     }
-//     return arr.filter(el => el !== 'deleteMePlease');
-// }
 
 // New helper function to process image tags
 function treatImagesInCreateReader(textArr) {
@@ -210,8 +205,8 @@ function calcValForGoal(learned, learning, avgRepnum) {
     return Math.floor(parseInt(learned) + (parseInt(learning) * parseFloat(avgRepnum) * 0.1));
 }
 
-async function getExampleSentence(promptWord) {
-    const response = await fetch(url2 + "/php/openai.php?word=" + promptWord,
+async function getExampleSentence(promptWord, promptTranny) {
+    const response = await fetch(url2 + "/php/openai.php?word=" + promptWord + "&tranny=" + promptTranny,
         {
             method: 'GET',
             headers: {
@@ -323,4 +318,14 @@ function sanitizeForJSON(obj) {
         return value;
     };
     return JSON.stringify(obj, replacer);
+}
+
+function normalizeText(str) {
+    return str
+        .replace(/[\u2019\u2018]/g, "'")     // curly apostrophes → '
+        .replace(/[\u201C\u201D]/g, '"')     // curly quotes → "
+        .replace(/\u2013|\u2014/g, '-')      // en/em dash → -
+        .replace(/\u2026/g, '...')           // ellipsis → ...
+        .replace(/\u00A0/g, ' ')             // no-breaking space → normal space
+        .normalize("NFC");                   // fix decomposed characters
 }

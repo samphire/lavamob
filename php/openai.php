@@ -2,21 +2,35 @@
 include ("session.inc");
 include ("api.inc");
 
+function isEnglish($word) {
+    return preg_match('/^[A-Za-z]+$/', $word) === 1;
+}
+
+$wordToSend = isEnglish($_GET['word']) ? $_GET['word'] : $_GET['tranny'];
+$trannyWord = isEnglish($_GET['word']) ? $_GET['tranny'] : $_GET['word'];
+
 $headers = array(
 'Content-Type: application/json',
 'Authorization: Bearer '.$openaiKey
 );
 
 $data = array(
-    'model' => 'gpt-4-turbo',
-    'max_tokens' => 100,
+    'model' => 'gpt-5.2-chat-latest',
+    'max_completion_tokens' => 500,
     'messages' => array(
-            array(
-                'role' => 'user',
-                'content' => "Generate a natural English sentence using the word " . $_GET['word'] . ". Provide a Korean translation and a brief explanation, in Korean, of the word’s meaning in this context."
-            )
+        array(
+            'role' => 'system',
+            'content' => 'Respond quickly. Be concise. No hidden reasoning. No explanations unless requested.'
+        ),
+        array(
+            'role' => 'user',
+            'content' => "Generate a natural English sentence using the word $wordToSend.
+            Provide a Korean translation including the word $trannyWord,
+            and a brief Korean explanation of the word’s meaning."
+        )
     )
 );
+
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, 'https://api.openai.com/v1/chat/completions');

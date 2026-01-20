@@ -235,7 +235,7 @@ async function manageLL(type) {
         case 5: // AI example sentences
             const spinner = document.getElementById("spinner");
             spinner.style.display = "block";
-            let aiResponse = await getExampleSentence(myEl.word);
+            let aiResponse = await getExampleSentence(myEl.word, myEl.tranny);
             try {
                 console.log("In manageLL number 5 openai " + aiResponse);
             } catch (error) {
@@ -273,11 +273,8 @@ function makeFlashCard(val) {
 function flashy(result, index) {
     if (result) {
         doneList.push(testList[index]);
-        //TODO: Don't need to reset lapses if we never had a lapse in the first place as per my new code!!!
-        testList[index].lapses = 0; // reset lapses, because we do not record lapses for flashcards
     } else {
         wrongList.push(testList[index]);
-        testList[index].lapses = 0; // reset lapses, because we do not record lapses for flashcards
     }
 
     let $el = $(event.target).parent().hasClass("testItem") ? $(event.target).parent() : $(event.target).parent().parent();

@@ -88,10 +88,14 @@ function parseText() {
     let text = document.getElementById('createReaderTextPanel').value;
 
     // deal with the annoying character in Shiloh.pdf
-    const ShilohCharacterRegex = /(?<=\S)\u2014(?=\S)/g;
-    text = text.replaceAll(ShilohCharacterRegex, ' \u2014 ');
+    // const ShilohCharacterRegex = /(?<=\S)\u2014(?=\S)/g;
+    // text = text.replaceAll(ShilohCharacterRegex, ' \u2014 ');
     // deal with annoying citations brackets in wikipedia
     text = text.replace(/(\S)(\[)/g, "$1 $2");
+    // convert annoying curly typeset apostrophe to simple U+0027 (from U+2019)
+    // text = text.replace(/\u2019/g, "\u0027");
+
+    text = normalizeText(text);
 
     const paragraphRegex = /\r\n|\r|\n/g
     let paragraphArr = text.split(paragraphRegex);
