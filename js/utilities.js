@@ -206,16 +206,20 @@ function calcValForGoal(learned, learning, avgRepnum) {
 }
 
 async function getExampleSentence(promptWord, promptTranny) {
-    const response = await fetch(url2 + "/php/openai.php?word=" + promptWord + "&tranny=" + promptTranny,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
+    const response = await fetch(
+        url2 + "/php/openai.php?type=AIExample&word=" +
+        encodeURIComponent(promptWord) +
+        "&tranny=" +
+        encodeURIComponent(promptTranny)
     );
-    const responseData = await response.text();
-    const myResponse = JSON.parse(responseData);
+
+    if (!response.ok) {
+        const text = await response.text();
+        console.error("Server response:", text);
+        throw new Error("Server error: " + response.status);
+    }
+
+    const myResponse = await response.json();
     return myResponse.choices[0].message.content;
 }
 

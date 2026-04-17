@@ -6,31 +6,49 @@ function isEnglish($word) {
     return preg_match('/^[A-Za-z]+$/', $word) === 1;
 }
 
-$wordToSend = isEnglish($_GET['word']) ? $_GET['word'] : $_GET['tranny'];
-$trannyWord = isEnglish($_GET['word']) ? $_GET['tranny'] : $_GET['word'];
+if($_GET['type'] === 'AIExample'){
 
-$headers = array(
-'Content-Type: application/json',
-'Authorization: Bearer '.$openaiKey
-);
+    $wordToSend = isEnglish($_GET['word']) ? $_GET['word'] : $_GET['tranny'];
+    $trannyWord = isEnglish($_GET['word']) ? $_GET['tranny'] : $_GET['word'];
 
-$data = array(
-    'model' => 'gpt-5.2-chat-latest',
-    'max_completion_tokens' => 500,
-    'messages' => array(
-        array(
-            'role' => 'system',
-            'content' => 'Respond quickly. Be concise. No hidden reasoning. No explanations unless requested.'
-        ),
-        array(
-            'role' => 'user',
-            'content' => "Generate a natural English sentence using the word $wordToSend.
-            Provide a Korean translation including the word $trannyWord,
-            and a brief Korean explanation of the word’s meaning."
+    $headers = array(
+    'Content-Type: application/json',
+    'Authorization: Bearer '.$openaiKey
+    );
+
+    $data = array(
+        'model' => 'gpt-5.2-chat-latest',
+        'max_completion_tokens' => 500,
+        'messages' => array(
+            array(
+                'role' => 'system',
+                'content' => 'Respond quickly. Be concise. No hidden reasoning. No explanations unless requested.'
+            ),
+            array(
+                'role' => 'user',
+                'content' => "Generate a natural English sentence using the word $wordToSend.
+                Provide a Korean translation including the word $trannyWord,
+                and a brief Korean explanation of the word’s meaning."
+            )
         )
-    )
-);
+    );
+}
 
+if($_GET['type'] === 'reader2fill3k'){
+
+
+// use reader3;
+// SELECT headword FROM headwords
+// left join
+// (select * from learned where userid=97) as amy
+// on headwords.id = amy.headwordid
+// where headwords.id between 1000 and 2000 and amy.headwordid is null
+// order by rand()
+// limit 20
+
+    echo "reader2fill3k not yet implemented";
+
+}
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, 'https://api.openai.com/v1/chat/completions');
