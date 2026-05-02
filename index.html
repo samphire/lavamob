@@ -19,6 +19,16 @@
     <script src="js/sweetalert2.min.js"></script>
 
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e88e5">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Optikon">
+    <!-- Optional legacy Android support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
     <!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
 
 
@@ -39,7 +49,7 @@
     <link href="https://fonts.googleapis.com/css?family=Bitter|Play" rel="stylesheet">
     <script>
 
-    window.onpopstate = function (event) {
+        window.onpopstate = function (event) {
             history.go(-(history.length + 1));
             // var content = "";
             if (event.state) {
@@ -80,6 +90,98 @@
 </head>
 <body>
 
+<button id="installBtn" style="display:none;">
+    Install Lavamob App
+</button>
+
+<div id="iosInstallMsg" style="display:none;">
+    On iPhone or iPad: tap the Share button, then choose
+    <strong>Add to Home Screen</strong>.
+</div>
+
+<script>
+    let deferredPrompt;
+
+    const installBtn = document.getElementById("installBtn");
+    const iosMsg = document.getElementById("iosInstallMsg");
+
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("service-worker.js", {
+                scope: "./"
+            })
+                .then(reg => {
+                    console.log("Service worker registered:", reg.scope);
+                })
+                .catch(err => {
+                    console.error("Service worker registration failed:", err);
+                });
+        });
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+        console.log("beforeinstallprompt fired");
+        e.preventDefault();
+
+        deferredPrompt = e;
+        installBtn.style.display = "inline-block";
+    });
+
+    setTimeout(() => {
+        if (!deferredPrompt) {
+            document.getElementById("androidAlt").style.display = "none";
+        }
+    }, 3000);
+
+    installBtn.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+
+        const choice = await deferredPrompt.userChoice;
+        console.log("Install choice:", choice.outcome);
+
+        deferredPrompt = null;
+        installBtn.style.display = "none";
+    });
+
+    window.addEventListener("appinstalled", () => {
+        console.log("PWA installed");
+        deferredPrompt = null;
+        installBtn.style.display = "none";
+    });
+
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    if (isIos && !isStandalone) {
+        iosMsg.style.display = "block";
+    }
+
+    if (isStandalone) {
+        // Hide ALL install-related UI
+        document.getElementById("installBtn").style.display = "none";
+        document.getElementById("androidAlt").style.display = "none";
+        document.getElementById("iosInstallMsg").style.display = "none";
+    }
+
+    const isSamsung = /samsung/i.test(navigator.userAgent);
+
+    if (isSamsung && isStandalone) {
+        // Force-hide install UI on Samsung when already installed
+        document.getElementById("installBtn").style.display = "none";
+        document.getElementById("androidAlt").style.display = "none";
+    }
+
+</script>
+
+<div id="androidAlt" style="display:none;"></div>
+<!--    On Samsung Internet: tap the menu (⋮) and choose-->
+<!--<strong>Add page to → Home screen</strong>.-->
+</div>
 <!--<div class="login" style="display: none">-->
 <!--    <div class="login-card">-->
 <!--        <div class="login-card-logo">-->
@@ -185,7 +287,8 @@
 <section id="welcome">
     <i class="fa-solid fa-user"></i>
     <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->
-    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<img id="userpic" src="" alt="user photo" /> <i class="fa-solid fa-right-from-bracket icon-large mySignout"></i>
+    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<img id="userpic" src="" alt="user photo"/> <i
+        class="fa-solid fa-right-from-bracket icon-large mySignout"></i>
 
 
     <!--    <h1>Choose Your Activity</h1>-->
@@ -278,7 +381,7 @@
         <div><input type="text" id="readerName" required><label for="readerName">Text Name</label></div>
         <div><input type="text" id="readerDescription" required><label for="readerDescription">Description</label></div>
         <div id="imageBtnContainer"></div>
-        <script>if(localStorage.getItem('group') === 'AUTHOR') {
+        <script>if (localStorage.getItem('group') === 'AUTHOR') {
             document.getElementById('imageBtnContainer').innerHTML = '<button class="imgButton" onclick="imageCode()">IMAGE</button>';
         }
         </script>
@@ -299,7 +402,7 @@
                 Audacity Labels File<br><br>
                 <input type="file" id="audacityFileChooser">
                 <script>
-                    document.getElementById("audacityFileChooser").addEventListener('change', function(event) {
+                    document.getElementById("audacityFileChooser").addEventListener('change', function (event) {
                         replaceSpriteData(event);
                     });
                 </script>
