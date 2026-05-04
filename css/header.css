@@ -1,0 +1,147 @@
+.topbar {
+    height: 56px;
+    padding: 0 12px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.topbar-spacer {
+    flex: 1;
+}
+
+.switch-btn,
+.logout-btn,
+.avatar-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    background: #f3f4f6;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.switch-btn img {
+    width: 32px;
+    height: 32px;
+}
+
+.logout-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.switch-btn:hover,
+.logout-btn:hover,
+.avatar-btn:hover {
+    background: #e5e7eb;
+}
+
+.user-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.username-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+}
+
+.dropdown {
+    position: absolute;
+    top: 52px;
+    right: 0;
+
+    width: 170px;
+    padding: 8px 0;
+
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+    color: #b91c1c;
+    letter-spacing: 1px;
+    display: none;
+    z-index: 9999;
+}
+
+.logout-menu-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown img{
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+.dropdown.show {
+    display: block;
+}
+
+.dropdown-name {
+    padding: 10px 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/*.dropdown a {*/
+/*    display: block;*/
+/*    padding: 10px 14px;*/
+/*    color: #111827;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.dropdown a:hover {*/
+/*    background: #f3f4f6;*/
+/*}*/
+
+.divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 6px 0;
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    .username-label,
+    .logout-btn {
+        display: none;
+    }
+
+    .topbar {
+        height: 54px;
+    }
+}
+
+/* Tablet and desktop */
+@media (min-width: 601px) {
+        .dropdown {
+        display: none !important;
+    }
+}

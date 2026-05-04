@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <title>Mobile Reader</title>
     <script src="js/globalVars.js?version=1"></script>
@@ -43,6 +46,7 @@
     <link rel="stylesheet" type="text/css" href="css/nav.css">
     <link rel="stylesheet" type="text/css" href="css/login.css">
     <link rel="stylesheet" type="text/css" href="css/gauges.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="shortcut icon" type="image/png" href="https://notborder.org/lavamob/icon-192x192.png">
     <link rel="shortcut icon" sizes="192x192" href="https://notborder.org/lavamob/icon-192x192.png">
     <link rel="apple-touch-icon" href="https://notborder.org/lavamob/icon-192x192.png">
@@ -89,6 +93,30 @@
     </script>
 </head>
 <body>
+
+<script>
+    // --- central login gate ---
+    async function checkLogin() {
+        fetch('/login/whoami_lavamob.php', {credentials: 'include', cache: 'no-store'})
+            .then(r => r.json())
+            .then(d => {
+                if (!d || !d.ok) {
+// Not logged in → go to central login
+                    const next = location.pathname + location.search + location.hash;
+                    location.href = '/login/?next=' + encodeURIComponent(next);
+                    return;
+                }
+            });
+    }
+
+    checkLogin();
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            checkLogin();
+        }
+    });
+</script>
+
 
 <button id="installBtn" style="display:none;">
     Install Lavamob App
@@ -182,61 +210,37 @@
 <!--    On Samsung Internet: tap the menu (⋮) and choose-->
 <!--<strong>Add page to → Home screen</strong>.-->
 </div>
-<!--<div class="login" style="display: none">-->
-<!--    <div class="login-card">-->
-<!--        <div class="login-card-logo">-->
-<!--            <img src="assets/img/logos/logo.png" alt="logo">-->
-<!--        </div>-->
-<!--        <div class="login-card-header">-->
-<!--            <h1>Sign In</h1>-->
-<!--            <div>Please login to use platform</div>-->
-<!--        </div>-->
-<!--        <form class="login-card-form">-->
-<!--            <div class="form-item">-->
-<!--                <span class="form-item-icon material-symbols-rounded">mail</span>-->
-<!--                <label for="userEmail"></label>-->
-<!--                <input id="userEmail" type="text" placeholder="Enter Email or Username" required autofocus>-->
-<!--            </div>-->
-<!--            <div class="form-item">-->
-<!--                <span class="form-item-icon material-symbols-rounded">lock</span>-->
-<!--                <label for="pass"></label>-->
-<!--                <input id="pass" type="password" placeholder="Enter Password" required>-->
-<!--            </div>-->
-<!--            <div class="form-item-other">-->
-<!--                <div class="checkbox">-->
-<!--                    <input type="checkbox" id="rememberMeCheckbox">-->
-<!--                    <label for="rememberMeCheckbox">Remember me</label>-->
-<!--                </div>-->
-<!--                <a href="#">I forgot my password!</a>-->
-<!--            </div>-->
-<!--            <button type="submit" onclick="login();">Sign In</button>-->
-<!--        </form>-->
-<!--        <div class="login-card-footer">-->
-<!--            Don't have an account? <a href="#">Create an account</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="login-card-social">-->
-<!--        <div>Other Sign-in Platform</div>-->
-<!--        <div class="login-card-social-btn">-->
-<!--            <a href="#">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-facebook" width="24"-->
-<!--                     height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"-->
-<!--                     stroke-linecap="round" stroke-linejoin="round">-->
-<!--                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>-->
-<!--                    <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"></path>-->
-<!--                </svg>-->
-<!--            </a>-->
-<!--            <a href="#">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google" width="24"-->
-<!--                     height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"-->
-<!--                     stroke-linecap="round" stroke-linejoin="round">-->
-<!--                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>-->
-<!--                    <path d="M17.788 5.108a9 9 0 1 0 3.212 6.892h-8"></path>-->
-<!--                </svg>-->
-<!--            </a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
+
+<div class="topbar">
+
+    <a href="https://notborder.org/optikon/" class="switch-btn" title="Switch to Lavamob">
+        <img src="icons/optikon.svg" alt="optikon">
+    </a>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="user-area">
+        <span class="username-label">Matthew</span>
+
+        <button class="avatar-btn" id="avatarBtn" type="button" aria-label="User menu">
+            <img src="" class="avatar" alt="Matthew">
+        </button>
+
+        <img src="icons/logout.svg" class="logout-btn mySignout" alt="Logout">
+
+        <div class="dropdown" id="dropdown">
+            <div class="dropdown-name"></div>
+            <div class="divider"></div>
+            <div class="logout-menu-row">
+                <img src="icons/logout.svg" id="dropdownLogout" alt="">
+                <span class="logout-text">logout</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 <nav id="menu" style="display:none;">
 
@@ -263,33 +267,12 @@
 
 <br>
 
-<span id="maximize">&#x26F6</span>
-
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('maximize');
-        if (!btn) return;
-        btn.addEventListener('click', () => {
-            const docEl = document.documentElement;
-            const isFullscreen = document.fullscreenElement;
-            if (!isFullscreen) {
-                docEl.requestFullscreen();
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        });
-    });
-</script>
-
-
 <section id="welcome">
-    <i class="fa-solid fa-user"></i>
+    <!--    <i class="fa-solid fa-user"></i>-->
     <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-sign-out icon-large mySignout"-->
-    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<img id="userpic" src="" alt="user photo"/> <i
-        class="fa-solid fa-right-from-bracket icon-large mySignout"></i>
-
+    <!--    <span id="showusername"></span>&nbsp;&nbsp;&nbsp;<img id="userpic" src="" alt="user photo"/>-->
+    <!--    <i class="fa-solid fa-right-from-bracket icon-large mySignout"></i>-->
+    <span class="mySignout"></span>
 
     <!--    <h1>Choose Your Activity</h1>-->
     <div id="welcomeRow">
@@ -434,5 +417,24 @@
     <!--<img src="assets/img/2coins50px.png">-->
 </div>
 <div id="spinner" class="spinner"></div>
+
+<script>
+    const avatarBtn = document.getElementById("avatarBtn");
+    const dropdown = document.getElementById("dropdown");
+
+    avatarBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", () => {
+        dropdown.classList.remove("show");
+    });
+
+    dropdown.addEventListener("click", (e) => {
+        e.stopPropagation();
+    });
+</script>
+
 </body>
 </html>

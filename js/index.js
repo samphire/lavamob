@@ -30,7 +30,7 @@ const realWordRegex1 = /^[a-zA-Z]+$/;
 
 window.onload = function () {
 
-    document.querySelector('.mySignout').addEventListener('click', async () => {
+    const loggyouty = async () => {
         try {
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userid');
@@ -42,7 +42,10 @@ window.onload = function () {
         }
         // Go to the central logout (clears nb_sess and SLOs Optikon)
         location.href = '/login/logout.php';
-    });
+    };
+
+    document.querySelector('.mySignout').addEventListener('click', loggyouty);
+    document.getElementById('dropdownLogout').addEventListener('click', loggyouty);
 
     // --- central login gate ---
     fetch('/login/whoami_lavamob.php', {credentials: 'include', cache: 'no-store'})
@@ -72,7 +75,11 @@ window.onload = function () {
             localStorage.setItem("group", d.usertype);
 
             $(".login").hide();
-            document.getElementById('showusername').innerText = "user: " + d.username;
+            // document.getElementById('showusername').innerText = "user: " + d.userEmail;
+            document.getElementsByClassName("avatar")[0].src = "../cobalt/userPics/" + d.userEmail + ".png";
+            document.getElementsByClassName("username-label")[0].innerText = d.username;
+            document.getElementsByClassName("dropdown-name")[0].innerText = d.username;
+            // document.getElementById('showusername').innerText = "user: " + d.username + " "
             $("#welcome").show();
             $("#menu").show();
 
@@ -121,7 +128,7 @@ window.onload = function () {
     $('#fileinput').on('change', prepareUpload);
     $('#audioform').on('submit', uploadFiles);
 
-    document.getElementById('showusername').innerText = localStorage.getItem('username');
+    // document.getElementById('showusername').innerText = localStorage.getItem('username');
 //            localStorage.clear();
     $('section').hide();
     $('#menu').hide();
