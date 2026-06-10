@@ -29,6 +29,12 @@ let reconstHyphenWord;
 const realWordRegex1 = /^[a-zA-Z]+$/;
 
 window.onload = function () {
+    console.log("href:", window.location.href);
+    console.log("pathname:", window.location.pathname);
+    console.log("search:", window.location.search);
+    console.log("hash:", window.location.hash);
+
+    const requestedTextId = new URLSearchParams(location.search).get("textid");
 
     const loggyouty = async () => {
         try {
@@ -54,6 +60,7 @@ window.onload = function () {
             if (!d || !d.ok) {
                 // Not logged in → go to central login
                 const next = location.pathname + location.search + location.hash;
+                console.log('location for next: ' + next);
                 location.href = '/login/?next=' + encodeURIComponent(next);
                 return;
             }
@@ -85,6 +92,14 @@ window.onload = function () {
 
             getGoalsInfo();
             getReaderInfo();
+
+            const params = new URLSearchParams(window.location.search);
+            console.log('params:', params);
+            const textid = params.get("textid");
+console.log('textid:', textid);
+            if (requestedTextId) {
+                getReader(parseInt(requestedTextId, 10));
+            }
 
         })
         .catch(err => {
@@ -446,11 +461,18 @@ function deleteReader(node, textid) {
 }
 
 function getReader(textid) {
-    history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/studyText");
+    history.pushState({page_id: 5, page: "studyText", textid: textid}, null, "/lavamob/?textid=" + textid);
     // console.log("push state page 5 studyText. History object size is " + History.length);
     selectedTextid = textid;
     getLL(textid);
+    hideAllSections();
     $("#reader").show();
+}
+
+function hideAllSections() {
+    document.querySelectorAll("section").forEach(function (el) {
+        el.style.display = "none";
+    });
 }
 
 function downloadReader() {
