@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "qrcode": "^1.5.4",
     "sweetalert2": "^11.11.1"
   }
 }

@@ -617,27 +617,3 @@ function llItemRemoveFromList(myLLItem) {
     llData.list = llData.list.filter(item => item !== myLLItem);
     nowList = nowList.filter(item => item !== myLLItem);
 }
-
-// function delLLItem(myLLItem, type) { // This appears to require web service, which is no longer operational!!!
-//
-//     printObject("LLItem to delete", myLLItem);
-//     console.log("Type of deletion is: " + type);
-//     console.log("type is type " + typeof type);
-//     console.log(" wordid is type: " + typeof myLLItem.wordid + ", value: " + myLLItem.wordid);
-//
-//     myLLItem.headwordid = 6;
-//
-//
-//     $.ajax({
-//         type: "DELETE",
-//         url: url + "/lladd?userid=" + userid + "&wordid=" + myLLItem.wordid +
-//             "&headwordid=" + myLLItem.headwordid + "&type=" + type,
-//         crossDomain: true,
-//         success: function (result) {
-//             console.log("LearningList Item removed successfully");
-//         },
-//         error: function (jqXHR, status, err) {
-//             alert("some problem: " + status + ", " + jqXHR.status + ", " + err);
-//         }
-//     });
-// }

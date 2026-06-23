@@ -2,13 +2,6 @@
 
 include ("session.inc");
 
-// $repnum = $_POST['repnum'];
-// $ef = $_POST['ef'];
-// $streak = $_POST['streak'];
-// $lastIntervalDays = $_POST['lastIntervalDays'];
-// $lapses = $_POST['lapses'];
-
-
 // Build the prepared statement with placeholders
 $sql = "UPDATE `learninglist`
         SET `repnum` = ?, `EF` = ?, `datenext` = ?, `streak` = ?, `lastIntervalDays` = ?, `lapses` = ?

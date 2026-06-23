@@ -38,6 +38,7 @@ window.onload = function () {
 
     const loggyouty = async () => {
         try {
+            console.log('Logging out...');
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userid');
             localStorage.removeItem('username');
@@ -59,6 +60,7 @@ window.onload = function () {
         .then(d => {
             if (!d || !d.ok) {
                 // Not logged in → go to central login
+                console.log('Not logged in, redirecting to central login');
                 const next = location.pathname + location.search + location.hash;
                 console.log('location for next: ' + next);
                 location.href = '/login/?next=' + encodeURIComponent(next);
@@ -66,6 +68,7 @@ window.onload = function () {
             }
 
             // Logged in → set globals
+            console.log('Logged in, setting globals');
             window.userEmail = d.userEmail;
             window.userid = d.userid;
             userid = d.userid;
@@ -96,7 +99,7 @@ window.onload = function () {
             const params = new URLSearchParams(window.location.search);
             console.log('params:', params);
             const textid = params.get("textid");
-console.log('textid:', textid);
+            console.log('textid:', textid);
             if (requestedTextId) {
                 getReader(parseInt(requestedTextId, 10));
             }
@@ -677,13 +680,23 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                                         showConfirmButton: false,
                                         icon: 'success'
                                     });
-                                    $(".readerPanel").remove();
-                                    getLL(selectedTextid);
+
+                                    // Update DOM in place: a word may appear multiple times,
+                                    // so update every span with this wordid
+                                    $(`.readerPanel .word`).each(function () {
+                                        const onclick = $(this).attr('onclick') || '';
+                                        const srchStr = `'${tom.wordid}'`;
+                                        console.log(srchStr);
+                                        if (onclick.indexOf(srchStr) > -1) {
+                                            $(this).removeClass('clicked');
+                                        }
+                                    });
+                                    // Update data in place
+                                    llItemRemoveFromList(tom);
                                 });
                         }
                     });
             });
-
         return;
     }
 
@@ -694,6 +707,10 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
     // var dicUrl = "https://www.bing.com/translator/?from=en&to=ru&text=" + word;
 
     language = localStorage.getItem('language');
+
+    console.log("language is " + language);
+
+    // language = '8'; // is it a string or an integer?
 
     switch (language) {
         case '2':
@@ -714,6 +731,9 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
             break;
         case '7':
             dicurl = "https://translate.google.com/?hl=ur&sl=en&tl=ur&text=" + word;
+            break;
+        case '8':
+            dicurl = "https://translate.google.com/?hl=en&sl=en&tl=km&text=" + word;
             break;
         default:
             dicurl = "https://en.dict.naver.com/#/search?range=all&query=" + word;
@@ -753,9 +773,30 @@ function customPop(el, word, wordid, headwordid, headword, tranche) {
                 "thouTranch": 5
             },
             success: function (result) {
-                $(el).addClass("clicked");
-                $(".readerPanel").remove();
-                getLL(selectedTextid);
+                // Build the new list item so llData stays in sync with the server
+                const newItem = {
+                    userid: userid,
+                    textid: selectedTextid,
+                    word: document.getElementById("llWord").value,
+                    wordid: wordid,
+                    headwordid: headwordid,
+                    headword: headword,
+                    tranny: data
+                    // add any other fields you rely on later, e.g. repnum/ef/datenext
+                };
+                llData.list.push(newItem);
+
+                // Mark every occurrence of this word in the panel
+                $(`.readerPanel .word`).each(function () {
+                    const onclick = $(this).attr('onclick') || '';
+                    if (onclick.indexOf(`'${wordid}'`) > -1) {
+                        $(this).addClass('clicked');
+                    }
+                });
+
+                // $(el).addClass("clicked");
+                // $(".readerPanel").remove();
+                // getLL(selectedTextid); // removed by ai for the above code
             },
             error: (function (jqXHR, status, err) {
                 // console.log("failed ajax call in customPop. Probably duplicate ll upload failed db constraint duplicate primary key. Check glassfish log\n" + err);
