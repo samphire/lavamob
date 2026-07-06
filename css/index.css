@@ -65,10 +65,6 @@
     font-size: medium;
 }
 
-#createReaderTextPanel{
-    font-family: "Times New Roman", Georgia, Times, serif;
-}
-
 .readerPanel {
     background-color: var(--bg);
     text-align: left;
@@ -254,14 +250,6 @@ body {
     background-color: var(--bg);
 }
 
-#createReaderTextPanel {
-    width: 90%;
-    min-height: 500px;
-    margin-top: 3rem;
-    resize: vertical;
-    padding: 3rem 1rem;
-}
-
 #audioSpriteSelectPanel {
     display: none;
     line-height: 3rem;
@@ -369,19 +357,6 @@ body {
     right: 10px;
 }
 
-#audiodiv {
-    width: 25%;
-    float: right;
-    display: none;
-    text-align: left;
-}
-
-#audiodiv input {
-    display: block;
-    margin-bottom: 1.6rem;
-}
-
-
 .audioOptions {
     position: fixed;
     background-color: #888c9e44;
@@ -395,11 +370,6 @@ body {
 
 .audioOptions input {
     margin-left: 20px;
-}
-
-fieldset {
-    margin-top: 2.3rem;
-    height: 312px;
 }
 
 .delreader {
@@ -486,96 +456,6 @@ input#llWord.llWord, input#tranny.tranny {
     border-left: 2px solid black;
     padding-left: 5px;
     margin-bottom: 10px;
-}
-
-#createReaderBlurb div {
-    position: relative;
-    margin-top: 1.4rem;
-    overflow: hidden;
-}
-
-#audiodiv + div {
-    position: relative;
-    overflow: hidden;
-}
-
-#createReaderBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
-    /*width: 50%;*/
-    border: 2px solid gray;
-    background: none;
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    padding: 4px 4px;
-    outline: 0;
-    font-size: 2rem;
-}
-
-#createReaderBlurb div input:valid, #audiodiv + div textarea:valid {
-    background: white;
-}
-
-#createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
-    border-color: #f06d06;
-}
-
-#createReaderBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
-    background: #f06d06;
-    color: white;
-    font-size: 70%;
-    padding: 1px 6px;
-    z-index: 2;
-    text-transform: uppercase;
-}
-
-#createReaderBlurb div label, #audiodiv + div textarea + label {
-    transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
-    position: absolute;
-    color: #999;
-    padding: 7px 6px;
-}
-
-/*#audiodiv + div textarea {*/
-/*    resize: vertical;*/
-/*    width: 90%;*/
-/*}*/
-
-#createReaderBlurb div input, #audiodiv + div textarea {
-    padding: 12px 12px 12px 12px;
-}
-
-#createReaderBlurb div label {
-    top: 10px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-#audiodiv + div textarea + label {
-    top: 100px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-#createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
-    padding: 4px 6px 20px 6px;
-}
-
-#createReaderBlurb div input:focus + label {
-    top: 26%;
-    margin-top: 24px;
-}
-
-#audiodiv + div textarea:focus + label {
-    top: 32px;
-    height: 1rem;
-    /*margin-top: 16px;*/
-}
-
-#createReaderTextPanel {
-    height: 50%;
 }
 
 .goalContainer {
@@ -704,12 +584,6 @@ input#llWord.llWord, input#tranny.tranny {
         /*transform: scale(2);*/
     }
 
-    #audiodiv {
-        width: 100%;
-        float: left;
-        display: none;
-    }
-
     #selectReader {
         overflow: auto;
         padding: 3% 4%;
@@ -748,115 +622,13 @@ input#llWord.llWord, input#tranny.tranny {
         margin: 0.7em 0 0 0.5em;
     }
 
-    #createReader {
-        width: 100%;
-        padding: 0;
-        margin-top: -46px;
-        min-height: 100%;
-    }
-
-    /*.swal2-modal button.styled {*/
-    /*    padding: 5px 16px;*/
-    /*    font-size: 12px;*/
-    /*    margin-right: 20%;*/
-    /*}*/
-
     .llWord, .tranny {
         display: block;
         margin: 1rem auto;
         width: 60%;
     }
 
-    #createReaderBlurb div {
-        position: relative;
-        margin-top: 1.4rem;
-        overflow: hidden;
-    }
-
-    #audiodiv + div {
-        position: relative;
-        overflow: hidden;
-    }
-
-    #createReaderBlurb div input:not([type=checkbox]), #audiodiv + div textarea {
-        width: 50%;
-        border: 2px solid gray;
-        background: none;
-        position: relative;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        padding: 16px 12px;
-        outline: 0;
-    }
-
-    #createReaderBlurb div input:valid, #audiodiv + div textarea:valid {
-        background: white;
-    }
-
-    #createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
-        border-color: #f06d06;
-    }
-
-    #createReaderBlurb div input:focus + label, #audiodiv + div textarea:focus + label {
-        background: #f06d06;
-        color: white;
-        font-size: 70%;
-        padding: 1px 6px;
-        z-index: 2;
-        text-transform: uppercase;
-    }
-
-    #createReaderBlurb div label, #audiodiv + div textarea + label {
-        transition: background 0.2s, color 0.2s, top 0.2s, bottom 0.2s, right 0.2s, left 0.2s;
-        position: absolute;
-        color: #999;
-        padding: 7px 6px;
-    }
-
-    #audiodiv + div textarea {
-        resize: vertical;
-        width: 90%;
-    }
-
-    #createReaderBlurb div input, #audiodiv + div textarea {
-        padding: 12px 12px 12px 12px;
-    }
-
-    #createReaderBlurb div label {
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-    }
-
-    #audiodiv + div textarea + label {
-        top: 100px;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-    }
-
-    #createReaderBlurb div input:focus, #audiodiv + div textarea:focus {
-        padding: 4px 6px 20px 6px;
-    }
-
-    #createReaderBlurb div input:focus + label {
-        top: 26%;
-        margin-top: 16px;
-    }
-
-    #audiodiv + div textarea:focus + label {
-        top: 32px;
-        height: 1rem;
-        /*margin-top: 16px;*/
-    }
-
-    #createReaderTextPanel {
-        height: 30%;
-    }
-
-    input#llWord.llWord, input#tranny.tranny {
+      input#llWord.llWord, input#tranny.tranny {
 
         margin-bottom: 50px;
     }
@@ -898,33 +670,10 @@ input#llWord.llWord, input#tranny.tranny {
         background: white;
     }
 
-    #audiodiv {
-        width: 100%;
-        float: left;
-        display: none;
-    }
-
     #selectReader {
         overflow: auto;
         padding: 3% 4%;
     }
-
-    #createReader {
-        box-sizing: border-box;
-        width: 100%;
-        background: cornsilk;
-        margin-top: -48px;
-        padding-top: 3%;
-    }
-
-    #audioOpt {
-        display: none;
-    }
-
-    #createReaderBlurb div input:not([type=checkbox]) {
-        width: 90%;
-    }
-
 
     /*.swal2-modal button.styled {*/
     /*    padding: 5px 16px;*/
@@ -1166,8 +915,6 @@ input#llWord.llWord, input#tranny.tranny {
 }
 
 @media print {
-
-
 
     .audioOptions {
         display: none;

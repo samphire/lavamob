@@ -1,0 +1,169 @@
+.create-reader-page {
+    min-height: 100vh;
+    padding: 2rem;
+    background: #efe5d0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.create-reader-top {
+    display: grid;
+    grid-template-columns: minmax(320px, 600px) minmax(320px, 460px);
+    gap: 2rem;
+    align-items: start;
+    margin-bottom: 2rem;
+}
+
+.preview-card {
+    min-height: 260px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.reader-settings-card {
+    text-align: left;
+}
+
+.reader-settings-card input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d2c5ad;
+    border-radius: 8px;
+    background: #fffdf8;
+    font-size: 1.1rem;
+}
+
+.create-reader-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 430px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.transcript-card,
+.audio-card {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid #d8ccb6;
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+}
+
+.transcript-card {
+    padding: 1.5rem;
+}
+
+.panelTitle {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.lucide-icon {
+    width: 32px;
+    height: 32px;
+    color: #222;
+}
+
+.audio-buttons {
+    display: flex;
+    align-items: flex-end;    /* bottoms line up */
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+#btnFinish {
+    /*font-size: 2.5rem;        !* or whatever size you like *!*/
+    cursor: pointer;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.card-tabs {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+}
+
+.card-tabs .active {
+    border-bottom: 3px solid #5f5137;
+    padding-bottom: 0.7rem;
+}
+
+#createReaderTextPanel {
+    width: 100%;
+    min-height: 342px;
+    margin: 0;
+    padding: 1.5rem;
+    resize: vertical;
+    box-sizing: border-box;
+    border: none;
+    border-top: 1px solid #e0d7c6;
+    background: transparent;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    outline: none;
+}
+
+#audiodiv.audio-card {
+    display: block;
+    float: none;
+    width: auto;
+    padding: 1.5rem;
+    text-align: left;
+}
+
+#audiodiv legend {
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+#audiodiv input,
+#audiodiv button {
+    margin-bottom: 1rem;
+}
+
+#audiodiv input[type="submit"],
+#audiodiv button,
+.imgButton {
+    border: 1px solid #d2c5ad;
+    border-radius: 8px;
+    background: #fffdf8;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+#audiodiv input[type="submit"] {
+    width: 100%;
+    background: #5f5137;
+    color: white;
+    font-weight: 700;
+}
+
+.floating-upload {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 3rem;
+    border: none;
+    background: transparent;
+}
+
+@media (max-width: 1000px) {
+    .create-reader-top,
+    .create-reader-main {
+        grid-template-columns: 1fr;
+    }
+}

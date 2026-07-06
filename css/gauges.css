@@ -19,7 +19,7 @@ body{
     border-radius: 50%;
 }
 
-svg{
+.gauge svg{
     position: absolute;
     left: 39px;
     top: 42px;
