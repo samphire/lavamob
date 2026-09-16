@@ -39,11 +39,13 @@ window.onload = function () {
     const loggyouty = async () => {
         try {
             console.log('Logging out...');
+            localStorage.removeItem('user');
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userid');
             localStorage.removeItem('username');
             localStorage.removeItem('language');
             localStorage.removeItem('group');
+            localStorage.removeItem('picurl');
             sessionStorage.clear();
         } catch (_) {
         }
@@ -83,10 +85,11 @@ window.onload = function () {
             localStorage.setItem("username", d.username);
             localStorage.setItem("language", d.language);
             localStorage.setItem("group", d.usertype);
+            localStorage.setItem("picurl", d.picurl);
 
             $(".login").hide();
             // document.getElementById('showusername').innerText = "user: " + d.userEmail;
-            document.getElementsByClassName("avatar")[0].src = "../cobalt/userPics/" + d.userEmail + ".png";
+            document.getElementsByClassName("avatar")[0].src = "../cobalt/userPics/" + d.picurl;
             document.getElementsByClassName("username-label")[0].innerText = d.username;
             document.getElementsByClassName("dropdown-name")[0].innerText = d.username;
             // document.getElementById('showusername').innerText = "user: " + d.username + " "
