@@ -2,11 +2,14 @@
 
 include("session.inc");
 
-$sql = "DELETE FROM `learninglist` WHERE `wordid`={$_POST['wordid']} AND `userid`={$_POST['userid']}";
-$result = mysqli_query($conn, $sql) or die("problem with LL delete query: \n$sql");
-$affected = mysqli_affected_rows($conn);
+$wordid = (int)$_POST['wordid'];
+$userid = (int)$_POST['userid'];
+
+$sql = "DELETE FROM `learninglist` WHERE `wordid` = ? AND `userid` = ?";
+$conn->execute_query($sql, [$wordid, $userid]) or die("problem with LL delete query");
+$affected = $conn->affected_rows;
 if($affected > 0){
-    echo "successfully deleted " . $_POST['wordid'];
+    echo "successfully deleted " . $wordid;
 }else{
     echo "no rows were affected";
 }
