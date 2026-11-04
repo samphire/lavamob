@@ -3,7 +3,10 @@
 .idea/workspace.xml
 .idea/inspectionProfiles/Project_Default.xml
 .idea/lavamob.iml
-php/api.inc
 .idea/dataSources.local.xml
 node_modules
 .idea/
+assets/img/
+# Server secrets: real copies of /var/www/config/*, never commit
+config/*
+!config/*.example.php

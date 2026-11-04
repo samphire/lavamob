@@ -1,6 +1,6 @@
 <?php
 include ("session.inc");
-include ("api.inc");
+require "/var/www/config/lavamob-api.php";
 
 function isEnglish($word) {
     return preg_match('/^[A-Za-z]+$/', $word) === 1;
