@@ -2,11 +2,16 @@
 
 include("session.inc");
 
-$sql = "DELETE FROM `learninglist` WHERE `wordid`={$_POST['wordid']} AND `userid`={$_POST['userid']}";
-$result = mysqli_query($conn, $sql) or die("problem with LL delete query: \n$sql");
-$sql = "INSERT INTO `learned` VALUES({$_POST['userid']}, {$_POST['headwordid']}, {$_POST['repnum']}, now(), 1, null, 0)";
-$result = mysqli_query($conn, $sql) or die("problem with LL add to learned query: \n$sql");
-$affected = mysqli_affected_rows($conn);
+$wordid = (int)$_POST['wordid'];
+$userid = (int)$_POST['userid'];
+$headwordid = (int)$_POST['headwordid'];
+$repnum = (int)$_POST['repnum'];
+
+$sql = "DELETE FROM `learninglist` WHERE `wordid` = ? AND `userid` = ?";
+$conn->execute_query($sql, [$wordid, $userid]) or die("problem with LL delete query");
+$sql = "INSERT INTO `learned` VALUES (?, ?, ?, now(), 1, null, 0)";
+$conn->execute_query($sql, [$userid, $headwordid, $repnum]) or die("problem with LL add to learned query");
+$affected = $conn->affected_rows;
 if($affected > 0){
     echo "success";
 }else{

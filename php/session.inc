@@ -19,5 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 date_default_timezone_set('Asia/Seoul');
 global $conn;
-$conn = mysqli_connect("localhost", "samphire", "Fk!i=a0@:K", "reader3") or die('Error connecting to mysql');
+require "/var/www/config/lavamob-db.php";
+$conn = mysqli_connect($dbHost, $dbUser, $dbPass, "reader3") or die('Error connecting to mysql');
 $conn->set_charset("utf8");

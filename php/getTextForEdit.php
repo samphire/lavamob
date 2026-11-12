@@ -1,6 +1,6 @@
 <?php
 include ("session.inc");
-$textid = $_GET['textid'];
+$textid = (int)$_GET['textid'];
 
 $sql = " SELECT SQL_NO_CACHE * FROM text WHERE id=".$textid;
 $result = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");

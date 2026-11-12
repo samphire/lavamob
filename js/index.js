@@ -183,62 +183,6 @@ window.onload = function () {
 }
 
 
-// function login() {
-//     history.replaceState({page_id: 4, page: "welcome"}, null, "/lavamob");
-//     // console.log("In login()");
-//     var urly = url2 + "/login.php?user_email=" + document.getElementById("userEmail").value + "&pass_word=" + document.getElementById("pass").value;
-//     // console.log(urly);
-//     //alert(urly);
-//     $.ajax({
-//         type: "GET",
-//         crossDomain: true,
-//         url: urly,
-//         async: false,
-//         success: function (data) {
-//             // console.log("LOGIN: " + data);
-//             //alert("success");
-//             if (data == "fail login") {
-//                 alert("username or password is incorrect");
-//                 localStorage.clear();
-//                 return;
-//             }
-//             const myData = JSON.parse(data);
-//             console.info(myData);
-//             userid = myData[0];
-//             language = myData[1];
-//             group = myData[2];
-//             username = myData[3];
-//             userEmail = document.getElementById("userEmail").value;
-//             localStorage.setItem("userEmail", userEmail);
-//             localStorage.setItem("userid", userid);
-//             localStorage.setItem("language", language);
-//             localStorage.setItem("group", group);
-//             localStorage.setItem("username", username);
-//
-//             console.log(localStorage.getItem("userEmail"));
-//             console.log(localStorage.getItem("userid"));
-//             console.log(localStorage.getItem("language"));
-//             console.log(localStorage.getItem("group"));
-//             console.log(localStorage.getItem("username"));
-//
-//             $(".login").hide();
-//             // document.getElementById('showusername').innerText = localStorage.getItem('username');
-//             document.getElementById('showusername').innerText = "user: " + window.username;
-//             // console.log("username is " + username);
-//             $("#welcome").show();
-//             $("#menu").show();
-//             getReaderInfo();
-//         },
-//         error: function (jqXHR, textStatus, errorThrown) {
-//             // console.log("some problem with ajax login");
-//             //alert("fail");
-//             // console.log(urly);
-//             // console.log(textStatus + "\n" + errorThrown);
-//             alert(textStatus + "\n" + errorThrown);
-//         }
-//     });
-// }
-
 function progress(percent, $element, boolAnimColor, col) {
     percent = percent > 100 ? 100 : percent;
     if (percent === 100) col = "#000000";

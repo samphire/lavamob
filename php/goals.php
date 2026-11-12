@@ -1,7 +1,7 @@
 <?php
 include("session.inc");
 
-$userid = $_GET['userid'];
+$userid = (int)$_GET['userid'];
 
 $learned = mysqli_query($conn, "SELECT COUNT(headwordid) AS numLearned FROM learned WHERE userid=$userid")->fetch_object()->numLearned;
 $learning = mysqli_query($conn, "SELECT COUNT(repnum) AS learning FROM learninglist WHERE userid=$userid")->fetch_object()->learning;

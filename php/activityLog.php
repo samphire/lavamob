@@ -2,15 +2,15 @@
 
 include ("session.inc");
 
-$userid = $_POST['userid'];
-$activityType = $_POST['activityType'];
+$userid = (int)$_POST['userid'];
+$activityType = (int)$_POST['activityType'];
 $extra = $_POST['extraInfo'] ?? 0;
 
-$sql = "INSERT INTO `reader3`.`activity_log` (`userid`, `activity_type`, `extra_info`) VALUES($userid, $activityType, IFNULL('$extra', NULL)) "
-    . "ON DUPLICATE KEY UPDATE `extra_info` = `extra_info` + " . $_POST['extraInfo'];
+$sql = "INSERT INTO `reader3`.`activity_log` (`userid`, `activity_type`, `extra_info`) VALUES (?, ?, ?) "
+    . "ON DUPLICATE KEY UPDATE `extra_info` = `extra_info` + ?";
 
-$result = mysqli_query($conn, $sql) or die("problem with sql query: \n$sql");
-if(mysqli_affected_rows($conn) > 0){
+$conn->execute_query($sql, [$userid, $activityType, $extra, $extra]) or die("problem with activity log query");
+if($conn->affected_rows > 0){
     echo "success";
 } else {
     echo "fail";
